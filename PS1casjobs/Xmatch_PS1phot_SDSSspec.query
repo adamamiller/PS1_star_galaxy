@@ -1,0 +1,72 @@
+/*This Query is designed to match photometric properties of 
+PS1 sources with SDSS spectroscopic sources */
+
+-- Query 1 [To be run on SDSS DR12]
+SELECT specobjid, ra, dec, class, sourceType, z, cModelMag_r, cModelMag_g - cModelMag_i as gminusi into mydb.sdssSpecPhoto
+from specphoto
+
+-- PS1 db cannot crossmatch 3.5M sources, so queries are needed to create smaller tables
+
+select top 884353 * from sdssSpecPhoto
+into mydb.sdssSpecPhoto1
+order by specobjid asc
+
+SELECT top 884353  *
+FROM (
+        SELECT TOP 1768706 *
+       FROM sdssSpecPhoto
+        ORDER BY specobjid asc
+     )T into mydb.sdssSpecPhoto2
+ORDER BY specobjid desc
+
+SELECT TOP 884353 *
+FROM (
+        SELECT top 2653059 *
+       FROM sdssSpecPhoto
+        ORDER BY specobjid asc
+     )T into mydb.sdssSpecPhoto3
+ORDER BY specobjid desc
+
+select top 884352 * from sdssSpecPhoto
+into mydb.sdssSpecPhoto4
+order by specobjid desc
+
+-- Query 3 [To be run on PanSTARRS_DR1]
+select s.specobjid, o.objID 
+from MyDB.sdssSpecPhoto1 s
+cross apply fGetNearbyObjEq(s.ra,s.dec,1.0/60.0) nb
+inner join ObjectThin o on o.objid=nb.objid and o.nDetections>1
+
+select s.specobjid, o.objID 
+from MyDB.sdssSpecPhoto2 s
+cross apply fGetNearbyObjEq(s.ra,s.dec,1.0/60.0) nb
+inner join ObjectThin o on o.objid=nb.objid and o.nDetections>1
+
+select s.specobjid, o.objID 
+from MyDB.sdssSpecPhoto3 s
+cross apply fGetNearbyObjEq(s.ra,s.dec,1.0/60.0) nb
+inner join ObjectThin o on o.objid=nb.objid and o.nDetections>1
+
+select s.specobjid, o.objID 
+from MyDB.sdssSpecPhoto4 s
+cross apply fGetNearbyObjEq(s.ra,s.dec,1.0/60.0) nb
+inner join ObjectThin o on o.objid=nb.objid and o.nDetections>1
+
+-- Query 4 [To be run on PanSTARRS_DR1]
+
+select sdss.specobjid, sdss.ra, sdss.dec, sdss.class, 
+sdss.sourceType, sdss.z, sdss.cModelMag_r, sdss.gminusi,
+soa.objID, soa.primaryDetection, soa.bestDetection, 
+soa.gpsfMajorFWHM, soa.gpsfMinorFWHM, soa.gpsfTheta, soa.gpsfCore, soa.gpsfLikelihood, soa.gpsfQf, soa.gpsfQfPerfect, soa.gpsfChiSq, soa.gmomentXX, soa.gmomentXY, soa.gmomentYY, soa.gmomentR1, soa.gmomentRH, soa.gPSFFlux, soa.gPSFFluxErr, soa.gApFlux, soa.gApFluxErr, soa.gApFillFac, soa.gApRadius, soa.gKronFlux, soa.gKronFluxErr, soa.gKronRad, soa.gexpTime, soa.gExtNSigma, soa.gsky, soa.gskyErr, soa.gzp, soa.gPlateScale, 
+soa.rpsfMajorFWHM, soa.rpsfMinorFWHM, soa.rpsfTheta, soa.rpsfCore, soa.rpsfLikelihood, soa.rpsfQf, soa.rpsfQfPerfect, soa.rpsfChiSq, soa.rmomentXX, soa.rmomentXY, soa.rmomentYY, soa.rmomentR1, soa.rmomentRH, soa.rPSFFlux, soa.rPSFFluxErr, soa.rApFlux, soa.rApFluxErr, soa.rApFillFac, soa.rApRadius, soa.rKronFlux, soa.rKronFluxErr, soa.rKronRad, soa.rexpTime, soa.rExtNSigma, soa.rsky, soa.rskyErr, soa.rzp, soa.rPlateScale, 
+soa.ipsfMajorFWHM, soa.ipsfMinorFWHM, soa.ipsfTheta, soa.ipsfCore, soa.ipsfLikelihood, soa.ipsfQf, soa.ipsfQfPerfect, soa.ipsfChiSq, soa.imomentXX, soa.imomentXY, soa.imomentYY, soa.imomentR1, soa.imomentRH, soa.iPSFFlux, soa.iPSFFluxErr, soa.iApFlux, soa.iApFluxErr, soa.iApFillFac, soa.iApRadius, soa.iKronFlux, soa.iKronFluxErr, soa.iKronRad, soa.iexpTime, soa.iExtNSigma, soa.isky, soa.iskyErr, soa.izp, soa.iPlateScale, 
+soa.zpsfMajorFWHM, soa.zpsfMinorFWHM, soa.zpsfTheta, soa.zpsfCore, soa.zpsfLikelihood, soa.zpsfQf, soa.zpsfQfPerfect, soa.zpsfChiSq, soa.zmomentXX, soa.zmomentXY, soa.zmomentYY, soa.zmomentR1, soa.zmomentRH, soa.zPSFFlux, soa.zPSFFluxErr, soa.zApFlux, soa.zApFluxErr, soa.zApFillFac, soa.zApRadius, soa.zKronFlux, soa.zKronFluxErr, soa.zKronRad, soa.zexpTime, soa.zExtNSigma, soa.zsky, soa.zskyErr, soa.zzp, soa.zPlateScale, 
+soa.ypsfMajorFWHM, soa.ypsfMinorFWHM, soa.ypsfTheta, soa.ypsfCore, soa.ypsfLikelihood, soa.ypsfQf, soa.ypsfQfPerfect, soa.ypsfChiSq, soa.ymomentXX, soa.ymomentXY, soa.ymomentYY, soa.ymomentR1, soa.ymomentRH, soa.yPSFFlux, soa.yPSFFluxErr, soa.yApFlux, soa.yApFluxErr, soa.yApFillFac, soa.yApRadius, soa.yKronFlux, soa.yKronFluxErr, soa.yKronRad, soa.yexpTime, soa.yExtNSigma, soa.ysky, soa.yskyErr, soa.yzp, soa.yPlateScale,
+ot.qualityFlag
+
+from (mydb.MyTable_2 Xmatch join mydb.sdssSpecPhoto1 sdss on 
+    sdss.specobjid = Xmatch.specobjid) 
+    join StackObjectAttributes soa on soa.objid = Xmatch.objid
+    join ObjectThin ot on ot.objid = Xmatch.objid
+ 
+where primaryDetection = 1
