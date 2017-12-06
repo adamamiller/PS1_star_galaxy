@@ -1,72 +1,369 @@
 /*This Query is designed to match photometric properties of 
 PS1 sources with SDSS spectroscopic sources */
 
--- Query 1 [To be run on SDSS DR12]
+-- Query 1 [To be run on SDSS DR14]
 SELECT specobjid, ra, dec, class, sourceType, z, cModelMag_r, cModelMag_g - cModelMag_i as gminusi into mydb.sdssSpecPhoto
 from specphoto
 
--- PS1 db cannot crossmatch 3.5M sources, so queries are needed to create smaller tables
 
-select top 884353 * from sdssSpecPhoto
-into mydb.sdssSpecPhoto1
-order by specobjid asc
+-- Query 2 [Create table to upload SDSS data]
+create table sdssSpecPhoto_DR14
+    (specobj_idx int,
+    ra float,
+    dec float,
+    class varchar(32),
+    sourceType varchar(128),
+    z float,
+    cModelMag_r float,
+    gminusi float,
+    type smallint,
+    countRatio float)
 
-SELECT top 884353  *
+-- Query 3 [populate intermediate table with counts in filters]
+SELECT 
+s.bestobjID, s.specobjid, s.ra, s.dec, 
+s.class, s.sourceType, s.z, 
+cModelMag_r, cModelMag_g - cModelMag_i as gminusi, p.type, 
+
+psfFlux_u/nMgyPerCount_u as psfCount_u, 
+cmodelFlux_u/nMgyPerCount_u as cmodelCount_u,  
+CASE 
+    WHEN ( ((flags_u & (dbo.fPhotoFlags('BINNED1')
+                     | dbo.fPhotoFlags('BINNED2') 
+                     | dbo.fPhotoFlags('BINNED4')) ) > 0) AND 
+           ((flags_u & (dbo.fPhotoFlags('DEBLEND_NOPEAK')
+                     | dbo.fPhotoFlags('INTERP_CENTER'))) = 0)
+                     )
+    THEN 1 ELSE 0
+END as det_u,
+
+psfFlux_g/nMgyPerCount_g as psfCount_g, 
+cmodelFlux_g/nMgyPerCount_g as cmodelCount_g, 
+CASE 
+    WHEN ( ((flags_g & (dbo.fPhotoFlags('BINNED1')
+                     | dbo.fPhotoFlags('BINNED2') 
+                     | dbo.fPhotoFlags('BINNED4')) ) > 0) AND 
+           ((flags_g & (dbo.fPhotoFlags('DEBLEND_NOPEAK')
+                     | dbo.fPhotoFlags('INTERP_CENTER'))) = 0)
+                     )
+    THEN 1 ELSE 0
+END as det_g,
+
+psfFlux_r/nMgyPerCount_r as psfCount_r, 
+cmodelFlux_r/nMgyPerCount_r as cmodelCount_r, 
+CASE 
+    WHEN ( ((flags_r & (dbo.fPhotoFlags('BINNED1')
+                     | dbo.fPhotoFlags('BINNED2') 
+                     | dbo.fPhotoFlags('BINNED4')) ) > 0) AND 
+           ((flags_r & (dbo.fPhotoFlags('DEBLEND_NOPEAK')
+                     | dbo.fPhotoFlags('INTERP_CENTER'))) = 0)
+                     )
+    THEN 1 ELSE 0
+END as det_r,
+
+psfFlux_i/nMgyPerCount_i as psfCount_i, 
+cmodelFlux_i/nMgyPerCount_i as cmodelCount_i, 
+CASE 
+    WHEN ( ((flags_i & (dbo.fPhotoFlags('BINNED1')
+                     | dbo.fPhotoFlags('BINNED2') 
+                     | dbo.fPhotoFlags('BINNED4')) ) > 0) AND 
+           ((flags_i & (dbo.fPhotoFlags('DEBLEND_NOPEAK')
+                     | dbo.fPhotoFlags('INTERP_CENTER'))) = 0)
+                     )
+    THEN 1 ELSE 0
+END as det_i,
+
+psfFlux_z/nMgyPerCount_z as psfCount_z, 
+cmodelFlux_z/nMgyPerCount_z as cmodelCount_z, 
+CASE 
+    WHEN ( ((flags_z & (dbo.fPhotoFlags('BINNED1')
+                     | dbo.fPhotoFlags('BINNED2') 
+                     | dbo.fPhotoFlags('BINNED4')) ) > 0) AND 
+           ((flags_z & (dbo.fPhotoFlags('DEBLEND_NOPEAK')
+                     | dbo.fPhotoFlags('INTERP_CENTER'))) = 0)
+                     )
+    THEN 1 ELSE 0
+END as det_z
+  into mydb.sdssSpecPhotoCounts_DR14
+  from specObj s left join photoPrimary p ON s.bestobjid = p.objid
+ORDER BY bestObjID
+
+-- Query 4 [calculate the SDSS countRatio]
+SELECT 
+    specobjid, ra, dec, 
+    class, sourceType, z, 
+    cModelMag_r, gminusi, type, 
+    COALESCE( (det_u*psfCount_u + det_g*psfCount_g + 
+               det_r*psfCount_r + det_i*psfCount_i + 
+               det_z*psfCount_z) / 
+               NULLIF( (det_u*cmodelCount_u + det_g*cmodelCount_g + 
+               det_r*cmodelCount_r + det_i*cmodelCount_i + 
+               det_z*cmodelCount_z), 
+                     0), 0
+             ) as countRatio
+    from mydb.sdssSpecPhotoCounts_DR14
+    into mydb.sdssSpecPhoto_DR14
+    ORDER BY bestObjID
+
+
+/* Once the SDSS spectroscopic sources are identified, the 
+    corresponding output needs to be downloaded and then 
+    loaded into the PS1 Casjobs interface */
+
+-- Query 5; PS1 db cannot crossmatch 3.5M sources, so queries are needed to create smaller tables
+
+select top 1077893 * from sdssSpecPhoto_DR14
+into mydb.sdssSpecPhoto1_DR14
+order by specobj_idx asc
+
+SELECT top 1077893  *
 FROM (
-        SELECT TOP 1768706 *
-       FROM sdssSpecPhoto
-        ORDER BY specobjid asc
-     )T into mydb.sdssSpecPhoto2
-ORDER BY specobjid desc
+        SELECT TOP 2155786 *
+       FROM sdssSpecPhoto_DR14
+        ORDER BY specobj_idx asc
+     )T into mydb.sdssSpecPhoto2_DR14
+ORDER BY specobj_idx desc
 
-SELECT TOP 884353 *
+SELECT TOP 1077893 *
 FROM (
-        SELECT top 2653059 *
-       FROM sdssSpecPhoto
-        ORDER BY specobjid asc
-     )T into mydb.sdssSpecPhoto3
-ORDER BY specobjid desc
+        SELECT top 3233679 *
+       FROM sdssSpecPhoto_DR14
+        ORDER BY specobj_idx asc
+     )T into mydb.sdssSpecPhoto3_DR14
+ORDER BY specobj_idx desc
 
-select top 884352 * from sdssSpecPhoto
-into mydb.sdssSpecPhoto4
-order by specobjid desc
+select top 1077892 * from sdssSpecPhoto_DR14
+into mydb.sdssSpecPhoto4_DR14
+order by specobj_idx desc
 
--- Query 3 [To be run on PanSTARRS_DR1]
-select s.specobjid, o.objID 
-from MyDB.sdssSpecPhoto1 s
-cross apply fGetNearbyObjEq(s.ra,s.dec,1.0/60.0) nb
-inner join ObjectThin o on o.objid=nb.objid and o.nDetections>1
+-- Query 6 [To be run on PanSTARRS_DR1]
+select s.specobj_idx, o.objID
+into MyDB.Xmatch1
+from MyDB.sdssSpecPhoto1_DR14 s
+cross apply fGetNearestObjEq(s.ra,s.dec,1.0/60.0) nb
+inner join ObjectThin o on o.objid=nb.objid 
 
-select s.specobjid, o.objID 
-from MyDB.sdssSpecPhoto2 s
-cross apply fGetNearbyObjEq(s.ra,s.dec,1.0/60.0) nb
-inner join ObjectThin o on o.objid=nb.objid and o.nDetections>1
+select s.specobj_idx, o.objID 
+into MyDB.Xmatch2
+from MyDB.sdssSpecPhoto2_DR14 s
+cross apply fGetNearestObjEq(s.ra,s.dec,1.0/60.0) nb
+inner join ObjectThin o on o.objid=nb.objid 
 
-select s.specobjid, o.objID 
-from MyDB.sdssSpecPhoto3 s
-cross apply fGetNearbyObjEq(s.ra,s.dec,1.0/60.0) nb
-inner join ObjectThin o on o.objid=nb.objid and o.nDetections>1
+select s.specobj_idx, o.objID 
+into MyDB.Xmatch3
+from MyDB.sdssSpecPhoto3_DR14 s
+cross apply fGetNearestObjEq(s.ra,s.dec,1.0/60.0) nb
+inner join ObjectThin o on o.objid=nb.objid 
 
-select s.specobjid, o.objID 
-from MyDB.sdssSpecPhoto4 s
-cross apply fGetNearbyObjEq(s.ra,s.dec,1.0/60.0) nb
-inner join ObjectThin o on o.objid=nb.objid and o.nDetections>1
+select s.specobj_idx, o.objID 
+into MyDB.Xmatch4
+from MyDB.sdssSpecPhoto4_DR14 s
+cross apply fGetNearestObjEq(s.ra,s.dec,1.0/60.0) nb
+inner join ObjectThin o on o.objid=nb.objid 
 
--- Query 4 [To be run on PanSTARRS_DR1]
+/* Queries below need to be updated for the actual features 
+used in our model */
 
-select sdss.specobjid, sdss.ra, sdss.dec, sdss.class, 
-sdss.sourceType, sdss.z, sdss.cModelMag_r, sdss.gminusi,
-soa.objID, soa.primaryDetection, soa.bestDetection, 
-soa.gpsfMajorFWHM, soa.gpsfMinorFWHM, soa.gpsfTheta, soa.gpsfCore, soa.gpsfLikelihood, soa.gpsfQf, soa.gpsfQfPerfect, soa.gpsfChiSq, soa.gmomentXX, soa.gmomentXY, soa.gmomentYY, soa.gmomentR1, soa.gmomentRH, soa.gPSFFlux, soa.gPSFFluxErr, soa.gApFlux, soa.gApFluxErr, soa.gApFillFac, soa.gApRadius, soa.gKronFlux, soa.gKronFluxErr, soa.gKronRad, soa.gexpTime, soa.gExtNSigma, soa.gsky, soa.gskyErr, soa.gzp, soa.gPlateScale, 
-soa.rpsfMajorFWHM, soa.rpsfMinorFWHM, soa.rpsfTheta, soa.rpsfCore, soa.rpsfLikelihood, soa.rpsfQf, soa.rpsfQfPerfect, soa.rpsfChiSq, soa.rmomentXX, soa.rmomentXY, soa.rmomentYY, soa.rmomentR1, soa.rmomentRH, soa.rPSFFlux, soa.rPSFFluxErr, soa.rApFlux, soa.rApFluxErr, soa.rApFillFac, soa.rApRadius, soa.rKronFlux, soa.rKronFluxErr, soa.rKronRad, soa.rexpTime, soa.rExtNSigma, soa.rsky, soa.rskyErr, soa.rzp, soa.rPlateScale, 
-soa.ipsfMajorFWHM, soa.ipsfMinorFWHM, soa.ipsfTheta, soa.ipsfCore, soa.ipsfLikelihood, soa.ipsfQf, soa.ipsfQfPerfect, soa.ipsfChiSq, soa.imomentXX, soa.imomentXY, soa.imomentYY, soa.imomentR1, soa.imomentRH, soa.iPSFFlux, soa.iPSFFluxErr, soa.iApFlux, soa.iApFluxErr, soa.iApFillFac, soa.iApRadius, soa.iKronFlux, soa.iKronFluxErr, soa.iKronRad, soa.iexpTime, soa.iExtNSigma, soa.isky, soa.iskyErr, soa.izp, soa.iPlateScale, 
-soa.zpsfMajorFWHM, soa.zpsfMinorFWHM, soa.zpsfTheta, soa.zpsfCore, soa.zpsfLikelihood, soa.zpsfQf, soa.zpsfQfPerfect, soa.zpsfChiSq, soa.zmomentXX, soa.zmomentXY, soa.zmomentYY, soa.zmomentR1, soa.zmomentRH, soa.zPSFFlux, soa.zPSFFluxErr, soa.zApFlux, soa.zApFluxErr, soa.zApFillFac, soa.zApRadius, soa.zKronFlux, soa.zKronFluxErr, soa.zKronRad, soa.zexpTime, soa.zExtNSigma, soa.zsky, soa.zskyErr, soa.zzp, soa.zPlateScale, 
-soa.ypsfMajorFWHM, soa.ypsfMinorFWHM, soa.ypsfTheta, soa.ypsfCore, soa.ypsfLikelihood, soa.ypsfQf, soa.ypsfQfPerfect, soa.ypsfChiSq, soa.ymomentXX, soa.ymomentXY, soa.ymomentYY, soa.ymomentR1, soa.ymomentRH, soa.yPSFFlux, soa.yPSFFluxErr, soa.yApFlux, soa.yApFluxErr, soa.yApFillFac, soa.yApRadius, soa.yKronFlux, soa.yKronFluxErr, soa.yKronRad, soa.yexpTime, soa.yExtNSigma, soa.ysky, soa.yskyErr, soa.yzp, soa.yPlateScale,
-ot.qualityFlag
+-- Query 5; get stack flux for ML features [To be run on PanSTARRS_DR1]
 
-from (mydb.MyTable_2 Xmatch join mydb.sdssSpecPhoto1 sdss on 
-    sdss.specobjid = Xmatch.specobjid) 
-    join StackObjectAttributes soa on soa.objid = Xmatch.objid
-    join ObjectThin ot on ot.objid = Xmatch.objid
- 
-where primaryDetection = 1
+select *, 
+wwPSFFlux/wwKronFlux as wwPSFKronRatio
+into mydb.sdssSP2_MLfeats
+from (select sdss.class, 
+    sdss.sourceType, sdss.z, sdss.cModelMag_r, sdss.gminusi, 
+    sdss.type, sdss.countRatio,
+    ot.raStack, ot.decStack, ot.nDetections, ot.qualityFlag,
+    soa.primaryDetection, soa.bestDetection,
+    soa.gpsfMajorFWHM, soa.gpsfMinorFWHM, soa.gpsfCore, soa.gpsfLikelihood, soa.gpsfQf, soa.gpsfQfPerfect, soa.gpsfChiSq, soa.gmomentXX, soa.gmomentXY, soa.gmomentYY, soa.gmomentR1, soa.gmomentRH, soa.gPSFFlux, soa.gPSFFluxErr,soa.gApFlux, soa.gApFillFac, soa.gApRadius, soa.gKronFlux, soa.gKronFluxErr,soa.gKronRad, soa.gExtNSigma,
+    soa.rpsfMajorFWHM, soa.rpsfMinorFWHM, soa.rpsfCore, soa.rpsfLikelihood, soa.rpsfQf, soa.rpsfQfPerfect, soa.rpsfChiSq, soa.rmomentXX, soa.rmomentXY, soa.rmomentYY, soa.rmomentR1, soa.rmomentRH, soa.rPSFFlux, soa.rPSFFluxErr,soa.rApFlux, soa.rApFillFac, soa.rApRadius, soa.rKronFlux, soa.rKronFluxErr,soa.rKronRad, soa.rExtNSigma,
+    soa.ipsfMajorFWHM, soa.ipsfMinorFWHM, soa.ipsfCore, soa.ipsfLikelihood, soa.ipsfQf, soa.ipsfQfPerfect, soa.ipsfChiSq, soa.imomentXX, soa.imomentXY, soa.imomentYY, soa.imomentR1, soa.imomentRH, soa.iPSFFlux, soa.iPSFFluxErr,soa.iApFlux, soa.iApFillFac, soa.iApRadius, soa.iKronFlux, soa.iKronFluxErr,soa.iKronRad, soa.iExtNSigma,
+    soa.zpsfMajorFWHM, soa.zpsfMinorFWHM, soa.zpsfCore, soa.zpsfLikelihood, soa.zpsfQf, soa.zpsfQfPerfect, soa.zpsfChiSq, soa.zmomentXX, soa.zmomentXY, soa.zmomentYY, soa.zmomentR1, soa.zmomentRH, soa.zPSFFlux, soa.zPSFFluxErr,soa.zApFlux, soa.zApFillFac, soa.zApRadius, soa.zKronFlux, soa.zKronFluxErr,soa.zKronRad, soa.zExtNSigma,
+    soa.ypsfMajorFWHM, soa.ypsfMinorFWHM, soa.ypsfCore, soa.ypsfLikelihood, soa.ypsfQf, soa.ypsfQfPerfect, soa.ypsfChiSq, soa.ymomentXX, soa.ymomentXY, soa.ymomentYY, soa.ymomentR1, soa.ymomentRH, soa.yPSFFlux, soa.yPSFFluxErr,soa.yApFlux, soa.yApFillFac, soa.yApRadius, soa.yKronFlux, soa.yKronFluxErr,soa.yKronRad, soa.yExtNSigma,
+    (case when (gPSFFlux > 0 AND gKronFlux > 0)
+        then power(gPSFFlux,3)/power(gPSFFluxErr,2) else 0 end + 
+    case when (rPSFFlux > 0 AND rKronFlux > 0)
+        then power(rPSFFlux,3)/power(rPSFFluxErr,2) else 0 end + 
+    case when (iPSFFlux > 0 AND iKronFlux > 0)
+        then power(iPSFFlux,3)/power(iPSFFluxErr,2) else 0 end + 
+    case when (zPSFFlux > 0 AND zKronFlux > 0)
+        then power(zPSFFlux,3)/power(zPSFFluxErr,2) else 0 end + 
+    case when (yPSFFlux > 0 AND yKronFlux > 0)
+        then power(yPSFFlux,3)/power(yPSFFluxErr,2) else 0 end)/nullif(
+    case when (gPSFFlux > 0 AND gKronFlux > 0)
+        then power(gPSFFlux,2)/power(gPSFFluxErr,2) else 0 end + 
+    case when (rPSFFlux > 0 AND rKronFlux > 0)
+        then power(rPSFFlux,2)/power(rPSFFluxErr,2) else 0 end + 
+    case when (iPSFFlux > 0 AND iKronFlux > 0)
+        then power(iPSFFlux,2)/power(iPSFFluxErr,2) else 0 end + 
+    case when (zPSFFlux > 0 AND zKronFlux > 0)
+        then power(zPSFFlux,2)/power(zPSFFluxErr,2) else 0 end + 
+    case when (yPSFFlux > 0 AND yKronFlux > 0)
+        then power(yPSFFlux,2)/power(yPSFFluxErr,2) else 0 end, 0) 
+    as wwPSFFlux, 
+    (case when (gPSFFlux > 0 AND gKronFlux > 0)
+        then power(gKronFlux,3)/power(gKronFluxErr,2) else 0 end + 
+    case when (rPSFFlux > 0 AND rKronFlux > 0)
+        then power(rKronFlux,3)/power(rKronFluxErr,2) else 0 end + 
+    case when (iPSFFlux > 0 AND iKronFlux > 0)
+        then power(iKronFlux,3)/power(iKronFluxErr,2) else 0 end + 
+    case when (zPSFFlux > 0 AND zKronFlux > 0)
+        then power(zKronFlux,3)/power(zKronFluxErr,2) else 0 end + 
+    case when (yPSFFlux > 0 AND yKronFlux > 0)
+        then power(yKronFlux,3)/power(yKronFluxErr,2) else 0 end)/nullif(
+    case when (gPSFFlux > 0 AND gKronFlux > 0)
+        then power(gKronFlux,2)/power(gKronFluxErr,2) else 0 end + 
+    case when (rPSFFlux > 0 AND rKronFlux > 0)
+        then power(rKronFlux,2)/power(rKronFluxErr,2) else 0 end + 
+    case when (iPSFFlux > 0 AND iKronFlux > 0)
+        then power(iKronFlux,2)/power(iKronFluxErr,2) else 0 end + 
+    case when (zPSFFlux > 0 AND zKronFlux > 0)
+        then power(zKronFlux,2)/power(zKronFluxErr,2) else 0 end + 
+    case when (yPSFFlux > 0 AND yKronFlux > 0)
+        then power(yKronFlux,2)/power(yKronFluxErr,2) else 0 end, 0) 
+    as wwKronFlux
+    from (mydb.Xmatch2 x join mydb.sdssSpecPhoto2_DR14 sdss on x.specobj_idx = sdss.specobj_idx)
+    join StackObjectAttributes soa on soa.objid = x.objid
+    join ObjectThin ot on ot.objid = soa.objid
+    where soa.primaryDetection = 1)
+    dummy
+
+select *, 
+wwPSFFlux/wwKronFlux as wwPSFKronRatio
+into mydb.sdssSP3_MLfeats
+from (select sdss.class, 
+    sdss.sourceType, sdss.z, sdss.cModelMag_r, sdss.gminusi, 
+    sdss.type, sdss.countRatio,
+    ot.raStack, ot.decStack, ot.nDetections, ot.qualityFlag,
+    soa.primaryDetection, soa.bestDetection,
+    soa.gpsfMajorFWHM, soa.gpsfMinorFWHM, soa.gpsfCore, soa.gpsfLikelihood, soa.gpsfQf, soa.gpsfQfPerfect, soa.gpsfChiSq, soa.gmomentXX, soa.gmomentXY, soa.gmomentYY, soa.gmomentR1, soa.gmomentRH, soa.gPSFFlux, soa.gPSFFluxErr,soa.gApFlux, soa.gApFillFac, soa.gApRadius, soa.gKronFlux, soa.gKronFluxErr,soa.gKronRad, soa.gExtNSigma,
+    soa.rpsfMajorFWHM, soa.rpsfMinorFWHM, soa.rpsfCore, soa.rpsfLikelihood, soa.rpsfQf, soa.rpsfQfPerfect, soa.rpsfChiSq, soa.rmomentXX, soa.rmomentXY, soa.rmomentYY, soa.rmomentR1, soa.rmomentRH, soa.rPSFFlux, soa.rPSFFluxErr,soa.rApFlux, soa.rApFillFac, soa.rApRadius, soa.rKronFlux, soa.rKronFluxErr,soa.rKronRad, soa.rExtNSigma,
+    soa.ipsfMajorFWHM, soa.ipsfMinorFWHM, soa.ipsfCore, soa.ipsfLikelihood, soa.ipsfQf, soa.ipsfQfPerfect, soa.ipsfChiSq, soa.imomentXX, soa.imomentXY, soa.imomentYY, soa.imomentR1, soa.imomentRH, soa.iPSFFlux, soa.iPSFFluxErr,soa.iApFlux, soa.iApFillFac, soa.iApRadius, soa.iKronFlux, soa.iKronFluxErr,soa.iKronRad, soa.iExtNSigma,
+    soa.zpsfMajorFWHM, soa.zpsfMinorFWHM, soa.zpsfCore, soa.zpsfLikelihood, soa.zpsfQf, soa.zpsfQfPerfect, soa.zpsfChiSq, soa.zmomentXX, soa.zmomentXY, soa.zmomentYY, soa.zmomentR1, soa.zmomentRH, soa.zPSFFlux, soa.zPSFFluxErr,soa.zApFlux, soa.zApFillFac, soa.zApRadius, soa.zKronFlux, soa.zKronFluxErr,soa.zKronRad, soa.zExtNSigma,
+    soa.ypsfMajorFWHM, soa.ypsfMinorFWHM, soa.ypsfCore, soa.ypsfLikelihood, soa.ypsfQf, soa.ypsfQfPerfect, soa.ypsfChiSq, soa.ymomentXX, soa.ymomentXY, soa.ymomentYY, soa.ymomentR1, soa.ymomentRH, soa.yPSFFlux, soa.yPSFFluxErr,soa.yApFlux, soa.yApFillFac, soa.yApRadius, soa.yKronFlux, soa.yKronFluxErr,soa.yKronRad, soa.yExtNSigma,
+    (case when (gPSFFlux > 0 AND gKronFlux > 0)
+        then power(gPSFFlux,3)/power(gPSFFluxErr,2) else 0 end + 
+    case when (rPSFFlux > 0 AND rKronFlux > 0)
+        then power(rPSFFlux,3)/power(rPSFFluxErr,2) else 0 end + 
+    case when (iPSFFlux > 0 AND iKronFlux > 0)
+        then power(iPSFFlux,3)/power(iPSFFluxErr,2) else 0 end + 
+    case when (zPSFFlux > 0 AND zKronFlux > 0)
+        then power(zPSFFlux,3)/power(zPSFFluxErr,2) else 0 end + 
+    case when (yPSFFlux > 0 AND yKronFlux > 0)
+        then power(yPSFFlux,3)/power(yPSFFluxErr,2) else 0 end)/nullif(
+    case when (gPSFFlux > 0 AND gKronFlux > 0)
+        then power(gPSFFlux,2)/power(gPSFFluxErr,2) else 0 end + 
+    case when (rPSFFlux > 0 AND rKronFlux > 0)
+        then power(rPSFFlux,2)/power(rPSFFluxErr,2) else 0 end + 
+    case when (iPSFFlux > 0 AND iKronFlux > 0)
+        then power(iPSFFlux,2)/power(iPSFFluxErr,2) else 0 end + 
+    case when (zPSFFlux > 0 AND zKronFlux > 0)
+        then power(zPSFFlux,2)/power(zPSFFluxErr,2) else 0 end + 
+    case when (yPSFFlux > 0 AND yKronFlux > 0)
+        then power(yPSFFlux,2)/power(yPSFFluxErr,2) else 0 end, 0) 
+    as wwPSFFlux, 
+    (case when (gPSFFlux > 0 AND gKronFlux > 0)
+        then power(gKronFlux,3)/power(gKronFluxErr,2) else 0 end + 
+    case when (rPSFFlux > 0 AND rKronFlux > 0)
+        then power(rKronFlux,3)/power(rKronFluxErr,2) else 0 end + 
+    case when (iPSFFlux > 0 AND iKronFlux > 0)
+        then power(iKronFlux,3)/power(iKronFluxErr,2) else 0 end + 
+    case when (zPSFFlux > 0 AND zKronFlux > 0)
+        then power(zKronFlux,3)/power(zKronFluxErr,2) else 0 end + 
+    case when (yPSFFlux > 0 AND yKronFlux > 0)
+        then power(yKronFlux,3)/power(yKronFluxErr,2) else 0 end)/nullif(
+    case when (gPSFFlux > 0 AND gKronFlux > 0)
+        then power(gKronFlux,2)/power(gKronFluxErr,2) else 0 end + 
+    case when (rPSFFlux > 0 AND rKronFlux > 0)
+        then power(rKronFlux,2)/power(rKronFluxErr,2) else 0 end + 
+    case when (iPSFFlux > 0 AND iKronFlux > 0)
+        then power(iKronFlux,2)/power(iKronFluxErr,2) else 0 end + 
+    case when (zPSFFlux > 0 AND zKronFlux > 0)
+        then power(zKronFlux,2)/power(zKronFluxErr,2) else 0 end + 
+    case when (yPSFFlux > 0 AND yKronFlux > 0)
+        then power(yKronFlux,2)/power(yKronFluxErr,2) else 0 end, 0) 
+    as wwKronFlux
+    from (mydb.Xmatch3 x join mydb.sdssSpecPhoto3_DR14 sdss on x.specobj_idx = sdss.specobj_idx)
+    join StackObjectAttributes soa on soa.objid = x.objid
+    join ObjectThin ot on ot.objid = soa.objid
+    where soa.primaryDetection = 1)
+    dummy    
+
+select *, 
+wwPSFFlux/wwKronFlux as wwPSFKronRatio
+into mydb.sdssSP4_MLfeats
+from (select sdss.class, 
+    sdss.sourceType, sdss.z, sdss.cModelMag_r, sdss.gminusi, 
+    sdss.type, sdss.countRatio,
+    ot.raStack, ot.decStack, ot.nDetections, ot.qualityFlag,
+    soa.primaryDetection, soa.bestDetection,
+    soa.gpsfMajorFWHM, soa.gpsfMinorFWHM, soa.gpsfCore, soa.gpsfLikelihood, soa.gpsfQf, soa.gpsfQfPerfect, soa.gpsfChiSq, soa.gmomentXX, soa.gmomentXY, soa.gmomentYY, soa.gmomentR1, soa.gmomentRH, soa.gPSFFlux, soa.gPSFFluxErr,soa.gApFlux, soa.gApFillFac, soa.gApRadius, soa.gKronFlux, soa.gKronFluxErr,soa.gKronRad, soa.gExtNSigma,
+    soa.rpsfMajorFWHM, soa.rpsfMinorFWHM, soa.rpsfCore, soa.rpsfLikelihood, soa.rpsfQf, soa.rpsfQfPerfect, soa.rpsfChiSq, soa.rmomentXX, soa.rmomentXY, soa.rmomentYY, soa.rmomentR1, soa.rmomentRH, soa.rPSFFlux, soa.rPSFFluxErr,soa.rApFlux, soa.rApFillFac, soa.rApRadius, soa.rKronFlux, soa.rKronFluxErr,soa.rKronRad, soa.rExtNSigma,
+    soa.ipsfMajorFWHM, soa.ipsfMinorFWHM, soa.ipsfCore, soa.ipsfLikelihood, soa.ipsfQf, soa.ipsfQfPerfect, soa.ipsfChiSq, soa.imomentXX, soa.imomentXY, soa.imomentYY, soa.imomentR1, soa.imomentRH, soa.iPSFFlux, soa.iPSFFluxErr,soa.iApFlux, soa.iApFillFac, soa.iApRadius, soa.iKronFlux, soa.iKronFluxErr,soa.iKronRad, soa.iExtNSigma,
+    soa.zpsfMajorFWHM, soa.zpsfMinorFWHM, soa.zpsfCore, soa.zpsfLikelihood, soa.zpsfQf, soa.zpsfQfPerfect, soa.zpsfChiSq, soa.zmomentXX, soa.zmomentXY, soa.zmomentYY, soa.zmomentR1, soa.zmomentRH, soa.zPSFFlux, soa.zPSFFluxErr,soa.zApFlux, soa.zApFillFac, soa.zApRadius, soa.zKronFlux, soa.zKronFluxErr,soa.zKronRad, soa.zExtNSigma,
+    soa.ypsfMajorFWHM, soa.ypsfMinorFWHM, soa.ypsfCore, soa.ypsfLikelihood, soa.ypsfQf, soa.ypsfQfPerfect, soa.ypsfChiSq, soa.ymomentXX, soa.ymomentXY, soa.ymomentYY, soa.ymomentR1, soa.ymomentRH, soa.yPSFFlux, soa.yPSFFluxErr,soa.yApFlux, soa.yApFillFac, soa.yApRadius, soa.yKronFlux, soa.yKronFluxErr,soa.yKronRad, soa.yExtNSigma,
+    (case when (gPSFFlux > 0 AND gKronFlux > 0)
+        then power(gPSFFlux,3)/power(gPSFFluxErr,2) else 0 end + 
+    case when (rPSFFlux > 0 AND rKronFlux > 0)
+        then power(rPSFFlux,3)/power(rPSFFluxErr,2) else 0 end + 
+    case when (iPSFFlux > 0 AND iKronFlux > 0)
+        then power(iPSFFlux,3)/power(iPSFFluxErr,2) else 0 end + 
+    case when (zPSFFlux > 0 AND zKronFlux > 0)
+        then power(zPSFFlux,3)/power(zPSFFluxErr,2) else 0 end + 
+    case when (yPSFFlux > 0 AND yKronFlux > 0)
+        then power(yPSFFlux,3)/power(yPSFFluxErr,2) else 0 end)/nullif(
+    case when (gPSFFlux > 0 AND gKronFlux > 0)
+        then power(gPSFFlux,2)/power(gPSFFluxErr,2) else 0 end + 
+    case when (rPSFFlux > 0 AND rKronFlux > 0)
+        then power(rPSFFlux,2)/power(rPSFFluxErr,2) else 0 end + 
+    case when (iPSFFlux > 0 AND iKronFlux > 0)
+        then power(iPSFFlux,2)/power(iPSFFluxErr,2) else 0 end + 
+    case when (zPSFFlux > 0 AND zKronFlux > 0)
+        then power(zPSFFlux,2)/power(zPSFFluxErr,2) else 0 end + 
+    case when (yPSFFlux > 0 AND yKronFlux > 0)
+        then power(yPSFFlux,2)/power(yPSFFluxErr,2) else 0 end, 0) 
+    as wwPSFFlux, 
+    (case when (gPSFFlux > 0 AND gKronFlux > 0)
+        then power(gKronFlux,3)/power(gKronFluxErr,2) else 0 end + 
+    case when (rPSFFlux > 0 AND rKronFlux > 0)
+        then power(rKronFlux,3)/power(rKronFluxErr,2) else 0 end + 
+    case when (iPSFFlux > 0 AND iKronFlux > 0)
+        then power(iKronFlux,3)/power(iKronFluxErr,2) else 0 end + 
+    case when (zPSFFlux > 0 AND zKronFlux > 0)
+        then power(zKronFlux,3)/power(zKronFluxErr,2) else 0 end + 
+    case when (yPSFFlux > 0 AND yKronFlux > 0)
+        then power(yKronFlux,3)/power(yKronFluxErr,2) else 0 end)/nullif(
+    case when (gPSFFlux > 0 AND gKronFlux > 0)
+        then power(gKronFlux,2)/power(gKronFluxErr,2) else 0 end + 
+    case when (rPSFFlux > 0 AND rKronFlux > 0)
+        then power(rKronFlux,2)/power(rKronFluxErr,2) else 0 end + 
+    case when (iPSFFlux > 0 AND iKronFlux > 0)
+        then power(iKronFlux,2)/power(iKronFluxErr,2) else 0 end + 
+    case when (zPSFFlux > 0 AND zKronFlux > 0)
+        then power(zKronFlux,2)/power(zKronFluxErr,2) else 0 end + 
+    case when (yPSFFlux > 0 AND yKronFlux > 0)
+        then power(yKronFlux,2)/power(yKronFluxErr,2) else 0 end, 0) 
+    as wwKronFlux
+    from (mydb.Xmatch4 x join mydb.sdssSpecPhoto4_DR14 sdss on x.specobj_idx = sdss.specobj_idx)
+    join StackObjectAttributes soa on soa.objid = x.objid
+    join ObjectThin ot on ot.objid = soa.objid
+    where soa.primaryDetection = 1)
+    dummy  
+
+-- Query 7
+
+select * from sdssSP1_MLfeats into sdssSP_MLfeats; 
+insert into sdssSP_MLfeats
+select * from sdssSP2_MLfeats; 
+insert into sdssSP_MLfeats
+select * from sdssSP3_MLfeats;
+insert into sdssSP_MLfeats
+select * from sdssSP4_MLfeats
+
+select * into mydb.sdssSP_MLfeats from AAMaccounts.adamamiller.sdssSP_MLfeats
+union
+(select * from AAMaccounts.adamamiller.sdssSP2_MLfeats
+    union
+    (select * from AAMaccounts.adamamiller.sdssSP3_MLfeats
+        union
+        select * from AAMaccounts.adamamiller.sdssSP4_MLfeats) 
+    ) 
