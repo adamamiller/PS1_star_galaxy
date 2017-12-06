@@ -351,14 +351,6 @@ from (select sdss.class,
 
 -- Query 7
 
-select * from sdssSP1_MLfeats into sdssSP_MLfeats; 
-insert into sdssSP_MLfeats
-select * from sdssSP2_MLfeats; 
-insert into sdssSP_MLfeats
-select * from sdssSP3_MLfeats;
-insert into sdssSP_MLfeats
-select * from sdssSP4_MLfeats
-
 select * into mydb.sdssSP_MLfeats from AAMaccounts.adamamiller.sdssSP_MLfeats
 union
 (select * from AAMaccounts.adamamiller.sdssSP2_MLfeats
