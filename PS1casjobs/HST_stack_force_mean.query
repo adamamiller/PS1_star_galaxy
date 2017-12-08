@@ -15,10 +15,7 @@ from mydb.COSMOS_PS1_Xmatch_unique cx join objectthin o on cx.objid = o.objid
 
 /* Get the whiteFlux Features */
 
-select *, 
-wwPSFFlux/wwKronFlux as wwPSFKronRatio
-into mydb.COSMOS_tmp2
-from (select t.*, 
+select t.*, 
     (case when (soa.gPSFFlux > 0 AND soa.gApFlux > 0 AND soa.gKronFlux > 0)
         then power(soa.gPSFFlux,3)/power(soa.gPSFFluxErr,2) else 0 end + 
     case when (soa.rPSFFlux > 0 AND soa.rApFlux > 0 AND soa.rKronFlux > 0)
@@ -81,18 +78,7 @@ from (select t.*,
         then power(soa.zApFlux,2)/power(soa.zApFluxErr,2) else 0 end + 
     case when (soa.yPSFFlux > 0 AND soa.yApFlux > 0 AND soa.yKronFlux > 0)
         then power(soa.yApFlux,2)/power(soa.yApFluxErr,2) else 0 end, 0) 
-    as wwApFlux
-    from mydb.COSMOS_tmp1 t left join stackobjectattributes soa on t.objid = soa.objid
-    where soa.primaryDetection = 1
-) dummy
-
-
-/* Query for the the Forced Flux values */
-
-select *, 
-wwFPSFFlux/wwFKronFlux as wwFPSFKronRatio
-into mydb.COSMOS_tmp3
-from (select t.*, 
+    as wwApFlux,    
     (case when (fmo.gFPSFFlux > 0 AND fmo.gFKronFlux > 0 AND fmo.gFPSFFluxErr > 0 AND fmo.gFKronFluxErr > 0 AND fmo.gFApFlux > 0 AND fmo.gFApFluxErr > 0)
         then power(fmo.gFPSFFlux,3)/power(fmo.gFPSFFluxErr,2) else 0 end + 
     case when (fmo.rFPSFFlux > 0 AND fmo.rFKronFlux > 0 AND fmo.rFPSFFluxErr > 0 AND fmo.rFKronFluxErr > 0 AND fmo.rFApFlux > 0 AND fmo.rFApFluxErr > 0)
@@ -155,16 +141,7 @@ from (select t.*,
         then power(fmo.zFApFlux,2)/power(fmo.zFApFluxErr,2) else 0 end + 
     case when (fmo.yFPSFFlux > 0 AND fmo.yFKronFlux > 0 AND fmo.yFPSFFluxErr > 0 AND fmo.yFKronFluxErr > 0 AND fmo.yFApFlux > 0 AND fmo.yFApFluxErr > 0)
         then power(fmo.yFApFlux,2)/power(fmo.yFApFluxErr,2) else 0 end, 0) 
-    as wwFApFlux     
-    from mydb.COSMOS_tmp2 t left join panstarrs_dr1.forcedmeanobject fmo on t.objid = fmo.objid
-) dummy
-
-/* Query for the the Mean Flux values */
-
-select *, 
-wwMeanPSFFlux/nullif(wwMeanKronFlux,0) as wwMeanPSFKronRatio
-into mydb.COSMOS_compare_white_phot
-from (select t.*, 
+    as wwFApFlux,
     (case when (mo.gMeanPSFMag > 0 AND mo.gMeanKronMag > 0 AND mo.gMeanPSFMagErr > 0 AND mo.gMeanKronMagErr > 0 AND mo.gMeanApMag > 0 AND mo.gMeanApMagErr > 0)
         then 3631*power(cast(10 as float),-0.4*mo.gMeanPSFMag)*power(2.5/log(10)/mo.gMeanPSFMagErr,2) else 0 end + 
     case when (mo.rMeanPSFMag > 0 AND mo.rMeanKronMag > 0 AND mo.rMeanPSFMagErr > 0 AND mo.rMeanKronMagErr > 0 AND mo.rMeanApMag > 0 AND mo.rMeanApMagErr > 0)
@@ -227,6 +204,9 @@ from (select t.*,
         then power(2.5/log(10)/mo.zMeanApMagErr,2) else 0 end + 
     case when (mo.yMeanPSFMag > 0 AND mo.yMeanKronMag > 0 AND mo.yMeanPSFMagErr > 0 AND mo.yMeanKronMagErr > 0 AND mo.yMeanApMag > 0 AND mo.yMeanApMagErr > 0)
         then power(2.5/log(10)/mo.yMeanApMagErr,2) else 0 end, 0) 
-    as wwMeanApFlux      
-    from mydb.COSMOS_tmp3 t left join meanobject mo on t.objid = mo.objid
-) dummy
+    as wwMeanApFlux
+    into mydb.COSMOS_compare_white_phot   
+    from ((mydb.COSMOS_tmp1 t left join stackobjectattributes soa on t.objid = soa.objid)
+            left join forcedmeanobject fmo on t.objid = fmo.objid)
+            left join meanobject mo on t.objid = mo.objid    
+    where soa.primaryDetection = 1
