@@ -1,17 +1,13 @@
 /* Select only those sources with unique matches to HST data */
 
-select c.*
+select c.class_star, c.mu_class, ot.objid, primaryDetection, nDetections, qualityFlag
 into mydb.COSMOS_PS1_Xmatch_unique
 from (select objid
-from COSMOS_PS1_Xmatch
+from mydb.COSMOS_PS1_Xmatch
 group by objid
-having count(objid) = 1) s join COSMOS_PS1_Xmatch c on s.objid = c.objid
+having count(objid) = 1) s join mydb.COSMOS_PS1_Xmatch c on s.objid = c.objid
+join objectthin ot on s.objid = ot.objid
 order by objid
-
-/* Grab the number of detections from objectThin */
-select class_star, mu_class, cx.objid, primaryDetection, nDetections, qualityFlag
-into mydb.COSMOS_tmp1
-from mydb.COSMOS_PS1_Xmatch_unique cx join objectthin o on cx.objid = o.objid
 
 /* Get the whiteFlux Features */
 
@@ -206,7 +202,7 @@ select t.*,
         then power(2.5/log(10)/mo.yMeanApMagErr,2) else 0 end, 0) 
     as wwMeanApFlux
     into mydb.COSMOS_compare_white_phot   
-    from ((mydb.COSMOS_tmp1 t left join stackobjectattributes soa on t.objid = soa.objid)
+    from ((mydb.COSMOS_PS1_Xmatch_unique t left join stackobjectattributes soa on t.objid = soa.objid)
             left join forcedmeanobject fmo on t.objid = fmo.objid)
             left join meanobject mo on t.objid = mo.objid    
     where soa.primaryDetection = 1
