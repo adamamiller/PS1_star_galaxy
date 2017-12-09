@@ -4,17 +4,14 @@ training set out of the COSMOS matched sources from HST */
 select *, 
 (wwPSFFlux - (0.9275*wwKronFlux)/sqrt(1 + power(0.9275,2))) as wwPSFKronDist
 into mydb.HST_COSMOS_features
-from (select cosmos.MAG_AUTO, 
-    cosmos.MAGERR_AUTO, cosmos.MAG_BEST, cosmos.MAGERR_BEST, 
-    cosmos.KRON_RADIUS, cosmos.FWHM_IMAGE, 
-    cosmos.MU_MAX, cosmos.CLASS_STAR, cosmos.MU_CLASS,
+from (select cosmos.CLASS_STAR, cosmos.MU_CLASS,
     ot.raStack, ot.decStack, ot.nDetections, ot.qualityFlag,
     soa.primaryDetection, soa.bestDetection,
-    soa.gpsfMajorFWHM, soa.gpsfMinorFWHM, soa.gpsfCore, soa.gpsfLikelihood, soa.gpsfQf, soa.gpsfQfPerfect, soa.gpsfChiSq, soa.gmomentXX, soa.gmomentXY, soa.gmomentYY, soa.gmomentR1, soa.gmomentRH, soa.gPSFFlux, soa.gPSFFluxErr,soa.gApFlux, soa.gApFillFac, soa.gApRadius, soa.gKronFlux, soa.gKronFluxErr,soa.gKronRad, soa.gExtNSigma,
-    soa.rpsfMajorFWHM, soa.rpsfMinorFWHM, soa.rpsfCore, soa.rpsfLikelihood, soa.rpsfQf, soa.rpsfQfPerfect, soa.rpsfChiSq, soa.rmomentXX, soa.rmomentXY, soa.rmomentYY, soa.rmomentR1, soa.rmomentRH, soa.rPSFFlux, soa.rPSFFluxErr,soa.rApFlux, soa.rApFillFac, soa.rApRadius, soa.rKronFlux, soa.rKronFluxErr,soa.rKronRad, soa.rExtNSigma,
-    soa.ipsfMajorFWHM, soa.ipsfMinorFWHM, soa.ipsfCore, soa.ipsfLikelihood, soa.ipsfQf, soa.ipsfQfPerfect, soa.ipsfChiSq, soa.imomentXX, soa.imomentXY, soa.imomentYY, soa.imomentR1, soa.imomentRH, soa.iPSFFlux, soa.iPSFFluxErr,soa.iApFlux, soa.iApFillFac, soa.iApRadius, soa.iKronFlux, soa.iKronFluxErr,soa.iKronRad, soa.iExtNSigma,
-    soa.zpsfMajorFWHM, soa.zpsfMinorFWHM, soa.zpsfCore, soa.zpsfLikelihood, soa.zpsfQf, soa.zpsfQfPerfect, soa.zpsfChiSq, soa.zmomentXX, soa.zmomentXY, soa.zmomentYY, soa.zmomentR1, soa.zmomentRH, soa.zPSFFlux, soa.zPSFFluxErr,soa.zApFlux, soa.zApFillFac, soa.zApRadius, soa.zKronFlux, soa.zKronFluxErr,soa.zKronRad, soa.zExtNSigma,
-    soa.ypsfMajorFWHM, soa.ypsfMinorFWHM, soa.ypsfCore, soa.ypsfLikelihood, soa.ypsfQf, soa.ypsfQfPerfect, soa.ypsfChiSq, soa.ymomentXX, soa.ymomentXY, soa.ymomentYY, soa.ymomentR1, soa.ymomentRH, soa.yPSFFlux, soa.yPSFFluxErr,soa.yApFlux, soa.yApFillFac, soa.yApRadius, soa.yKronFlux, soa.yKronFluxErr,soa.yKronRad, soa.yExtNSigma,
+    soa.gpsfMajorFWHM, soa.gpsfMinorFWHM, soa.gpsfCore, soa.gpsfLikelihood, soa.gpsfQf, soa.gpsfQfPerfect, soa.gpsfChiSq, soa.gmomentXX, soa.gmomentXY, soa.gmomentYY, soa.gmomentR1, soa.gmomentRH, soa.gPSFFlux, soa.gPSFFluxErr,soa.gApFlux, soa.gApFluxErr,soa.gApFillFac, soa.gApRadius, soa.gKronFlux, soa.gKronFluxErr,soa.gKronRad, soa.gExtNSigma,
+    soa.rpsfMajorFWHM, soa.rpsfMinorFWHM, soa.rpsfCore, soa.rpsfLikelihood, soa.rpsfQf, soa.rpsfQfPerfect, soa.rpsfChiSq, soa.rmomentXX, soa.rmomentXY, soa.rmomentYY, soa.rmomentR1, soa.rmomentRH, soa.rPSFFlux, soa.rPSFFluxErr,soa.rApFlux, soa.rApFluxErr,soa.rApFillFac, soa.rApRadius, soa.rKronFlux, soa.rKronFluxErr,soa.rKronRad, soa.rExtNSigma,
+    soa.ipsfMajorFWHM, soa.ipsfMinorFWHM, soa.ipsfCore, soa.ipsfLikelihood, soa.ipsfQf, soa.ipsfQfPerfect, soa.ipsfChiSq, soa.imomentXX, soa.imomentXY, soa.imomentYY, soa.imomentR1, soa.imomentRH, soa.iPSFFlux, soa.iPSFFluxErr,soa.iApFlux, soa.iApFluxErr,soa.iApFillFac, soa.iApRadius, soa.iKronFlux, soa.iKronFluxErr,soa.iKronRad, soa.iExtNSigma,
+    soa.zpsfMajorFWHM, soa.zpsfMinorFWHM, soa.zpsfCore, soa.zpsfLikelihood, soa.zpsfQf, soa.zpsfQfPerfect, soa.zpsfChiSq, soa.zmomentXX, soa.zmomentXY, soa.zmomentYY, soa.zmomentR1, soa.zmomentRH, soa.zPSFFlux, soa.zPSFFluxErr,soa.zApFlux, soa.zApFluxErr,soa.zApFillFac, soa.zApRadius, soa.zKronFlux, soa.zKronFluxErr,soa.zKronRad, soa.zExtNSigma,
+    soa.ypsfMajorFWHM, soa.ypsfMinorFWHM, soa.ypsfCore, soa.ypsfLikelihood, soa.ypsfQf, soa.ypsfQfPerfect, soa.ypsfChiSq, soa.ymomentXX, soa.ymomentXY, soa.ymomentYY, soa.ymomentR1, soa.ymomentRH, soa.yPSFFlux, soa.yPSFFluxErr,soa.yApFlux, soa.yApFluxErr,soa.yApFillFac, soa.yApRadius, soa.yKronFlux, soa.yKronFluxErr,soa.yKronRad, soa.yExtNSigma,
     (case when (soa.gPSFFlux > 0 AND soa.gKronFlux > 0)
         then power(soa.gPSFFlux,3)/power(soa.gPSFFluxErr,2) else 0 end + 
     case when (soa.rPSFFlux > 0 AND soa.rKronFlux > 0)
