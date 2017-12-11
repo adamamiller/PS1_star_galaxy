@@ -55,25 +55,25 @@ select t.*,
         then power(soa.yKronFlux,2)/power(soa.yKronFluxErr,2) else 0 end, 0) 
     as wwKronFlux, 
     (case when (soa.gPSFFlux > 0 AND soa.gApFlux > 0 AND soa.gKronFlux > 0)
-        then power(soa.gApFlux,3)/power(soa.gApFluxErr,2) else 0 end + 
+        then power(soa.gApFlux,3)/power(soa.gPSFFluxErr,2) else 0 end + 
     case when (soa.rPSFFlux > 0 AND soa.rApFlux > 0 AND soa.rKronFlux > 0)
-        then power(soa.rApFlux,3)/power(soa.rApFluxErr,2) else 0 end + 
+        then power(soa.rApFlux,3)/power(soa.rPSFFluxErr,2) else 0 end + 
     case when (soa.iPSFFlux > 0 AND soa.iApFlux > 0 AND soa.iKronFlux > 0)
-        then power(soa.iApFlux,3)/power(soa.iApFluxErr,2) else 0 end + 
+        then power(soa.iApFlux,3)/power(soa.iPSFFluxErr,2) else 0 end + 
     case when (soa.zPSFFlux > 0 AND soa.zApFlux > 0 AND soa.zKronFlux > 0)
-        then power(soa.zApFlux,3)/power(soa.zApFluxErr,2) else 0 end + 
+        then power(soa.zApFlux,3)/power(soa.zPSFFluxErr,2) else 0 end + 
     case when (soa.yPSFFlux > 0 AND soa.yApFlux > 0 AND soa.yKronFlux > 0)
-        then power(soa.yApFlux,3)/power(soa.yApFluxErr,2) else 0 end)/nullif(
+        then power(soa.yApFlux,3)/power(soa.yPSFFluxErr,2) else 0 end)/nullif(
     case when (soa.gPSFFlux > 0 AND soa.gApFlux > 0 AND soa.gKronFlux > 0)
-        then power(soa.gApFlux,2)/power(soa.gApFluxErr,2) else 0 end + 
+        then power(soa.gApFlux,2)/power(soa.gPSFFluxErr,2) else 0 end + 
     case when (soa.rPSFFlux > 0 AND soa.rApFlux > 0 AND soa.rKronFlux > 0)
-        then power(soa.rApFlux,2)/power(soa.rApFluxErr,2) else 0 end + 
+        then power(soa.rApFlux,2)/power(soa.rPSFFluxErr,2) else 0 end + 
     case when (soa.iPSFFlux > 0 AND soa.iApFlux > 0 AND soa.iKronFlux > 0)
-        then power(soa.iApFlux,2)/power(soa.iApFluxErr,2) else 0 end + 
+        then power(soa.iApFlux,2)/power(soa.iPSFFluxErr,2) else 0 end + 
     case when (soa.zPSFFlux > 0 AND soa.zApFlux > 0 AND soa.zKronFlux > 0)
-        then power(soa.zApFlux,2)/power(soa.zApFluxErr,2) else 0 end + 
+        then power(soa.zApFlux,2)/power(soa.zPSFFluxErr,2) else 0 end + 
     case when (soa.yPSFFlux > 0 AND soa.yApFlux > 0 AND soa.yKronFlux > 0)
-        then power(soa.yApFlux,2)/power(soa.yApFluxErr,2) else 0 end, 0) 
+        then power(soa.yApFlux,2)/power(soa.yPSFFluxErr,2) else 0 end, 0) 
     as wwApFlux,    
     (case when (fmo.gFPSFFlux > 0 AND fmo.gFKronFlux > 0 AND fmo.gFPSFFluxErr > 0 AND fmo.gFKronFluxErr > 0 AND fmo.gFApFlux > 0 AND fmo.gFApFluxErr > 0)
         then power(fmo.gFPSFFlux,3)/power(fmo.gFPSFFluxErr,2) else 0 end + 
@@ -118,25 +118,25 @@ select t.*,
         then power(fmo.yFKronFlux,2)/power(fmo.yFKronFluxErr,2) else 0 end, 0) 
     as wwFKronFlux,
     (case when (fmo.gFPSFFlux > 0 AND fmo.gFKronFlux > 0 AND fmo.gFPSFFluxErr > 0 AND fmo.gFKronFluxErr > 0 AND fmo.gFApFlux > 0 AND fmo.gFApFluxErr > 0)
-        then power(fmo.gFApFlux,3)/power(fmo.gFApFluxErr,2) else 0 end + 
+        then power(fmo.gFApFlux,3)/power(fmo.gFPSFFluxErr,2) else 0 end + 
     case when (fmo.rFPSFFlux > 0 AND fmo.rFKronFlux > 0 AND fmo.rFPSFFluxErr > 0 AND fmo.rFKronFluxErr > 0 AND fmo.rFApFlux > 0 AND fmo.rFApFluxErr > 0)
-        then power(fmo.rFApFlux,3)/power(fmo.rFApFluxErr,2) else 0 end + 
+        then power(fmo.rFApFlux,3)/power(fmo.rFPSFFluxErr,2) else 0 end + 
     case when (fmo.iFPSFFlux > 0 AND fmo.iFKronFlux > 0 AND fmo.iFPSFFluxErr > 0 AND fmo.iFKronFluxErr > 0 AND fmo.iFApFlux > 0 AND fmo.iFApFluxErr > 0)
-        then power(fmo.iFApFlux,3)/power(fmo.iFApFluxErr,2) else 0 end + 
+        then power(fmo.iFApFlux,3)/power(fmo.iFPSFFluxErr,2) else 0 end + 
     case when (fmo.zFPSFFlux > 0 AND fmo.zFKronFlux > 0 AND fmo.zFPSFFluxErr > 0 AND fmo.zFKronFluxErr > 0 AND fmo.zFApFlux > 0 AND fmo.zFApFluxErr > 0)
-        then power(fmo.zFApFlux,3)/power(fmo.zFApFluxErr,2) else 0 end + 
+        then power(fmo.zFApFlux,3)/power(fmo.zFPSFFluxErr,2) else 0 end + 
     case when (fmo.yFPSFFlux > 0 AND fmo.yFKronFlux > 0 AND fmo.yFPSFFluxErr > 0 AND fmo.yFKronFluxErr > 0 AND fmo.yFApFlux > 0 AND fmo.yFApFluxErr > 0)
-        then power(fmo.yFApFlux,3)/power(fmo.yFApFluxErr,2) else 0 end)/nullif(
+        then power(fmo.yFApFlux,3)/power(fmo.yFPSFFluxErr,2) else 0 end)/nullif(
     case when (fmo.gFPSFFlux > 0 AND fmo.gFKronFlux > 0 AND fmo.gFPSFFluxErr > 0 AND fmo.gFKronFluxErr > 0 AND fmo.gFApFlux > 0 AND fmo.gFApFluxErr > 0)
-        then power(fmo.gFApFlux,2)/power(fmo.gFApFluxErr,2) else 0 end + 
+        then power(fmo.gFApFlux,2)/power(fmo.gFPSFFluxErr,2) else 0 end + 
     case when (fmo.rFPSFFlux > 0 AND fmo.rFKronFlux > 0 AND fmo.rFPSFFluxErr > 0 AND fmo.rFKronFluxErr > 0 AND fmo.rFApFlux > 0 AND fmo.rFApFluxErr > 0)
-        then power(fmo.rFApFlux,2)/power(fmo.rFApFluxErr,2) else 0 end + 
+        then power(fmo.rFApFlux,2)/power(fmo.rFPSFFluxErr,2) else 0 end + 
     case when (fmo.iFPSFFlux > 0 AND fmo.iFKronFlux > 0 AND fmo.iFPSFFluxErr > 0 AND fmo.iFKronFluxErr > 0 AND fmo.iFApFlux > 0 AND fmo.iFApFluxErr > 0)
-        then power(fmo.iFApFlux,2)/power(fmo.iFApFluxErr,2) else 0 end + 
+        then power(fmo.iFApFlux,2)/power(fmo.iFPSFFluxErr,2) else 0 end + 
     case when (fmo.zFPSFFlux > 0 AND fmo.zFKronFlux > 0 AND fmo.zFPSFFluxErr > 0 AND fmo.zFKronFluxErr > 0 AND fmo.zFApFlux > 0 AND fmo.zFApFluxErr > 0)
-        then power(fmo.zFApFlux,2)/power(fmo.zFApFluxErr,2) else 0 end + 
+        then power(fmo.zFApFlux,2)/power(fmo.zFPSFFluxErr,2) else 0 end + 
     case when (fmo.yFPSFFlux > 0 AND fmo.yFKronFlux > 0 AND fmo.yFPSFFluxErr > 0 AND fmo.yFKronFluxErr > 0 AND fmo.yFApFlux > 0 AND fmo.yFApFluxErr > 0)
-        then power(fmo.yFApFlux,2)/power(fmo.yFApFluxErr,2) else 0 end, 0) 
+        then power(fmo.yFApFlux,2)/power(fmo.yFPSFFluxErr,2) else 0 end, 0) 
     as wwFApFlux,
     (case when (mo.gMeanPSFMag > 0 AND mo.gMeanKronMag > 0 AND mo.gMeanPSFMagErr > 0 AND mo.gMeanKronMagErr > 0 AND mo.gMeanApMag > 0 AND mo.gMeanApMagErr > 0)
         then 3631*power(cast(10 as float),-0.4*mo.gMeanPSFMag)*power(2.5/log(10)/mo.gMeanPSFMagErr,2) else 0 end + 
@@ -181,25 +181,25 @@ select t.*,
         then power(2.5/log(10)/mo.yMeanKronMagErr,2) else 0 end, 0) 
     as wwMeanKronFlux,
     (case when (mo.gMeanPSFMag > 0 AND mo.gMeanKronMag > 0 AND mo.gMeanPSFMagErr > 0 AND mo.gMeanKronMagErr > 0 AND mo.gMeanApMag > 0 AND mo.gMeanApMagErr > 0)
-        then 3631*power(cast(10 as float),-0.4*mo.gMeanApMag)*power(2.5/log(10)/mo.gMeanApMagErr,2) else 0 end + 
+        then 3631*power(cast(10 as float),-0.4*mo.gMeanApMag)*power(2.5/log(10)/mo.gMeanPSFMagErr,2) else 0 end + 
     case when (mo.rMeanPSFMag > 0 AND mo.rMeanKronMag > 0 AND mo.rMeanPSFMagErr > 0 AND mo.rMeanKronMagErr > 0 AND mo.rMeanApMag > 0 AND mo.rMeanApMagErr > 0)
-        then 3631*power(cast(10 as float),-0.4*mo.rMeanApMag)*power(2.5/log(10)/mo.rMeanApMagErr,2) else 0 end + 
+        then 3631*power(cast(10 as float),-0.4*mo.rMeanApMag)*power(2.5/log(10)/mo.rMeanPSFMagErr,2) else 0 end + 
     case when (mo.iMeanPSFMag > 0 AND mo.iMeanKronMag > 0 AND mo.iMeanPSFMagErr > 0 AND mo.iMeanKronMagErr > 0 AND mo.iMeanApMag > 0 AND mo.iMeanApMagErr > 0)
-        then 3631*power(cast(10 as float),-0.4*mo.iMeanApMag)*power(2.5/log(10)/mo.iMeanApMagErr,2) else 0 end + 
+        then 3631*power(cast(10 as float),-0.4*mo.iMeanApMag)*power(2.5/log(10)/mo.iMeanPSFMagErr,2) else 0 end + 
     case when (mo.zMeanPSFMag > 0 AND mo.zMeanKronMag > 0 AND mo.zMeanPSFMagErr > 0 AND mo.zMeanKronMagErr > 0 AND mo.zMeanApMag > 0 AND mo.zMeanApMagErr > 0)
-        then 3631*power(cast(10 as float),-0.4*mo.zMeanApMag)*power(2.5/log(10)/mo.zMeanApMagErr,2) else 0 end + 
+        then 3631*power(cast(10 as float),-0.4*mo.zMeanApMag)*power(2.5/log(10)/mo.zMeanPSFMagErr,2) else 0 end + 
     case when (mo.yMeanPSFMag > 0 AND mo.yMeanKronMag > 0 AND mo.yMeanPSFMagErr > 0 AND mo.yMeanKronMagErr > 0 AND mo.yMeanApMag > 0 AND mo.yMeanApMagErr > 0)
-        then 3631*power(cast(10 as float),-0.4*mo.yMeanApMag)*power(2.5/log(10)/mo.yMeanApMagErr,2) else 0 end)/nullif(
+        then 3631*power(cast(10 as float),-0.4*mo.yMeanApMag)*power(2.5/log(10)/mo.yMeanPSFMagErr,2) else 0 end)/nullif(
     case when (mo.gMeanPSFMag > 0 AND mo.gMeanKronMag > 0 AND mo.gMeanPSFMagErr > 0 AND mo.gMeanKronMagErr > 0 AND mo.gMeanApMag > 0 AND mo.gMeanApMagErr > 0)
-        then power(2.5/log(10)/mo.gMeanApMagErr,2) else 0 end + 
+        then power(2.5/log(10)/mo.gMeanPSFMagErr,2) else 0 end + 
     case when (mo.rMeanPSFMag > 0 AND mo.rMeanKronMag > 0 AND mo.rMeanPSFMagErr > 0 AND mo.rMeanKronMagErr > 0 AND mo.rMeanApMag > 0 AND mo.rMeanApMagErr > 0)
-        then power(2.5/log(10)/mo.rMeanApMagErr,2) else 0 end + 
+        then power(2.5/log(10)/mo.rMeanPSFMagErr,2) else 0 end + 
     case when (mo.iMeanPSFMag > 0 AND mo.iMeanKronMag > 0 AND mo.iMeanPSFMagErr > 0 AND mo.iMeanKronMagErr > 0 AND mo.iMeanApMag > 0 AND mo.iMeanApMagErr > 0)
-        then power(2.5/log(10)/mo.iMeanApMagErr,2) else 0 end + 
+        then power(2.5/log(10)/mo.iMeanPSFMagErr,2) else 0 end + 
     case when (mo.zMeanPSFMag > 0 AND mo.zMeanKronMag > 0 AND mo.zMeanPSFMagErr > 0 AND mo.zMeanKronMagErr > 0 AND mo.zMeanApMag > 0 AND mo.zMeanApMagErr > 0)
-        then power(2.5/log(10)/mo.zMeanApMagErr,2) else 0 end + 
+        then power(2.5/log(10)/mo.zMeanPSFMagErr,2) else 0 end + 
     case when (mo.yMeanPSFMag > 0 AND mo.yMeanKronMag > 0 AND mo.yMeanPSFMagErr > 0 AND mo.yMeanKronMagErr > 0 AND mo.yMeanApMag > 0 AND mo.yMeanApMagErr > 0)
-        then power(2.5/log(10)/mo.yMeanApMagErr,2) else 0 end, 0) 
+        then power(2.5/log(10)/mo.yMeanPSFMagErr,2) else 0 end, 0) 
     as wwMeanApFlux
     into mydb.COSMOS_compare_white_phot   
     from ((mydb.COSMOS_PS1_Xmatch_unique t left join stackobjectattributes soa on t.objid = soa.objid)
