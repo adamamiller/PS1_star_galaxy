@@ -93,59 +93,59 @@ select (soa.gPSFFlux*gPSFWeight + soa.rPSFFlux*rPSFWeight + soa.iPSFFlux*iPSFWei
         soa.zApFlux*zPSFWeight + soa.yApFlux*yPSFWeight)/nullif(
         gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
         as wwApFlux,
-       (soa.gExtNSigma*gPSFWeight + soa.rExtNSigma*rPSFWeight + soa.iExtNSigma*iPSFWeight +
-        soa.zExtNSigma*zPSFWeight + soa.yExtNSigma*yPSFWeight)/nullif(
-        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+       (soa.gExtNSigma*gKronWeight + soa.rExtNSigma*rKronWeight + soa.iExtNSigma*iKronWeight +
+        soa.zExtNSigma*zKronWeight + soa.yExtNSigma*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
         as wwExtNSigma,
-       (soa.gmomentYY/power(gSeeing, 2)*gPSFWeight + 
-        soa.rmomentYY/power(rSeeing, 2)*rPSFWeight + 
-        soa.imomentYY/power(iSeeing, 2)*iPSFWeight +
-        soa.zmomentYY/power(zSeeing, 2)*zPSFWeight + 
-        soa.ymomentYY/power(ySeeing, 2)*yPSFWeight)/nullif(
-        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+       (soa.gmomentYY/power(gSeeing, 2)*gKronWeight + 
+        soa.rmomentYY/power(rSeeing, 2)*rKronWeight + 
+        soa.imomentYY/power(iSeeing, 2)*iKronWeight +
+        soa.zmomentYY/power(zSeeing, 2)*zKronWeight + 
+        soa.ymomentYY/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
         as wwmomentYY,
-       (soa.gmomentXY/power(gSeeing, 2)*gPSFWeight + 
-        soa.rmomentXY/power(rSeeing, 2)*rPSFWeight + 
-        soa.imomentXY/power(iSeeing, 2)*iPSFWeight +
-        soa.zmomentXY/power(zSeeing, 2)*zPSFWeight + 
-        soa.ymomentXY/power(ySeeing, 2)*yPSFWeight)/nullif(
-        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+       (soa.gmomentXY/power(gSeeing, 2)*gKronWeight + 
+        soa.rmomentXY/power(rSeeing, 2)*rKronWeight + 
+        soa.imomentXY/power(iSeeing, 2)*iKronWeight +
+        soa.zmomentXY/power(zSeeing, 2)*zKronWeight + 
+        soa.ymomentXY/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
         as wwmomentXY,
-       (soa.gmomentXX/power(gSeeing, 2)*gPSFWeight + 
-        soa.rmomentXX/power(rSeeing, 2)*rPSFWeight + 
-        soa.imomentXX/power(iSeeing, 2)*iPSFWeight +
-        soa.zmomentXX/power(zSeeing, 2)*zPSFWeight + 
-        soa.ymomentXX/power(ySeeing, 2)*yPSFWeight)/nullif(
-        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+       (soa.gmomentXX/power(gSeeing, 2)*gKronWeight + 
+        soa.rmomentXX/power(rSeeing, 2)*rKronWeight + 
+        soa.imomentXX/power(iSeeing, 2)*iKronWeight +
+        soa.zmomentXX/power(zSeeing, 2)*zKronWeight + 
+        soa.ymomentXX/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
         as wwmomentXX,
-       (soa.gmomentR1/power(gSeeing, 1)*gPSFWeight + 
-        soa.rmomentR1/power(rSeeing, 1)*rPSFWeight + 
-        soa.imomentR1/power(iSeeing, 1)*iPSFWeight +
-        soa.zmomentR1/power(zSeeing, 1)*zPSFWeight + 
-        soa.ymomentR1/power(ySeeing, 1)*yPSFWeight)/nullif(
-        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+       (soa.gmomentR1/power(gSeeing, 1)*gKronWeight + 
+        soa.rmomentR1/power(rSeeing, 1)*rKronWeight + 
+        soa.imomentR1/power(iSeeing, 1)*iKronWeight +
+        soa.zmomentR1/power(zSeeing, 1)*zKronWeight + 
+        soa.ymomentR1/power(ySeeing, 1)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
         as wwmomentR1,
-       (soa.gKronRad/power(gSeeing, 1)*gPSFWeight + 
-        soa.rKronRad/power(rSeeing, 1)*rPSFWeight + 
-        soa.iKronRad/power(iSeeing, 1)*iPSFWeight +
-        soa.zKronRad/power(zSeeing, 1)*zPSFWeight + 
-        soa.yKronRad/power(ySeeing, 1)*yPSFWeight)/nullif(
-        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+       (soa.gKronRad/power(gSeeing, 1)*gKronWeight + 
+        soa.rKronRad/power(rSeeing, 1)*rKronWeight + 
+        soa.iKronRad/power(iSeeing, 1)*iKronWeight +
+        soa.zKronRad/power(zSeeing, 1)*zKronWeight + 
+        soa.yKronRad/power(ySeeing, 1)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
         as wwKronRad,
-       (soa.gmomentRH/power(gSeeing, 0.5)*gPSFWeight + 
-        soa.rmomentRH/power(rSeeing, 0.5)*rPSFWeight + 
-        soa.imomentRH/power(iSeeing, 0.5)*iPSFWeight +
-        soa.zmomentRH/power(zSeeing, 0.5)*zPSFWeight + 
-        soa.ymomentRH/power(ySeeing, 0.5)*yPSFWeight)/nullif(
-        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+       (soa.gmomentRH/power(gSeeing, 0.5)*gKronWeight + 
+        soa.rmomentRH/power(rSeeing, 0.5)*rKronWeight + 
+        soa.imomentRH/power(iSeeing, 0.5)*iKronWeight +
+        soa.zmomentRH/power(zSeeing, 0.5)*zKronWeight + 
+        soa.ymomentRH/power(ySeeing, 0.5)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
         as wwmomentRH,
-       (soa.gpsfChiSq*gPSFWeight + soa.rpsfChiSq*rPSFWeight + soa.ipsfChiSq*iPSFWeight +
-        soa.zpsfChiSq*zPSFWeight + soa.ypsfChiSq*yPSFWeight)/nullif(
-        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+       (soa.gpsfChiSq*gKronWeight + soa.rpsfChiSq*rKronWeight + soa.ipsfChiSq*iKronWeight +
+        soa.zpsfChiSq*zKronWeight + soa.ypsfChiSq*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
         as wwpsfChiSq,
-       (soa.gpsfLikelihood*gPSFWeight + soa.rpsfLikelihood*rPSFWeight + soa.ipsfLikelihood*iPSFWeight +
-        soa.zpsfLikelihood*zPSFWeight + soa.ypsfLikelihood*yPSFWeight)/nullif(
-        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+       (soa.gpsfLikelihood*gKronWeight + soa.rpsfLikelihood*rKronWeight + soa.ipsfLikelihood*iKronWeight +
+        soa.zpsfLikelihood*zKronWeight + soa.ypsfLikelihood*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
         as wwpsfLikelihood
         from
 (select soa.objid, 
