@@ -150,15 +150,15 @@ select (soa.gPSFFlux*gPSFWeight + soa.rPSFFlux*rPSFWeight + soa.iPSFFlux*iPSFWei
         from
 (select soa.objid, 
       (case when (soa.gpsfMajorFWHM > 0 and soa.gpsfMinorFWHM > 0)
-          then soa.gpsfMajorFWHM + soa.gpsfMinorFWHM)/2 else 1e6 end) as gSeeing,
+          then (soa.gpsfMajorFWHM + soa.gpsfMinorFWHM)/2 else 1e8 end) as gSeeing,
       (case when (soa.rpsfMajorFWHM > 0 and soa.rpsfMinorFWHM > 0)
-          then soa.rpsfMajorFWHM + soa.rpsfMinorFWHM)/2 else 1e6 end) as rSeeing,
+          then (soa.rpsfMajorFWHM + soa.rpsfMinorFWHM)/2 else 1e8 end) as rSeeing,
       (case when (soa.ipsfMajorFWHM > 0 and soa.ipsfMinorFWHM > 0)
-          then soa.ipsfMajorFWHM + soa.ipsfMinorFWHM)/2 else 1e6 end) as iSeeing,
+          then (soa.ipsfMajorFWHM + soa.ipsfMinorFWHM)/2 else 1e8 end) as iSeeing,
       (case when (soa.zpsfMajorFWHM > 0 and soa.zpsfMinorFWHM > 0)
-          then soa.zpsfMajorFWHM + soa.zpsfMinorFWHM)/2 else 1e6 end) as zSeeing,
+          then (soa.zpsfMajorFWHM + soa.zpsfMinorFWHM)/2 else 1e8 end) as zSeeing,
       (case when (soa.ypsfMajorFWHM > 0 and soa.ypsfMinorFWHM > 0)
-          then soa.ypsfMajorFWHM + soa.ypsfMinorFWHM)/2 else 1e6 end) as ySeeing,
+          then (soa.ypsfMajorFWHM + soa.ypsfMinorFWHM)/2 else 1e8 end) as ySeeing,
       (case when (soa.gPSFFlux > 0 AND soa.gKronFlux > 0 AND soa.gApFlux > 0) 
              then power(soa.gPSFFlux,2)/power(soa.gPSFFluxErr,2) else 0 end) as gPSFWeight, 
        (case when (soa.rPSFFlux > 0 AND soa.rKronFlux > 0 AND soa.rApFlux > 0) 
