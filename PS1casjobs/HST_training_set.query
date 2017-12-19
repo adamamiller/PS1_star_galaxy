@@ -2,81 +2,115 @@
 training set out of the COSMOS matched sources from HST */
 
 select *, 
-(wwPSFFlux - (0.9255*wwKronFlux)/sqrt(1 + power(0.9255,2))) as wwPSFKronDist
+(wwPSFFlux - (0.9255*wwKronFlux)/sqrt(1 + power(0.9255,2))) as wwPSFKronDist, 
+wwPSFFlux/wwApFlux as wwPSFApRatio,
+wwPSFFlux/wwKronFlux as wwPSFKronRatio
 into mydb.HST_COSMOS_features
-from (select cosmos.CLASS_STAR, cosmos.MU_CLASS,
-    ot.raStack, ot.decStack, ot.nDetections, ot.qualityFlag,
-    soa.primaryDetection, soa.bestDetection,
-    soa.gpsfMajorFWHM, soa.gpsfMinorFWHM, soa.gpsfCore, soa.gpsfLikelihood, soa.gpsfQf, soa.gpsfQfPerfect, soa.gpsfChiSq, soa.gmomentXX, soa.gmomentXY, soa.gmomentYY, soa.gmomentR1, soa.gmomentRH, soa.gPSFFlux, soa.gPSFFluxErr,soa.gApFlux, soa.gApFluxErr,soa.gApFillFac, soa.gApRadius, soa.gKronFlux, soa.gKronFluxErr,soa.gKronRad, soa.gExtNSigma,
-    soa.rpsfMajorFWHM, soa.rpsfMinorFWHM, soa.rpsfCore, soa.rpsfLikelihood, soa.rpsfQf, soa.rpsfQfPerfect, soa.rpsfChiSq, soa.rmomentXX, soa.rmomentXY, soa.rmomentYY, soa.rmomentR1, soa.rmomentRH, soa.rPSFFlux, soa.rPSFFluxErr,soa.rApFlux, soa.rApFluxErr,soa.rApFillFac, soa.rApRadius, soa.rKronFlux, soa.rKronFluxErr,soa.rKronRad, soa.rExtNSigma,
-    soa.ipsfMajorFWHM, soa.ipsfMinorFWHM, soa.ipsfCore, soa.ipsfLikelihood, soa.ipsfQf, soa.ipsfQfPerfect, soa.ipsfChiSq, soa.imomentXX, soa.imomentXY, soa.imomentYY, soa.imomentR1, soa.imomentRH, soa.iPSFFlux, soa.iPSFFluxErr,soa.iApFlux, soa.iApFluxErr,soa.iApFillFac, soa.iApRadius, soa.iKronFlux, soa.iKronFluxErr,soa.iKronRad, soa.iExtNSigma,
-    soa.zpsfMajorFWHM, soa.zpsfMinorFWHM, soa.zpsfCore, soa.zpsfLikelihood, soa.zpsfQf, soa.zpsfQfPerfect, soa.zpsfChiSq, soa.zmomentXX, soa.zmomentXY, soa.zmomentYY, soa.zmomentR1, soa.zmomentRH, soa.zPSFFlux, soa.zPSFFluxErr,soa.zApFlux, soa.zApFluxErr,soa.zApFillFac, soa.zApRadius, soa.zKronFlux, soa.zKronFluxErr,soa.zKronRad, soa.zExtNSigma,
-    soa.ypsfMajorFWHM, soa.ypsfMinorFWHM, soa.ypsfCore, soa.ypsfLikelihood, soa.ypsfQf, soa.ypsfQfPerfect, soa.ypsfChiSq, soa.ymomentXX, soa.ymomentXY, soa.ymomentYY, soa.ymomentR1, soa.ymomentRH, soa.yPSFFlux, soa.yPSFFluxErr,soa.yApFlux, soa.yApFluxErr,soa.yApFillFac, soa.yApRadius, soa.yKronFlux, soa.yKronFluxErr,soa.yKronRad, soa.yExtNSigma,
-    (case when (soa.gPSFFlux > 0 AND soa.gKronFlux > 0 AND soa.gApFlux > 0)
-        then power(soa.gPSFFlux,3)/power(soa.gPSFFluxErr,2) else 0 end + 
-    case when (soa.rPSFFlux > 0 AND soa.rKronFlux > 0 AND soa.rApFlux > 0)
-        then power(soa.rPSFFlux,3)/power(soa.rPSFFluxErr,2) else 0 end + 
-    case when (soa.iPSFFlux > 0 AND soa.iKronFlux > 0 AND soa.iApFlux > 0)
-        then power(soa.iPSFFlux,3)/power(soa.iPSFFluxErr,2) else 0 end + 
-    case when (soa.zPSFFlux > 0 AND soa.zKronFlux > 0 AND soa.zApFlux > 0)
-        then power(soa.zPSFFlux,3)/power(soa.zPSFFluxErr,2) else 0 end + 
-    case when (soa.yPSFFlux > 0 AND soa.yKronFlux > 0 AND soa.yApFlux > 0)
-        then power(soa.yPSFFlux,3)/power(soa.yPSFFluxErr,2) else 0 end)/nullif(
-    case when (soa.gPSFFlux > 0 AND soa.gKronFlux > 0 AND soa.gApFlux > 0)
-        then power(soa.gPSFFlux,2)/power(soa.gPSFFluxErr,2) else 0 end + 
-    case when (soa.rPSFFlux > 0 AND soa.rKronFlux > 0 AND soa.rApFlux > 0)
-        then power(soa.rPSFFlux,2)/power(soa.rPSFFluxErr,2) else 0 end + 
-    case when (soa.iPSFFlux > 0 AND soa.iKronFlux > 0 AND soa.iApFlux > 0)
-        then power(soa.iPSFFlux,2)/power(soa.iPSFFluxErr,2) else 0 end + 
-    case when (soa.zPSFFlux > 0 AND soa.zKronFlux > 0 AND soa.zApFlux > 0)
-        then power(soa.zPSFFlux,2)/power(soa.zPSFFluxErr,2) else 0 end + 
-    case when (soa.yPSFFlux > 0 AND soa.yKronFlux > 0 AND soa.yApFlux > 0)
-        then power(soa.yPSFFlux,2)/power(soa.yPSFFluxErr,2) else 0 end, 0) 
-    as wwPSFFlux, 
-    (case when (soa.gPSFFlux > 0 AND soa.gKronFlux > 0 AND soa.gApFlux > 0)
-        then power(soa.gKronFlux,3)/power(soa.gKronFluxErr,2) else 0 end + 
-    case when (soa.rPSFFlux > 0 AND soa.rKronFlux > 0 AND soa.rApFlux > 0)
-        then power(soa.rKronFlux,3)/power(soa.rKronFluxErr,2) else 0 end + 
-    case when (soa.iPSFFlux > 0 AND soa.iKronFlux > 0 AND soa.iApFlux > 0)
-        then power(soa.iKronFlux,3)/power(soa.iKronFluxErr,2) else 0 end + 
-    case when (soa.zPSFFlux > 0 AND soa.zKronFlux > 0 AND soa.zApFlux > 0)
-        then power(soa.zKronFlux,3)/power(soa.zKronFluxErr,2) else 0 end + 
-    case when (soa.yPSFFlux > 0 AND soa.yKronFlux > 0 AND soa.yApFlux > 0)
-        then power(soa.yKronFlux,3)/power(soa.yKronFluxErr,2) else 0 end)/nullif(
-    case when (soa.gPSFFlux > 0 AND soa.gKronFlux > 0 AND soa.gApFlux > 0)
-        then power(soa.gKronFlux,2)/power(soa.gKronFluxErr,2) else 0 end + 
-    case when (soa.rPSFFlux > 0 AND soa.rKronFlux > 0 AND soa.rApFlux > 0)
-        then power(soa.rKronFlux,2)/power(soa.rKronFluxErr,2) else 0 end + 
-    case when (soa.iPSFFlux > 0 AND soa.iKronFlux > 0 AND soa.iApFlux > 0)
-        then power(soa.iKronFlux,2)/power(soa.iKronFluxErr,2) else 0 end + 
-    case when (soa.zPSFFlux > 0 AND soa.zKronFlux > 0 AND soa.zApFlux > 0)
-        then power(soa.zKronFlux,2)/power(soa.zKronFluxErr,2) else 0 end + 
-    case when (soa.yPSFFlux > 0 AND soa.yKronFlux > 0 AND soa.yApFlux > 0)
-        then power(soa.yKronFlux,2)/power(soa.yKronFluxErr,2) else 0 end, 0) 
-    as wwKronFlux,
-    (case when (soa.gPSFFlux > 0 AND soa.gKronFlux > 0 AND soa.gApFlux > 0)
-        then power(soa.gApFlux,3)/power(soa.gPSFFluxErr,2) else 0 end + 
-    case when (soa.rPSFFlux > 0 AND soa.rKronFlux > 0 AND soa.rApFlux > 0)
-        then power(soa.rApFlux,3)/power(soa.rPSFFluxErr,2) else 0 end + 
-    case when (soa.iPSFFlux > 0 AND soa.iKronFlux > 0 AND soa.iApFlux > 0)
-        then power(soa.iApFlux,3)/power(soa.iPSFFluxErr,2) else 0 end + 
-    case when (soa.zPSFFlux > 0 AND soa.zKronFlux > 0 AND soa.zApFlux > 0)
-        then power(soa.zApFlux,3)/power(soa.zPSFFluxErr,2) else 0 end + 
-    case when (soa.yPSFFlux > 0 AND soa.yKronFlux > 0 AND soa.yApFlux > 0)
-        then power(soa.yApFlux,3)/power(soa.yPSFFluxErr,2) else 0 end)/nullif(
-    case when (soa.gPSFFlux > 0 AND soa.gKronFlux > 0 AND soa.gApFlux > 0)
-        then power(soa.gApFlux,2)/power(soa.gPSFFluxErr,2) else 0 end + 
-    case when (soa.rPSFFlux > 0 AND soa.rKronFlux > 0 AND soa.rApFlux > 0)
-        then power(soa.rApFlux,2)/power(soa.rPSFFluxErr,2) else 0 end + 
-    case when (soa.iPSFFlux > 0 AND soa.iKronFlux > 0 AND soa.iApFlux > 0)
-        then power(soa.iApFlux,2)/power(soa.iPSFFluxErr,2) else 0 end + 
-    case when (soa.zPSFFlux > 0 AND soa.zKronFlux > 0 AND soa.zApFlux > 0)
-        then power(soa.zApFlux,2)/power(soa.zPSFFluxErr,2) else 0 end + 
-    case when (soa.yPSFFlux > 0 AND soa.yKronFlux > 0 AND soa.yApFlux > 0)
-        then power(soa.yApFlux,2)/power(soa.yPSFFluxErr,2) else 0 end, 0)
-    as wwApFlux
-    from mydb.COSMOS_PS1_Xmatch_unique cosmos 
-    join StackObjectAttributes soa on soa.objid = cosmos.objid
-    join ObjectThin ot on ot.objid = soa.objid
-    where soa.primaryDetection = 1)
-    dummy  
+from 
+(select cosmos.CLASS_STAR, cosmos.MU_CLASS,
+        ot.raStack, ot.decStack, ot.nDetections, ot.qualityFlag, 
+       (soa.gPSFFlux*gPSFWeight + soa.rPSFFlux*rPSFWeight + soa.iPSFFlux*iPSFWeight +
+        soa.zPSFFlux*zPSFWeight + soa.yPSFFlux*yPSFWeight)/nullif(
+        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+        as wwPSFFlux,
+       (soa.gKronFlux*gKronWeight + soa.rKronFlux*rKronWeight + soa.iKronFlux*iKronWeight +
+        soa.zKronFlux*zKronWeight + soa.yKronFlux*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwKronFlux, 
+       (soa.gApFlux*gPSFWeight + soa.rApFlux*rPSFWeight + soa.iApFlux*iPSFWeight +
+        soa.zApFlux*zPSFWeight + soa.yApFlux*yPSFWeight)/nullif(
+        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+        as wwApFlux,
+       (soa.gExtNSigma*gKronWeight + soa.rExtNSigma*rKronWeight + soa.iExtNSigma*iKronWeight +
+        soa.zExtNSigma*zKronWeight + soa.yExtNSigma*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwExtNSigma,
+       (soa.gmomentYY/power(gSeeing, 2)*gKronWeight + 
+        soa.rmomentYY/power(rSeeing, 2)*rKronWeight + 
+        soa.imomentYY/power(iSeeing, 2)*iKronWeight +
+        soa.zmomentYY/power(zSeeing, 2)*zKronWeight + 
+        soa.ymomentYY/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentYY,
+       (soa.gmomentXY/power(gSeeing, 2)*gKronWeight + 
+        soa.rmomentXY/power(rSeeing, 2)*rKronWeight + 
+        soa.imomentXY/power(iSeeing, 2)*iKronWeight +
+        soa.zmomentXY/power(zSeeing, 2)*zKronWeight + 
+        soa.ymomentXY/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentXY,
+       (soa.gmomentXX/power(gSeeing, 2)*gKronWeight + 
+        soa.rmomentXX/power(rSeeing, 2)*rKronWeight + 
+        soa.imomentXX/power(iSeeing, 2)*iKronWeight +
+        soa.zmomentXX/power(zSeeing, 2)*zKronWeight + 
+        soa.ymomentXX/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentXX,
+       (soa.gmomentR1/power(gSeeing, 1)*gKronWeight + 
+        soa.rmomentR1/power(rSeeing, 1)*rKronWeight + 
+        soa.imomentR1/power(iSeeing, 1)*iKronWeight +
+        soa.zmomentR1/power(zSeeing, 1)*zKronWeight + 
+        soa.ymomentR1/power(ySeeing, 1)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentR1,
+       (soa.gKronRad/power(gSeeing, 1)*gKronWeight + 
+        soa.rKronRad/power(rSeeing, 1)*rKronWeight + 
+        soa.iKronRad/power(iSeeing, 1)*iKronWeight +
+        soa.zKronRad/power(zSeeing, 1)*zKronWeight + 
+        soa.yKronRad/power(ySeeing, 1)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwKronRad,
+       (soa.gmomentRH/power(gSeeing, 0.5)*gKronWeight + 
+        soa.rmomentRH/power(rSeeing, 0.5)*rKronWeight + 
+        soa.imomentRH/power(iSeeing, 0.5)*iKronWeight +
+        soa.zmomentRH/power(zSeeing, 0.5)*zKronWeight + 
+        soa.ymomentRH/power(ySeeing, 0.5)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentRH,
+       (soa.gpsfChiSq*gKronWeight + soa.rpsfChiSq*rKronWeight + soa.ipsfChiSq*iKronWeight +
+        soa.zpsfChiSq*zKronWeight + soa.ypsfChiSq*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwpsfChiSq,
+       (soa.gpsfLikelihood*gKronWeight + soa.rpsfLikelihood*rKronWeight + soa.ipsfLikelihood*iKronWeight +
+        soa.zpsfLikelihood*zKronWeight + soa.ypsfLikelihood*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwpsfLikelihood
+        from
+(select soa.objid, 
+      (case when (soa.gpsfMajorFWHM > 0 and soa.gpsfMinorFWHM > 0)
+          then (soa.gpsfMajorFWHM + soa.gpsfMinorFWHM)/2 else 1e8 end) as gSeeing,
+      (case when (soa.rpsfMajorFWHM > 0 and soa.rpsfMinorFWHM > 0)
+          then (soa.rpsfMajorFWHM + soa.rpsfMinorFWHM)/2 else 1e8 end) as rSeeing,
+      (case when (soa.ipsfMajorFWHM > 0 and soa.ipsfMinorFWHM > 0)
+          then (soa.ipsfMajorFWHM + soa.ipsfMinorFWHM)/2 else 1e8 end) as iSeeing,
+      (case when (soa.zpsfMajorFWHM > 0 and soa.zpsfMinorFWHM > 0)
+          then (soa.zpsfMajorFWHM + soa.zpsfMinorFWHM)/2 else 1e8 end) as zSeeing,
+      (case when (soa.ypsfMajorFWHM > 0 and soa.ypsfMinorFWHM > 0)
+          then (soa.ypsfMajorFWHM + soa.ypsfMinorFWHM)/2 else 1e8 end) as ySeeing,
+      (case when (soa.gPSFFlux > 0 AND soa.gKronFlux > 0 AND soa.gApFlux > 0) 
+             then power(soa.gPSFFlux,2)/power(soa.gPSFFluxErr,2) else 0 end) as gPSFWeight, 
+       (case when (soa.rPSFFlux > 0 AND soa.rKronFlux > 0 AND soa.rApFlux > 0) 
+             then power(soa.rPSFFlux,2)/power(soa.rPSFFluxErr,2) else 0 end) as rPSFWeight,
+       (case when (soa.iPSFFlux > 0 AND soa.iKronFlux > 0 AND soa.iApFlux > 0) 
+             then power(soa.iPSFFlux,2)/power(soa.iPSFFluxErr,2) else 0 end) as iPSFWeight,
+       (case when (soa.zPSFFlux > 0 AND soa.zKronFlux > 0 AND soa.zApFlux > 0) 
+             then power(soa.zPSFFlux,2)/power(soa.zPSFFluxErr,2) else 0 end) as zPSFWeight,
+       (case when (soa.yPSFFlux > 0 AND soa.yKronFlux > 0 AND soa.yApFlux > 0) 
+             then power(soa.yPSFFlux,2)/power(soa.yPSFFluxErr,2) else 0 end) as yPSFWeight, 
+       (case when (soa.gPSFFlux > 0 AND soa.gKronFlux > 0 AND soa.gApFlux > 0) 
+             then power(soa.gKronFlux,2)/power(soa.gKronFluxErr,2) else 0 end) as gKronWeight, 
+       (case when (soa.rPSFFlux > 0 AND soa.rKronFlux > 0 AND soa.rApFlux > 0) 
+             then power(soa.rKronFlux,2)/power(soa.rKronFluxErr,2) else 0 end) as rKronWeight,
+       (case when (soa.iPSFFlux > 0 AND soa.iKronFlux > 0 AND soa.iApFlux > 0) 
+             then power(soa.iKronFlux,2)/power(soa.iKronFluxErr,2) else 0 end) as iKronWeight,
+       (case when (soa.zPSFFlux > 0 AND soa.zKronFlux > 0 AND soa.zApFlux > 0) 
+             then power(soa.zKronFlux,2)/power(soa.zKronFluxErr,2) else 0 end) as zKronWeight,
+       (case when (soa.yPSFFlux > 0 AND soa.yKronFlux > 0 AND soa.yApFlux > 0) 
+             then power(soa.yKronFlux,2)/power(soa.yKronFluxErr,2) else 0 end) as yKronWeight
+from stackobjectattributes as soa 
+join mydb.COSMOS_PS1_Xmatch_unique cosmos on soa.objid = cosmos.objid) dummy1 
+join mydb.COSMOS_PS1_Xmatch_unique cosmos on dummy1.objid = cosmos.objid
+join stackobjectattributes as soa on dummy1.objid = soa.objid
+join objectthin ot on dummy1.objid = ot.objid
+where gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight > 0
+and soa.primaryDetection = 1) dummy2
