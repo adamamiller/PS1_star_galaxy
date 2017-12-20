@@ -46,13 +46,6 @@ from
         soa.ymomentXX/power(ySeeing, 2)*yKronWeight)/nullif(
         gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
         as wwmomentXX,
-       (soa.gmomentR1/power(gSeeing, 1)*gKronWeight + 
-        soa.rmomentR1/power(rSeeing, 1)*rKronWeight + 
-        soa.imomentR1/power(iSeeing, 1)*iKronWeight +
-        soa.zmomentR1/power(zSeeing, 1)*zKronWeight + 
-        soa.ymomentR1/power(ySeeing, 1)*yKronWeight)/nullif(
-        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
-        as wwmomentR1,
        (soa.gKronRad/power(gSeeing, 1)*gKronWeight + 
         soa.rKronRad/power(rSeeing, 1)*rKronWeight + 
         soa.iKronRad/power(iSeeing, 1)*iKronWeight +
