@@ -108,7 +108,8 @@ from
        (case when (soa.yPSFFlux > 0 AND soa.yKronFlux > 0 AND soa.yApFlux > 0) 
              then power(soa.yKronFlux,2)/power(soa.yKronFluxErr,2) else 0 end) as yKronWeight
 from stackobjectattributes as soa 
-join mydb.COSMOS_PS1_Xmatch_unique cosmos on soa.objid = cosmos.objid) dummy1 
+join mydb.COSMOS_PS1_Xmatch_unique cosmos on soa.objid = cosmos.objid
+where soa.primaryDetection = 1) dummy1 
 join mydb.COSMOS_PS1_Xmatch_unique cosmos on dummy1.objid = cosmos.objid
 join stackobjectattributes as soa on dummy1.objid = soa.objid
 join objectthin ot on dummy1.objid = ot.objid
