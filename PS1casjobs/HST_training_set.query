@@ -2,7 +2,7 @@
 training set out of the COSMOS matched sources from HST */
 
 select *, 
-(wwPSFFlux - (0.9255*wwKronFlux)/sqrt(1 + power(0.9255,2))) as wwPSFKronDist, 
+(wwPSFFlux - (0.91375*wwKronFlux)/sqrt(1 + power(0.91375,2))) as wwPSFKronDist,
 wwPSFFlux/wwApFlux as wwPSFApRatio,
 wwPSFFlux/wwKronFlux as wwPSFKronRatio
 into mydb.HST_COSMOS_features
