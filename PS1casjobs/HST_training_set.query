@@ -111,3 +111,4 @@ join stackobjectattributes as soa on dummy1.objid = soa.objid
 join objectthin ot on dummy1.objid = ot.objid
 where gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight > 0
 and soa.primaryDetection = 1) dummy2
+order by objid
