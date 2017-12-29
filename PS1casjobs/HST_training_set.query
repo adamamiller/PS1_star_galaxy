@@ -7,9 +7,9 @@ wwPSFFlux/wwApFlux as wwPSFApRatio,
 wwPSFFlux/wwKronFlux as wwPSFKronRatio
 into mydb.HST_COSMOS_features
 from 
-(select cosmos.CLASS_STAR, cosmos.MU_CLASS,
+(select cosmos.CLASS_STAR, cosmos.MU_CLASS, ot.objid, 
         ot.raStack, ot.decStack, ot.nDetections, ot.qualityFlag, 
-        -2.5*log10(nullif(iPSFWeight,0)/nullif(iPSFWeight,0)*nullif(iKronWeight,0)/nullif(iKronWeight,0)*soa.iPSFFlux/soa.iKronFlux) as iPSFminusKron,       
+        -2.5*log10(iDet*soa.iPSFFlux/soa.iKronFlux) as iPSFminusKron,       
        (soa.gPSFFlux*gPSFWeight + soa.rPSFFlux*rPSFWeight + soa.iPSFFlux*iPSFWeight +
         soa.zPSFFlux*zPSFWeight + soa.yPSFFlux*yPSFWeight)/nullif(
         gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
@@ -100,7 +100,9 @@ from
        (case when (soa.zPSFFlux > 0 AND soa.zKronFlux > 0 AND soa.zApFlux > 0) 
              then power(soa.zKronFlux,2)/power(soa.zKronFluxErr,2) else 0 end) as zKronWeight,
        (case when (soa.yPSFFlux > 0 AND soa.yKronFlux > 0 AND soa.yApFlux > 0) 
-             then power(soa.yKronFlux,2)/power(soa.yKronFluxErr,2) else 0 end) as yKronWeight
+             then power(soa.yKronFlux,2)/power(soa.yKronFluxErr,2) else 0 end) as yKronWeight,
+       (case when (soa.iPSFFlux > 0 AND soa.iKronFlux > 0 AND soa.iApFlux > 0) 
+             then 1 else null end) as iDet
 from stackobjectattributes as soa 
 join mydb.COSMOS_PS1_Xmatch_unique cosmos on soa.objid = cosmos.objid
 where soa.primaryDetection = 1) dummy1 
