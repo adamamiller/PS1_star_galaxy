@@ -167,187 +167,358 @@ used in our model */
 -- Query 5; get stack flux for ML features [To be run on PanSTARRS_DR1]
 
 select *, 
+(wwPSFFlux - (0.91375*wwKronFlux)/sqrt(1 + power(0.91375,2))) as wwPSFKronDist,
+wwPSFFlux/wwApFlux as wwPSFApRatio,
 wwPSFFlux/wwKronFlux as wwPSFKronRatio
 into mydb.sdssSP2_MLfeats
-from (select sdss.class, 
+from 
+(select sdss.class, 
     sdss.sourceType, sdss.z, sdss.cModelMag_r, sdss.gminusi, 
     sdss.type, sdss.countRatio,
-    ot.raStack, ot.decStack, ot.nDetections, ot.qualityFlag,
-    soa.primaryDetection, soa.bestDetection,
-    soa.gpsfMajorFWHM, soa.gpsfMinorFWHM, soa.gpsfCore, soa.gpsfLikelihood, soa.gpsfQf, soa.gpsfQfPerfect, soa.gpsfChiSq, soa.gmomentXX, soa.gmomentXY, soa.gmomentYY, soa.gmomentR1, soa.gmomentRH, soa.gPSFFlux, soa.gPSFFluxErr,soa.gApFlux, soa.gApFillFac, soa.gApRadius, soa.gKronFlux, soa.gKronFluxErr,soa.gKronRad, soa.gExtNSigma,
-    soa.rpsfMajorFWHM, soa.rpsfMinorFWHM, soa.rpsfCore, soa.rpsfLikelihood, soa.rpsfQf, soa.rpsfQfPerfect, soa.rpsfChiSq, soa.rmomentXX, soa.rmomentXY, soa.rmomentYY, soa.rmomentR1, soa.rmomentRH, soa.rPSFFlux, soa.rPSFFluxErr,soa.rApFlux, soa.rApFillFac, soa.rApRadius, soa.rKronFlux, soa.rKronFluxErr,soa.rKronRad, soa.rExtNSigma,
-    soa.ipsfMajorFWHM, soa.ipsfMinorFWHM, soa.ipsfCore, soa.ipsfLikelihood, soa.ipsfQf, soa.ipsfQfPerfect, soa.ipsfChiSq, soa.imomentXX, soa.imomentXY, soa.imomentYY, soa.imomentR1, soa.imomentRH, soa.iPSFFlux, soa.iPSFFluxErr,soa.iApFlux, soa.iApFillFac, soa.iApRadius, soa.iKronFlux, soa.iKronFluxErr,soa.iKronRad, soa.iExtNSigma,
-    soa.zpsfMajorFWHM, soa.zpsfMinorFWHM, soa.zpsfCore, soa.zpsfLikelihood, soa.zpsfQf, soa.zpsfQfPerfect, soa.zpsfChiSq, soa.zmomentXX, soa.zmomentXY, soa.zmomentYY, soa.zmomentR1, soa.zmomentRH, soa.zPSFFlux, soa.zPSFFluxErr,soa.zApFlux, soa.zApFillFac, soa.zApRadius, soa.zKronFlux, soa.zKronFluxErr,soa.zKronRad, soa.zExtNSigma,
-    soa.ypsfMajorFWHM, soa.ypsfMinorFWHM, soa.ypsfCore, soa.ypsfLikelihood, soa.ypsfQf, soa.ypsfQfPerfect, soa.ypsfChiSq, soa.ymomentXX, soa.ymomentXY, soa.ymomentYY, soa.ymomentR1, soa.ymomentRH, soa.yPSFFlux, soa.yPSFFluxErr,soa.yApFlux, soa.yApFillFac, soa.yApRadius, soa.yKronFlux, soa.yKronFluxErr,soa.yKronRad, soa.yExtNSigma,
-    (case when (gPSFFlux > 0 AND gKronFlux > 0)
-        then power(gPSFFlux,3)/power(gPSFFluxErr,2) else 0 end + 
-    case when (rPSFFlux > 0 AND rKronFlux > 0)
-        then power(rPSFFlux,3)/power(rPSFFluxErr,2) else 0 end + 
-    case when (iPSFFlux > 0 AND iKronFlux > 0)
-        then power(iPSFFlux,3)/power(iPSFFluxErr,2) else 0 end + 
-    case when (zPSFFlux > 0 AND zKronFlux > 0)
-        then power(zPSFFlux,3)/power(zPSFFluxErr,2) else 0 end + 
-    case when (yPSFFlux > 0 AND yKronFlux > 0)
-        then power(yPSFFlux,3)/power(yPSFFluxErr,2) else 0 end)/nullif(
-    case when (gPSFFlux > 0 AND gKronFlux > 0)
-        then power(gPSFFlux,2)/power(gPSFFluxErr,2) else 0 end + 
-    case when (rPSFFlux > 0 AND rKronFlux > 0)
-        then power(rPSFFlux,2)/power(rPSFFluxErr,2) else 0 end + 
-    case when (iPSFFlux > 0 AND iKronFlux > 0)
-        then power(iPSFFlux,2)/power(iPSFFluxErr,2) else 0 end + 
-    case when (zPSFFlux > 0 AND zKronFlux > 0)
-        then power(zPSFFlux,2)/power(zPSFFluxErr,2) else 0 end + 
-    case when (yPSFFlux > 0 AND yKronFlux > 0)
-        then power(yPSFFlux,2)/power(yPSFFluxErr,2) else 0 end, 0) 
-    as wwPSFFlux, 
-    (case when (gPSFFlux > 0 AND gKronFlux > 0)
-        then power(gKronFlux,3)/power(gKronFluxErr,2) else 0 end + 
-    case when (rPSFFlux > 0 AND rKronFlux > 0)
-        then power(rKronFlux,3)/power(rKronFluxErr,2) else 0 end + 
-    case when (iPSFFlux > 0 AND iKronFlux > 0)
-        then power(iKronFlux,3)/power(iKronFluxErr,2) else 0 end + 
-    case when (zPSFFlux > 0 AND zKronFlux > 0)
-        then power(zKronFlux,3)/power(zKronFluxErr,2) else 0 end + 
-    case when (yPSFFlux > 0 AND yKronFlux > 0)
-        then power(yKronFlux,3)/power(yKronFluxErr,2) else 0 end)/nullif(
-    case when (gPSFFlux > 0 AND gKronFlux > 0)
-        then power(gKronFlux,2)/power(gKronFluxErr,2) else 0 end + 
-    case when (rPSFFlux > 0 AND rKronFlux > 0)
-        then power(rKronFlux,2)/power(rKronFluxErr,2) else 0 end + 
-    case when (iPSFFlux > 0 AND iKronFlux > 0)
-        then power(iKronFlux,2)/power(iKronFluxErr,2) else 0 end + 
-    case when (zPSFFlux > 0 AND zKronFlux > 0)
-        then power(zKronFlux,2)/power(zKronFluxErr,2) else 0 end + 
-    case when (yPSFFlux > 0 AND yKronFlux > 0)
-        then power(yKronFlux,2)/power(yKronFluxErr,2) else 0 end, 0) 
-    as wwKronFlux
-    from (mydb.Xmatch2 x join mydb.sdssSpecPhoto2_DR14 sdss on x.specobj_idx = sdss.specobj_idx)
-    join StackObjectAttributes soa on soa.objid = x.objid
-    join ObjectThin ot on ot.objid = soa.objid
-    where soa.primaryDetection = 1)
-    dummy
+        sov.objid, sov.raStack, sov.decStack, sov.nDetections, sov.qualityFlag, 
+        (sov.iPSFMag - sov.iKronMag)*iKronWeight/nullif(iKronWeight,0) as iPSFminusKron,       
+       (sov.gPSFFlux*gPSFWeight + sov.rPSFFlux*rPSFWeight + sov.iPSFFlux*iPSFWeight +
+        sov.zPSFFlux*zPSFWeight + sov.yPSFFlux*yPSFWeight)/nullif(
+        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+        as wwPSFFlux,
+       (sov.gKronFlux*gKronWeight + sov.rKronFlux*rKronWeight + sov.iKronFlux*iKronWeight +
+        sov.zKronFlux*zKronWeight + sov.yKronFlux*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwKronFlux, 
+       (sov.gApFlux*gPSFWeight + sov.rApFlux*rPSFWeight + sov.iApFlux*iPSFWeight +
+        sov.zApFlux*zPSFWeight + sov.yApFlux*yPSFWeight)/nullif(
+        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+        as wwApFlux,
+       (sov.gExtNSigma*gKronWeight + sov.rExtNSigma*rKronWeight + sov.iExtNSigma*iKronWeight +
+        sov.zExtNSigma*zKronWeight + sov.yExtNSigma*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwExtNSigma,
+       (sov.gmomentYY/power(gSeeing, 2)*gKronWeight + 
+        sov.rmomentYY/power(rSeeing, 2)*rKronWeight + 
+        sov.imomentYY/power(iSeeing, 2)*iKronWeight +
+        sov.zmomentYY/power(zSeeing, 2)*zKronWeight + 
+        sov.ymomentYY/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentYY,
+       (sov.gmomentXY/power(gSeeing, 2)*gKronWeight + 
+        sov.rmomentXY/power(rSeeing, 2)*rKronWeight + 
+        sov.imomentXY/power(iSeeing, 2)*iKronWeight +
+        sov.zmomentXY/power(zSeeing, 2)*zKronWeight + 
+        sov.ymomentXY/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentXY,
+       (sov.gmomentXX/power(gSeeing, 2)*gKronWeight + 
+        sov.rmomentXX/power(rSeeing, 2)*rKronWeight + 
+        sov.imomentXX/power(iSeeing, 2)*iKronWeight +
+        sov.zmomentXX/power(zSeeing, 2)*zKronWeight + 
+        sov.ymomentXX/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentXX,
+       (sov.gKronRad/power(gSeeing, 1)*gKronWeight + 
+        sov.rKronRad/power(rSeeing, 1)*rKronWeight + 
+        sov.iKronRad/power(iSeeing, 1)*iKronWeight +
+        sov.zKronRad/power(zSeeing, 1)*zKronWeight + 
+        sov.yKronRad/power(ySeeing, 1)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwKronRad,
+       (sov.gmomentRH/power(gSeeing, 0.5)*gKronWeight + 
+        sov.rmomentRH/power(rSeeing, 0.5)*rKronWeight + 
+        sov.imomentRH/power(iSeeing, 0.5)*iKronWeight +
+        sov.zmomentRH/power(zSeeing, 0.5)*zKronWeight + 
+        sov.ymomentRH/power(ySeeing, 0.5)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentRH,
+       (sov.gpsfChiSq*gKronWeight + sov.rpsfChiSq*rKronWeight + sov.ipsfChiSq*iKronWeight +
+        sov.zpsfChiSq*zKronWeight + sov.ypsfChiSq*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwpsfChiSq,
+       (sov.gpsfLikelihood*gKronWeight + sov.rpsfLikelihood*rKronWeight + sov.ipsfLikelihood*iKronWeight +
+        sov.zpsfLikelihood*zKronWeight + sov.ypsfLikelihood*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwpsfLikelihood
+        from
+(select sov.objid, 
+      (case when (sov.gpsfMajorFWHM > 0 and sov.gpsfMinorFWHM > 0)
+          then (sov.gpsfMajorFWHM + sov.gpsfMinorFWHM)/2 else 1e8 end) as gSeeing,
+      (case when (sov.rpsfMajorFWHM > 0 and sov.rpsfMinorFWHM > 0)
+          then (sov.rpsfMajorFWHM + sov.rpsfMinorFWHM)/2 else 1e8 end) as rSeeing,
+      (case when (sov.ipsfMajorFWHM > 0 and sov.ipsfMinorFWHM > 0)
+          then (sov.ipsfMajorFWHM + sov.ipsfMinorFWHM)/2 else 1e8 end) as iSeeing,
+      (case when (sov.zpsfMajorFWHM > 0 and sov.zpsfMinorFWHM > 0)
+          then (sov.zpsfMajorFWHM + sov.zpsfMinorFWHM)/2 else 1e8 end) as zSeeing,
+      (case when (sov.ypsfMajorFWHM > 0 and sov.ypsfMinorFWHM > 0)
+          then (sov.ypsfMajorFWHM + sov.ypsfMinorFWHM)/2 else 1e8 end) as ySeeing,
+      (case when (sov.gPSFFlux > 0 AND sov.gKronFlux > 0 AND sov.gApFlux > 0) 
+             then power(sov.gPSFFlux,2)/power(sov.gPSFFluxErr,2) else 0 end) as gPSFWeight, 
+       (case when (sov.rPSFFlux > 0 AND sov.rKronFlux > 0 AND sov.rApFlux > 0) 
+             then power(sov.rPSFFlux,2)/power(sov.rPSFFluxErr,2) else 0 end) as rPSFWeight,
+       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
+             then power(sov.iPSFFlux,2)/power(sov.iPSFFluxErr,2) else 0 end) as iPSFWeight,
+       (case when (sov.zPSFFlux > 0 AND sov.zKronFlux > 0 AND sov.zApFlux > 0) 
+             then power(sov.zPSFFlux,2)/power(sov.zPSFFluxErr,2) else 0 end) as zPSFWeight,
+       (case when (sov.yPSFFlux > 0 AND sov.yKronFlux > 0 AND sov.yApFlux > 0) 
+             then power(sov.yPSFFlux,2)/power(sov.yPSFFluxErr,2) else 0 end) as yPSFWeight, 
+       (case when (sov.gPSFFlux > 0 AND sov.gKronFlux > 0 AND sov.gApFlux > 0) 
+             then power(sov.gKronFlux,2)/power(sov.gKronFluxErr,2) else 0 end) as gKronWeight, 
+       (case when (sov.rPSFFlux > 0 AND sov.rKronFlux > 0 AND sov.rApFlux > 0) 
+             then power(sov.rKronFlux,2)/power(sov.rKronFluxErr,2) else 0 end) as rKronWeight,
+       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
+             then power(sov.iKronFlux,2)/power(sov.iKronFluxErr,2) else 0 end) as iKronWeight,
+       (case when (sov.zPSFFlux > 0 AND sov.zKronFlux > 0 AND sov.zApFlux > 0) 
+             then power(sov.zKronFlux,2)/power(sov.zKronFluxErr,2) else 0 end) as zKronWeight,
+       (case when (sov.yPSFFlux > 0 AND sov.yKronFlux > 0 AND sov.yApFlux > 0) 
+             then power(sov.yKronFlux,2)/power(sov.yKronFluxErr,2) else 0 end) as yKronWeight,
+       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
+             then 1 else null end) as iDet
+from 
+(select sov.objid 
+    from stackobjectview as sov
+join mydb.Xmatch2 x on sov.objid = x.objid
+where primaryDetection = 1
+group by sov.objid
+having count(sov.objid) = 1) s join stackobjectview as sov on s.objid = sov.objid
+) dummy1 
+join mydb.Xmatch2 x on dummy1.objid = x.objid
+join stackobjectview as sov on dummy1.objid = sov.objid
+join mydb.sdssSpecPhoto2_DR14 sdss on x.specobj_idx = sdss.specobj_idx
+where gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight > 0
+and sov.primaryDetection = 1) dummy2
 
 select *, 
+(wwPSFFlux - (0.91375*wwKronFlux)/sqrt(1 + power(0.91375,2))) as wwPSFKronDist,
+wwPSFFlux/wwApFlux as wwPSFApRatio,
 wwPSFFlux/wwKronFlux as wwPSFKronRatio
 into mydb.sdssSP3_MLfeats
-from (select sdss.class, 
+from 
+(select sdss.class, 
     sdss.sourceType, sdss.z, sdss.cModelMag_r, sdss.gminusi, 
     sdss.type, sdss.countRatio,
-    ot.raStack, ot.decStack, ot.nDetections, ot.qualityFlag,
-    soa.primaryDetection, soa.bestDetection,
-    soa.gpsfMajorFWHM, soa.gpsfMinorFWHM, soa.gpsfCore, soa.gpsfLikelihood, soa.gpsfQf, soa.gpsfQfPerfect, soa.gpsfChiSq, soa.gmomentXX, soa.gmomentXY, soa.gmomentYY, soa.gmomentR1, soa.gmomentRH, soa.gPSFFlux, soa.gPSFFluxErr,soa.gApFlux, soa.gApFillFac, soa.gApRadius, soa.gKronFlux, soa.gKronFluxErr,soa.gKronRad, soa.gExtNSigma,
-    soa.rpsfMajorFWHM, soa.rpsfMinorFWHM, soa.rpsfCore, soa.rpsfLikelihood, soa.rpsfQf, soa.rpsfQfPerfect, soa.rpsfChiSq, soa.rmomentXX, soa.rmomentXY, soa.rmomentYY, soa.rmomentR1, soa.rmomentRH, soa.rPSFFlux, soa.rPSFFluxErr,soa.rApFlux, soa.rApFillFac, soa.rApRadius, soa.rKronFlux, soa.rKronFluxErr,soa.rKronRad, soa.rExtNSigma,
-    soa.ipsfMajorFWHM, soa.ipsfMinorFWHM, soa.ipsfCore, soa.ipsfLikelihood, soa.ipsfQf, soa.ipsfQfPerfect, soa.ipsfChiSq, soa.imomentXX, soa.imomentXY, soa.imomentYY, soa.imomentR1, soa.imomentRH, soa.iPSFFlux, soa.iPSFFluxErr,soa.iApFlux, soa.iApFillFac, soa.iApRadius, soa.iKronFlux, soa.iKronFluxErr,soa.iKronRad, soa.iExtNSigma,
-    soa.zpsfMajorFWHM, soa.zpsfMinorFWHM, soa.zpsfCore, soa.zpsfLikelihood, soa.zpsfQf, soa.zpsfQfPerfect, soa.zpsfChiSq, soa.zmomentXX, soa.zmomentXY, soa.zmomentYY, soa.zmomentR1, soa.zmomentRH, soa.zPSFFlux, soa.zPSFFluxErr,soa.zApFlux, soa.zApFillFac, soa.zApRadius, soa.zKronFlux, soa.zKronFluxErr,soa.zKronRad, soa.zExtNSigma,
-    soa.ypsfMajorFWHM, soa.ypsfMinorFWHM, soa.ypsfCore, soa.ypsfLikelihood, soa.ypsfQf, soa.ypsfQfPerfect, soa.ypsfChiSq, soa.ymomentXX, soa.ymomentXY, soa.ymomentYY, soa.ymomentR1, soa.ymomentRH, soa.yPSFFlux, soa.yPSFFluxErr,soa.yApFlux, soa.yApFillFac, soa.yApRadius, soa.yKronFlux, soa.yKronFluxErr,soa.yKronRad, soa.yExtNSigma,
-    (case when (gPSFFlux > 0 AND gKronFlux > 0)
-        then power(gPSFFlux,3)/power(gPSFFluxErr,2) else 0 end + 
-    case when (rPSFFlux > 0 AND rKronFlux > 0)
-        then power(rPSFFlux,3)/power(rPSFFluxErr,2) else 0 end + 
-    case when (iPSFFlux > 0 AND iKronFlux > 0)
-        then power(iPSFFlux,3)/power(iPSFFluxErr,2) else 0 end + 
-    case when (zPSFFlux > 0 AND zKronFlux > 0)
-        then power(zPSFFlux,3)/power(zPSFFluxErr,2) else 0 end + 
-    case when (yPSFFlux > 0 AND yKronFlux > 0)
-        then power(yPSFFlux,3)/power(yPSFFluxErr,2) else 0 end)/nullif(
-    case when (gPSFFlux > 0 AND gKronFlux > 0)
-        then power(gPSFFlux,2)/power(gPSFFluxErr,2) else 0 end + 
-    case when (rPSFFlux > 0 AND rKronFlux > 0)
-        then power(rPSFFlux,2)/power(rPSFFluxErr,2) else 0 end + 
-    case when (iPSFFlux > 0 AND iKronFlux > 0)
-        then power(iPSFFlux,2)/power(iPSFFluxErr,2) else 0 end + 
-    case when (zPSFFlux > 0 AND zKronFlux > 0)
-        then power(zPSFFlux,2)/power(zPSFFluxErr,2) else 0 end + 
-    case when (yPSFFlux > 0 AND yKronFlux > 0)
-        then power(yPSFFlux,2)/power(yPSFFluxErr,2) else 0 end, 0) 
-    as wwPSFFlux, 
-    (case when (gPSFFlux > 0 AND gKronFlux > 0)
-        then power(gKronFlux,3)/power(gKronFluxErr,2) else 0 end + 
-    case when (rPSFFlux > 0 AND rKronFlux > 0)
-        then power(rKronFlux,3)/power(rKronFluxErr,2) else 0 end + 
-    case when (iPSFFlux > 0 AND iKronFlux > 0)
-        then power(iKronFlux,3)/power(iKronFluxErr,2) else 0 end + 
-    case when (zPSFFlux > 0 AND zKronFlux > 0)
-        then power(zKronFlux,3)/power(zKronFluxErr,2) else 0 end + 
-    case when (yPSFFlux > 0 AND yKronFlux > 0)
-        then power(yKronFlux,3)/power(yKronFluxErr,2) else 0 end)/nullif(
-    case when (gPSFFlux > 0 AND gKronFlux > 0)
-        then power(gKronFlux,2)/power(gKronFluxErr,2) else 0 end + 
-    case when (rPSFFlux > 0 AND rKronFlux > 0)
-        then power(rKronFlux,2)/power(rKronFluxErr,2) else 0 end + 
-    case when (iPSFFlux > 0 AND iKronFlux > 0)
-        then power(iKronFlux,2)/power(iKronFluxErr,2) else 0 end + 
-    case when (zPSFFlux > 0 AND zKronFlux > 0)
-        then power(zKronFlux,2)/power(zKronFluxErr,2) else 0 end + 
-    case when (yPSFFlux > 0 AND yKronFlux > 0)
-        then power(yKronFlux,2)/power(yKronFluxErr,2) else 0 end, 0) 
-    as wwKronFlux
-    from (mydb.Xmatch3 x join mydb.sdssSpecPhoto3_DR14 sdss on x.specobj_idx = sdss.specobj_idx)
-    join StackObjectAttributes soa on soa.objid = x.objid
-    join ObjectThin ot on ot.objid = soa.objid
-    where soa.primaryDetection = 1)
-    dummy    
+        sov.objid, sov.raStack, sov.decStack, sov.nDetections, sov.qualityFlag, 
+        (sov.iPSFMag - sov.iKronMag)*iKronWeight/nullif(iKronWeight,0) as iPSFminusKron,       
+       (sov.gPSFFlux*gPSFWeight + sov.rPSFFlux*rPSFWeight + sov.iPSFFlux*iPSFWeight +
+        sov.zPSFFlux*zPSFWeight + sov.yPSFFlux*yPSFWeight)/nullif(
+        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+        as wwPSFFlux,
+       (sov.gKronFlux*gKronWeight + sov.rKronFlux*rKronWeight + sov.iKronFlux*iKronWeight +
+        sov.zKronFlux*zKronWeight + sov.yKronFlux*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwKronFlux, 
+       (sov.gApFlux*gPSFWeight + sov.rApFlux*rPSFWeight + sov.iApFlux*iPSFWeight +
+        sov.zApFlux*zPSFWeight + sov.yApFlux*yPSFWeight)/nullif(
+        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+        as wwApFlux,
+       (sov.gExtNSigma*gKronWeight + sov.rExtNSigma*rKronWeight + sov.iExtNSigma*iKronWeight +
+        sov.zExtNSigma*zKronWeight + sov.yExtNSigma*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwExtNSigma,
+       (sov.gmomentYY/power(gSeeing, 2)*gKronWeight + 
+        sov.rmomentYY/power(rSeeing, 2)*rKronWeight + 
+        sov.imomentYY/power(iSeeing, 2)*iKronWeight +
+        sov.zmomentYY/power(zSeeing, 2)*zKronWeight + 
+        sov.ymomentYY/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentYY,
+       (sov.gmomentXY/power(gSeeing, 2)*gKronWeight + 
+        sov.rmomentXY/power(rSeeing, 2)*rKronWeight + 
+        sov.imomentXY/power(iSeeing, 2)*iKronWeight +
+        sov.zmomentXY/power(zSeeing, 2)*zKronWeight + 
+        sov.ymomentXY/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentXY,
+       (sov.gmomentXX/power(gSeeing, 2)*gKronWeight + 
+        sov.rmomentXX/power(rSeeing, 2)*rKronWeight + 
+        sov.imomentXX/power(iSeeing, 2)*iKronWeight +
+        sov.zmomentXX/power(zSeeing, 2)*zKronWeight + 
+        sov.ymomentXX/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentXX,
+       (sov.gKronRad/power(gSeeing, 1)*gKronWeight + 
+        sov.rKronRad/power(rSeeing, 1)*rKronWeight + 
+        sov.iKronRad/power(iSeeing, 1)*iKronWeight +
+        sov.zKronRad/power(zSeeing, 1)*zKronWeight + 
+        sov.yKronRad/power(ySeeing, 1)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwKronRad,
+       (sov.gmomentRH/power(gSeeing, 0.5)*gKronWeight + 
+        sov.rmomentRH/power(rSeeing, 0.5)*rKronWeight + 
+        sov.imomentRH/power(iSeeing, 0.5)*iKronWeight +
+        sov.zmomentRH/power(zSeeing, 0.5)*zKronWeight + 
+        sov.ymomentRH/power(ySeeing, 0.5)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentRH,
+       (sov.gpsfChiSq*gKronWeight + sov.rpsfChiSq*rKronWeight + sov.ipsfChiSq*iKronWeight +
+        sov.zpsfChiSq*zKronWeight + sov.ypsfChiSq*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwpsfChiSq,
+       (sov.gpsfLikelihood*gKronWeight + sov.rpsfLikelihood*rKronWeight + sov.ipsfLikelihood*iKronWeight +
+        sov.zpsfLikelihood*zKronWeight + sov.ypsfLikelihood*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwpsfLikelihood
+        from
+(select sov.objid, 
+      (case when (sov.gpsfMajorFWHM > 0 and sov.gpsfMinorFWHM > 0)
+          then (sov.gpsfMajorFWHM + sov.gpsfMinorFWHM)/2 else 1e8 end) as gSeeing,
+      (case when (sov.rpsfMajorFWHM > 0 and sov.rpsfMinorFWHM > 0)
+          then (sov.rpsfMajorFWHM + sov.rpsfMinorFWHM)/2 else 1e8 end) as rSeeing,
+      (case when (sov.ipsfMajorFWHM > 0 and sov.ipsfMinorFWHM > 0)
+          then (sov.ipsfMajorFWHM + sov.ipsfMinorFWHM)/2 else 1e8 end) as iSeeing,
+      (case when (sov.zpsfMajorFWHM > 0 and sov.zpsfMinorFWHM > 0)
+          then (sov.zpsfMajorFWHM + sov.zpsfMinorFWHM)/2 else 1e8 end) as zSeeing,
+      (case when (sov.ypsfMajorFWHM > 0 and sov.ypsfMinorFWHM > 0)
+          then (sov.ypsfMajorFWHM + sov.ypsfMinorFWHM)/2 else 1e8 end) as ySeeing,
+      (case when (sov.gPSFFlux > 0 AND sov.gKronFlux > 0 AND sov.gApFlux > 0) 
+             then power(sov.gPSFFlux,2)/power(sov.gPSFFluxErr,2) else 0 end) as gPSFWeight, 
+       (case when (sov.rPSFFlux > 0 AND sov.rKronFlux > 0 AND sov.rApFlux > 0) 
+             then power(sov.rPSFFlux,2)/power(sov.rPSFFluxErr,2) else 0 end) as rPSFWeight,
+       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
+             then power(sov.iPSFFlux,2)/power(sov.iPSFFluxErr,2) else 0 end) as iPSFWeight,
+       (case when (sov.zPSFFlux > 0 AND sov.zKronFlux > 0 AND sov.zApFlux > 0) 
+             then power(sov.zPSFFlux,2)/power(sov.zPSFFluxErr,2) else 0 end) as zPSFWeight,
+       (case when (sov.yPSFFlux > 0 AND sov.yKronFlux > 0 AND sov.yApFlux > 0) 
+             then power(sov.yPSFFlux,2)/power(sov.yPSFFluxErr,2) else 0 end) as yPSFWeight, 
+       (case when (sov.gPSFFlux > 0 AND sov.gKronFlux > 0 AND sov.gApFlux > 0) 
+             then power(sov.gKronFlux,2)/power(sov.gKronFluxErr,2) else 0 end) as gKronWeight, 
+       (case when (sov.rPSFFlux > 0 AND sov.rKronFlux > 0 AND sov.rApFlux > 0) 
+             then power(sov.rKronFlux,2)/power(sov.rKronFluxErr,2) else 0 end) as rKronWeight,
+       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
+             then power(sov.iKronFlux,2)/power(sov.iKronFluxErr,2) else 0 end) as iKronWeight,
+       (case when (sov.zPSFFlux > 0 AND sov.zKronFlux > 0 AND sov.zApFlux > 0) 
+             then power(sov.zKronFlux,2)/power(sov.zKronFluxErr,2) else 0 end) as zKronWeight,
+       (case when (sov.yPSFFlux > 0 AND sov.yKronFlux > 0 AND sov.yApFlux > 0) 
+             then power(sov.yKronFlux,2)/power(sov.yKronFluxErr,2) else 0 end) as yKronWeight,
+       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
+             then 1 else null end) as iDet
+from 
+(select sov.objid 
+    from stackobjectview as sov
+join mydb.Xmatch3 x on sov.objid = x.objid
+where primaryDetection = 1
+group by sov.objid
+having count(sov.objid) = 1) s join stackobjectview as sov on s.objid = sov.objid
+) dummy1 
+join mydb.Xmatch3 x on dummy1.objid = x.objid
+join stackobjectview as sov on dummy1.objid = sov.objid
+join mydb.sdssSpecPhoto3_DR14 sdss on x.specobj_idx = sdss.specobj_idx
+where gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight > 0
+and sov.primaryDetection = 1) dummy2
 
 select *, 
+(wwPSFFlux - (0.91375*wwKronFlux)/sqrt(1 + power(0.91375,2))) as wwPSFKronDist,
+wwPSFFlux/wwApFlux as wwPSFApRatio,
 wwPSFFlux/wwKronFlux as wwPSFKronRatio
 into mydb.sdssSP4_MLfeats
-from (select sdss.class, 
+from 
+(select sdss.class, 
     sdss.sourceType, sdss.z, sdss.cModelMag_r, sdss.gminusi, 
     sdss.type, sdss.countRatio,
-    ot.raStack, ot.decStack, ot.nDetections, ot.qualityFlag,
-    soa.primaryDetection, soa.bestDetection,
-    soa.gpsfMajorFWHM, soa.gpsfMinorFWHM, soa.gpsfCore, soa.gpsfLikelihood, soa.gpsfQf, soa.gpsfQfPerfect, soa.gpsfChiSq, soa.gmomentXX, soa.gmomentXY, soa.gmomentYY, soa.gmomentR1, soa.gmomentRH, soa.gPSFFlux, soa.gPSFFluxErr,soa.gApFlux, soa.gApFillFac, soa.gApRadius, soa.gKronFlux, soa.gKronFluxErr,soa.gKronRad, soa.gExtNSigma,
-    soa.rpsfMajorFWHM, soa.rpsfMinorFWHM, soa.rpsfCore, soa.rpsfLikelihood, soa.rpsfQf, soa.rpsfQfPerfect, soa.rpsfChiSq, soa.rmomentXX, soa.rmomentXY, soa.rmomentYY, soa.rmomentR1, soa.rmomentRH, soa.rPSFFlux, soa.rPSFFluxErr,soa.rApFlux, soa.rApFillFac, soa.rApRadius, soa.rKronFlux, soa.rKronFluxErr,soa.rKronRad, soa.rExtNSigma,
-    soa.ipsfMajorFWHM, soa.ipsfMinorFWHM, soa.ipsfCore, soa.ipsfLikelihood, soa.ipsfQf, soa.ipsfQfPerfect, soa.ipsfChiSq, soa.imomentXX, soa.imomentXY, soa.imomentYY, soa.imomentR1, soa.imomentRH, soa.iPSFFlux, soa.iPSFFluxErr,soa.iApFlux, soa.iApFillFac, soa.iApRadius, soa.iKronFlux, soa.iKronFluxErr,soa.iKronRad, soa.iExtNSigma,
-    soa.zpsfMajorFWHM, soa.zpsfMinorFWHM, soa.zpsfCore, soa.zpsfLikelihood, soa.zpsfQf, soa.zpsfQfPerfect, soa.zpsfChiSq, soa.zmomentXX, soa.zmomentXY, soa.zmomentYY, soa.zmomentR1, soa.zmomentRH, soa.zPSFFlux, soa.zPSFFluxErr,soa.zApFlux, soa.zApFillFac, soa.zApRadius, soa.zKronFlux, soa.zKronFluxErr,soa.zKronRad, soa.zExtNSigma,
-    soa.ypsfMajorFWHM, soa.ypsfMinorFWHM, soa.ypsfCore, soa.ypsfLikelihood, soa.ypsfQf, soa.ypsfQfPerfect, soa.ypsfChiSq, soa.ymomentXX, soa.ymomentXY, soa.ymomentYY, soa.ymomentR1, soa.ymomentRH, soa.yPSFFlux, soa.yPSFFluxErr,soa.yApFlux, soa.yApFillFac, soa.yApRadius, soa.yKronFlux, soa.yKronFluxErr,soa.yKronRad, soa.yExtNSigma,
-    (case when (gPSFFlux > 0 AND gKronFlux > 0)
-        then power(gPSFFlux,3)/power(gPSFFluxErr,2) else 0 end + 
-    case when (rPSFFlux > 0 AND rKronFlux > 0)
-        then power(rPSFFlux,3)/power(rPSFFluxErr,2) else 0 end + 
-    case when (iPSFFlux > 0 AND iKronFlux > 0)
-        then power(iPSFFlux,3)/power(iPSFFluxErr,2) else 0 end + 
-    case when (zPSFFlux > 0 AND zKronFlux > 0)
-        then power(zPSFFlux,3)/power(zPSFFluxErr,2) else 0 end + 
-    case when (yPSFFlux > 0 AND yKronFlux > 0)
-        then power(yPSFFlux,3)/power(yPSFFluxErr,2) else 0 end)/nullif(
-    case when (gPSFFlux > 0 AND gKronFlux > 0)
-        then power(gPSFFlux,2)/power(gPSFFluxErr,2) else 0 end + 
-    case when (rPSFFlux > 0 AND rKronFlux > 0)
-        then power(rPSFFlux,2)/power(rPSFFluxErr,2) else 0 end + 
-    case when (iPSFFlux > 0 AND iKronFlux > 0)
-        then power(iPSFFlux,2)/power(iPSFFluxErr,2) else 0 end + 
-    case when (zPSFFlux > 0 AND zKronFlux > 0)
-        then power(zPSFFlux,2)/power(zPSFFluxErr,2) else 0 end + 
-    case when (yPSFFlux > 0 AND yKronFlux > 0)
-        then power(yPSFFlux,2)/power(yPSFFluxErr,2) else 0 end, 0) 
-    as wwPSFFlux, 
-    (case when (gPSFFlux > 0 AND gKronFlux > 0)
-        then power(gKronFlux,3)/power(gKronFluxErr,2) else 0 end + 
-    case when (rPSFFlux > 0 AND rKronFlux > 0)
-        then power(rKronFlux,3)/power(rKronFluxErr,2) else 0 end + 
-    case when (iPSFFlux > 0 AND iKronFlux > 0)
-        then power(iKronFlux,3)/power(iKronFluxErr,2) else 0 end + 
-    case when (zPSFFlux > 0 AND zKronFlux > 0)
-        then power(zKronFlux,3)/power(zKronFluxErr,2) else 0 end + 
-    case when (yPSFFlux > 0 AND yKronFlux > 0)
-        then power(yKronFlux,3)/power(yKronFluxErr,2) else 0 end)/nullif(
-    case when (gPSFFlux > 0 AND gKronFlux > 0)
-        then power(gKronFlux,2)/power(gKronFluxErr,2) else 0 end + 
-    case when (rPSFFlux > 0 AND rKronFlux > 0)
-        then power(rKronFlux,2)/power(rKronFluxErr,2) else 0 end + 
-    case when (iPSFFlux > 0 AND iKronFlux > 0)
-        then power(iKronFlux,2)/power(iKronFluxErr,2) else 0 end + 
-    case when (zPSFFlux > 0 AND zKronFlux > 0)
-        then power(zKronFlux,2)/power(zKronFluxErr,2) else 0 end + 
-    case when (yPSFFlux > 0 AND yKronFlux > 0)
-        then power(yKronFlux,2)/power(yKronFluxErr,2) else 0 end, 0) 
-    as wwKronFlux
-    from (mydb.Xmatch4 x join mydb.sdssSpecPhoto4_DR14 sdss on x.specobj_idx = sdss.specobj_idx)
-    join StackObjectAttributes soa on soa.objid = x.objid
-    join ObjectThin ot on ot.objid = soa.objid
-    where soa.primaryDetection = 1)
-    dummy  
+        sov.objid, sov.raStack, sov.decStack, sov.nDetections, sov.qualityFlag, 
+        (sov.iPSFMag - sov.iKronMag)*iKronWeight/nullif(iKronWeight,0) as iPSFminusKron,       
+       (sov.gPSFFlux*gPSFWeight + sov.rPSFFlux*rPSFWeight + sov.iPSFFlux*iPSFWeight +
+        sov.zPSFFlux*zPSFWeight + sov.yPSFFlux*yPSFWeight)/nullif(
+        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+        as wwPSFFlux,
+       (sov.gKronFlux*gKronWeight + sov.rKronFlux*rKronWeight + sov.iKronFlux*iKronWeight +
+        sov.zKronFlux*zKronWeight + sov.yKronFlux*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwKronFlux, 
+       (sov.gApFlux*gPSFWeight + sov.rApFlux*rPSFWeight + sov.iApFlux*iPSFWeight +
+        sov.zApFlux*zPSFWeight + sov.yApFlux*yPSFWeight)/nullif(
+        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+        as wwApFlux,
+       (sov.gExtNSigma*gKronWeight + sov.rExtNSigma*rKronWeight + sov.iExtNSigma*iKronWeight +
+        sov.zExtNSigma*zKronWeight + sov.yExtNSigma*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwExtNSigma,
+       (sov.gmomentYY/power(gSeeing, 2)*gKronWeight + 
+        sov.rmomentYY/power(rSeeing, 2)*rKronWeight + 
+        sov.imomentYY/power(iSeeing, 2)*iKronWeight +
+        sov.zmomentYY/power(zSeeing, 2)*zKronWeight + 
+        sov.ymomentYY/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentYY,
+       (sov.gmomentXY/power(gSeeing, 2)*gKronWeight + 
+        sov.rmomentXY/power(rSeeing, 2)*rKronWeight + 
+        sov.imomentXY/power(iSeeing, 2)*iKronWeight +
+        sov.zmomentXY/power(zSeeing, 2)*zKronWeight + 
+        sov.ymomentXY/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentXY,
+       (sov.gmomentXX/power(gSeeing, 2)*gKronWeight + 
+        sov.rmomentXX/power(rSeeing, 2)*rKronWeight + 
+        sov.imomentXX/power(iSeeing, 2)*iKronWeight +
+        sov.zmomentXX/power(zSeeing, 2)*zKronWeight + 
+        sov.ymomentXX/power(ySeeing, 2)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentXX,
+       (sov.gKronRad/power(gSeeing, 1)*gKronWeight + 
+        sov.rKronRad/power(rSeeing, 1)*rKronWeight + 
+        sov.iKronRad/power(iSeeing, 1)*iKronWeight +
+        sov.zKronRad/power(zSeeing, 1)*zKronWeight + 
+        sov.yKronRad/power(ySeeing, 1)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwKronRad,
+       (sov.gmomentRH/power(gSeeing, 0.5)*gKronWeight + 
+        sov.rmomentRH/power(rSeeing, 0.5)*rKronWeight + 
+        sov.imomentRH/power(iSeeing, 0.5)*iKronWeight +
+        sov.zmomentRH/power(zSeeing, 0.5)*zKronWeight + 
+        sov.ymomentRH/power(ySeeing, 0.5)*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwmomentRH,
+       (sov.gpsfChiSq*gKronWeight + sov.rpsfChiSq*rKronWeight + sov.ipsfChiSq*iKronWeight +
+        sov.zpsfChiSq*zKronWeight + sov.ypsfChiSq*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwpsfChiSq,
+       (sov.gpsfLikelihood*gKronWeight + sov.rpsfLikelihood*rKronWeight + sov.ipsfLikelihood*iKronWeight +
+        sov.zpsfLikelihood*zKronWeight + sov.ypsfLikelihood*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwpsfLikelihood
+        from
+(select sov.objid, 
+      (case when (sov.gpsfMajorFWHM > 0 and sov.gpsfMinorFWHM > 0)
+          then (sov.gpsfMajorFWHM + sov.gpsfMinorFWHM)/2 else 1e8 end) as gSeeing,
+      (case when (sov.rpsfMajorFWHM > 0 and sov.rpsfMinorFWHM > 0)
+          then (sov.rpsfMajorFWHM + sov.rpsfMinorFWHM)/2 else 1e8 end) as rSeeing,
+      (case when (sov.ipsfMajorFWHM > 0 and sov.ipsfMinorFWHM > 0)
+          then (sov.ipsfMajorFWHM + sov.ipsfMinorFWHM)/2 else 1e8 end) as iSeeing,
+      (case when (sov.zpsfMajorFWHM > 0 and sov.zpsfMinorFWHM > 0)
+          then (sov.zpsfMajorFWHM + sov.zpsfMinorFWHM)/2 else 1e8 end) as zSeeing,
+      (case when (sov.ypsfMajorFWHM > 0 and sov.ypsfMinorFWHM > 0)
+          then (sov.ypsfMajorFWHM + sov.ypsfMinorFWHM)/2 else 1e8 end) as ySeeing,
+      (case when (sov.gPSFFlux > 0 AND sov.gKronFlux > 0 AND sov.gApFlux > 0) 
+             then power(sov.gPSFFlux,2)/power(sov.gPSFFluxErr,2) else 0 end) as gPSFWeight, 
+       (case when (sov.rPSFFlux > 0 AND sov.rKronFlux > 0 AND sov.rApFlux > 0) 
+             then power(sov.rPSFFlux,2)/power(sov.rPSFFluxErr,2) else 0 end) as rPSFWeight,
+       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
+             then power(sov.iPSFFlux,2)/power(sov.iPSFFluxErr,2) else 0 end) as iPSFWeight,
+       (case when (sov.zPSFFlux > 0 AND sov.zKronFlux > 0 AND sov.zApFlux > 0) 
+             then power(sov.zPSFFlux,2)/power(sov.zPSFFluxErr,2) else 0 end) as zPSFWeight,
+       (case when (sov.yPSFFlux > 0 AND sov.yKronFlux > 0 AND sov.yApFlux > 0) 
+             then power(sov.yPSFFlux,2)/power(sov.yPSFFluxErr,2) else 0 end) as yPSFWeight, 
+       (case when (sov.gPSFFlux > 0 AND sov.gKronFlux > 0 AND sov.gApFlux > 0) 
+             then power(sov.gKronFlux,2)/power(sov.gKronFluxErr,2) else 0 end) as gKronWeight, 
+       (case when (sov.rPSFFlux > 0 AND sov.rKronFlux > 0 AND sov.rApFlux > 0) 
+             then power(sov.rKronFlux,2)/power(sov.rKronFluxErr,2) else 0 end) as rKronWeight,
+       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
+             then power(sov.iKronFlux,2)/power(sov.iKronFluxErr,2) else 0 end) as iKronWeight,
+       (case when (sov.zPSFFlux > 0 AND sov.zKronFlux > 0 AND sov.zApFlux > 0) 
+             then power(sov.zKronFlux,2)/power(sov.zKronFluxErr,2) else 0 end) as zKronWeight,
+       (case when (sov.yPSFFlux > 0 AND sov.yKronFlux > 0 AND sov.yApFlux > 0) 
+             then power(sov.yKronFlux,2)/power(sov.yKronFluxErr,2) else 0 end) as yKronWeight,
+       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
+             then 1 else null end) as iDet
+from 
+(select sov.objid 
+    from stackobjectview as sov
+join mydb.Xmatch4 x on sov.objid = x.objid
+where primaryDetection = 1
+group by sov.objid
+having count(sov.objid) = 1) s join stackobjectview as sov on s.objid = sov.objid
+) dummy1 
+join mydb.Xmatch4 x on dummy1.objid = x.objid
+join stackobjectview as sov on dummy1.objid = sov.objid
+join mydb.sdssSpecPhoto4_DR14 sdss on x.specobj_idx = sdss.specobj_idx
+where gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight > 0
+and sov.primaryDetection = 1) dummy2
 
 -- Query 7
 
