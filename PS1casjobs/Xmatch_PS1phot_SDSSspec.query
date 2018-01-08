@@ -161,10 +161,58 @@ from MyDB.sdssSpecPhoto4_DR14 s
 cross apply fGetNearestObjEq(s.ra,s.dec,1.0/60.0) nb
 inner join ObjectThin o on o.objid=nb.objid 
 
-/* Queries below need to be updated for the actual features 
-used in our model */
+/* Self-matching a table with 1M rows 3 times within casjobs does not appear
+to be possible within the 12 hr queue limit imposed on casjobs. Instead, I have
+split the steps necessary to grab features for the SDSS spectroscopic sample
+into 2 queries.
+*/
 
--- Query 5; get stack flux for ML features [To be run on PanSTARRS_DR1]
+-- Query 7 [To be run on PanSTARRS_DR1]
+
+select sov.objid, 
+      (case when (sov.gpsfMajorFWHM > 0 and sov.gpsfMinorFWHM > 0)
+          then (sov.gpsfMajorFWHM + sov.gpsfMinorFWHM)/2 else 1e8 end) as gSeeing,
+      (case when (sov.rpsfMajorFWHM > 0 and sov.rpsfMinorFWHM > 0)
+          then (sov.rpsfMajorFWHM + sov.rpsfMinorFWHM)/2 else 1e8 end) as rSeeing,
+      (case when (sov.ipsfMajorFWHM > 0 and sov.ipsfMinorFWHM > 0)
+          then (sov.ipsfMajorFWHM + sov.ipsfMinorFWHM)/2 else 1e8 end) as iSeeing,
+      (case when (sov.zpsfMajorFWHM > 0 and sov.zpsfMinorFWHM > 0)
+          then (sov.zpsfMajorFWHM + sov.zpsfMinorFWHM)/2 else 1e8 end) as zSeeing,
+      (case when (sov.ypsfMajorFWHM > 0 and sov.ypsfMinorFWHM > 0)
+          then (sov.ypsfMajorFWHM + sov.ypsfMinorFWHM)/2 else 1e8 end) as ySeeing,
+      (case when (sov.gPSFFlux > 0 AND sov.gKronFlux > 0 AND sov.gApFlux > 0) 
+             then power(sov.gPSFFlux,2)/power(sov.gPSFFluxErr,2) else 0 end) as gPSFWeight, 
+       (case when (sov.rPSFFlux > 0 AND sov.rKronFlux > 0 AND sov.rApFlux > 0) 
+             then power(sov.rPSFFlux,2)/power(sov.rPSFFluxErr,2) else 0 end) as rPSFWeight,
+       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
+             then power(sov.iPSFFlux,2)/power(sov.iPSFFluxErr,2) else 0 end) as iPSFWeight,
+       (case when (sov.zPSFFlux > 0 AND sov.zKronFlux > 0 AND sov.zApFlux > 0) 
+             then power(sov.zPSFFlux,2)/power(sov.zPSFFluxErr,2) else 0 end) as zPSFWeight,
+       (case when (sov.yPSFFlux > 0 AND sov.yKronFlux > 0 AND sov.yApFlux > 0) 
+             then power(sov.yPSFFlux,2)/power(sov.yPSFFluxErr,2) else 0 end) as yPSFWeight, 
+       (case when (sov.gPSFFlux > 0 AND sov.gKronFlux > 0 AND sov.gApFlux > 0) 
+             then power(sov.gKronFlux,2)/power(sov.gKronFluxErr,2) else 0 end) as gKronWeight, 
+       (case when (sov.rPSFFlux > 0 AND sov.rKronFlux > 0 AND sov.rApFlux > 0) 
+             then power(sov.rKronFlux,2)/power(sov.rKronFluxErr,2) else 0 end) as rKronWeight,
+       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
+             then power(sov.iKronFlux,2)/power(sov.iKronFluxErr,2) else 0 end) as iKronWeight,
+       (case when (sov.zPSFFlux > 0 AND sov.zKronFlux > 0 AND sov.zApFlux > 0) 
+             then power(sov.zKronFlux,2)/power(sov.zKronFluxErr,2) else 0 end) as zKronWeight,
+       (case when (sov.yPSFFlux > 0 AND sov.yKronFlux > 0 AND sov.yApFlux > 0) 
+             then power(sov.yKronFlux,2)/power(sov.yKronFluxErr,2) else 0 end) as yKronWeight,
+       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
+             then 1 else null end) as iDet
+into mydb.intermediate1
+from 
+(select sov.objid 
+    from stackobjectview as sov
+join mydb.Xmatch1 x on sov.objid = x.objid
+where sov.primaryDetection = 1
+group by sov.objid
+having count(sov.objid) = 1) s join stackobjectview as sov on s.objid = sov.objid
+where sov.primaryDetection = 1
+
+-- Query 8 [To be run on PanSTARRS_DR1]
 
 select *, 
 (wwPSFFlux - (0.91375*wwKronFlux)/sqrt(1 + power(0.91375,2))) as wwPSFKronDist,
@@ -236,56 +284,14 @@ from
         sov.zpsfLikelihood*zKronWeight + sov.ypsfLikelihood*yKronWeight)/nullif(
         gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
         as wwpsfLikelihood
-        from
-(select sov.objid, 
-      (case when (sov.gpsfMajorFWHM > 0 and sov.gpsfMinorFWHM > 0)
-          then (sov.gpsfMajorFWHM + sov.gpsfMinorFWHM)/2 else 1e8 end) as gSeeing,
-      (case when (sov.rpsfMajorFWHM > 0 and sov.rpsfMinorFWHM > 0)
-          then (sov.rpsfMajorFWHM + sov.rpsfMinorFWHM)/2 else 1e8 end) as rSeeing,
-      (case when (sov.ipsfMajorFWHM > 0 and sov.ipsfMinorFWHM > 0)
-          then (sov.ipsfMajorFWHM + sov.ipsfMinorFWHM)/2 else 1e8 end) as iSeeing,
-      (case when (sov.zpsfMajorFWHM > 0 and sov.zpsfMinorFWHM > 0)
-          then (sov.zpsfMajorFWHM + sov.zpsfMinorFWHM)/2 else 1e8 end) as zSeeing,
-      (case when (sov.ypsfMajorFWHM > 0 and sov.ypsfMinorFWHM > 0)
-          then (sov.ypsfMajorFWHM + sov.ypsfMinorFWHM)/2 else 1e8 end) as ySeeing,
-      (case when (sov.gPSFFlux > 0 AND sov.gKronFlux > 0 AND sov.gApFlux > 0) 
-             then power(sov.gPSFFlux,2)/power(sov.gPSFFluxErr,2) else 0 end) as gPSFWeight, 
-       (case when (sov.rPSFFlux > 0 AND sov.rKronFlux > 0 AND sov.rApFlux > 0) 
-             then power(sov.rPSFFlux,2)/power(sov.rPSFFluxErr,2) else 0 end) as rPSFWeight,
-       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
-             then power(sov.iPSFFlux,2)/power(sov.iPSFFluxErr,2) else 0 end) as iPSFWeight,
-       (case when (sov.zPSFFlux > 0 AND sov.zKronFlux > 0 AND sov.zApFlux > 0) 
-             then power(sov.zPSFFlux,2)/power(sov.zPSFFluxErr,2) else 0 end) as zPSFWeight,
-       (case when (sov.yPSFFlux > 0 AND sov.yKronFlux > 0 AND sov.yApFlux > 0) 
-             then power(sov.yPSFFlux,2)/power(sov.yPSFFluxErr,2) else 0 end) as yPSFWeight, 
-       (case when (sov.gPSFFlux > 0 AND sov.gKronFlux > 0 AND sov.gApFlux > 0) 
-             then power(sov.gKronFlux,2)/power(sov.gKronFluxErr,2) else 0 end) as gKronWeight, 
-       (case when (sov.rPSFFlux > 0 AND sov.rKronFlux > 0 AND sov.rApFlux > 0) 
-             then power(sov.rKronFlux,2)/power(sov.rKronFluxErr,2) else 0 end) as rKronWeight,
-       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
-             then power(sov.iKronFlux,2)/power(sov.iKronFluxErr,2) else 0 end) as iKronWeight,
-       (case when (sov.zPSFFlux > 0 AND sov.zKronFlux > 0 AND sov.zApFlux > 0) 
-             then power(sov.zKronFlux,2)/power(sov.zKronFluxErr,2) else 0 end) as zKronWeight,
-       (case when (sov.yPSFFlux > 0 AND sov.yKronFlux > 0 AND sov.yApFlux > 0) 
-             then power(sov.yKronFlux,2)/power(sov.yKronFluxErr,2) else 0 end) as yKronWeight,
-       (case when (sov.iPSFFlux > 0 AND sov.iKronFlux > 0 AND sov.iApFlux > 0) 
-             then 1 else null end) as iDet
-from 
-(select sov.objid 
-    from stackobjectview as sov
-join mydb.Xmatch1 x on sov.objid = x.objid
-where sov.primaryDetection = 1
-group by sov.objid
-having count(sov.objid) = 1) s join stackobjectview as sov on s.objid = sov.objid
-where sov.primaryDetection = 1
-) dummy1 
+        from mydb.intermediate1 as dummy1
 join mydb.Xmatch1 x on dummy1.objid = x.objid
 join stackobjectview as sov on dummy1.objid = sov.objid
 join mydb.sdssSpecPhoto1_DR14 sdss on x.specobj_idx = sdss.specobj_idx
 where gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight > 0
 and sov.primaryDetection = 1) dummy2
 
--- Query 7
+-- Query 9
 
 select * into mydb.sdssSP_MLfeats from AAMaccounts.adamamiller.sdssSP_MLfeats
 union
