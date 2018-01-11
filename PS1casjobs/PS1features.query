@@ -106,7 +106,7 @@ from
         from stackobjectview as sov
         where sov.primaryDetection = 1 and
         sov.nDetections > 2 and
-        sov.decStack between 0 and 0.33333333333333333333
+        sov.decStack between cast(ZZZYYYXXX as float)/3 and cast(ZZZYYYXXX as float)/3
         group by sov.objid
         having count(sov.objid) = 1) s join stackobjectview as sov on s.objid = sov.objid
 where sov.primaryDetection = 1
