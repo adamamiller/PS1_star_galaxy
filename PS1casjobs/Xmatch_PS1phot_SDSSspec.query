@@ -293,11 +293,11 @@ and sov.primaryDetection = 1) dummy2
 
 -- Query 9
 
-select * into mydb.sdssSP_MLfeats from AAMaccounts.adamamiller.sdssSP_MLfeats
+select * into mydb.sdssSP_MLfeats from mydb.sdssSP1_MLfeats
 union
-(select * from AAMaccounts.adamamiller.sdssSP2_MLfeats
+(select * from mydb.sdssSP2_MLfeats
     union
-    (select * from AAMaccounts.adamamiller.sdssSP3_MLfeats
+    (select * from mydb.sdssSP3_MLfeats
         union
-        select * from AAMaccounts.adamamiller.sdssSP4_MLfeats) 
+        select * from mydb.sdssSP4_MLfeats) 
     ) 
