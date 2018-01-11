@@ -1,5 +1,9 @@
 /*This Query is designed to select relevant features for 
-star-galaxy separation from the PS1 stackObjectView table.*/
+star-galaxy separation from the PS1 stackObjectView table.
+
+Note - below ZZZYYYXXX is inserted as a variable to captrue the 
+range of declinations that will be captured in each slice.
+*/
 
 select *, 
 (wwPSFFlux - (0.91375*wwKronFlux)/sqrt(1 + power(0.91375,2))) as wwPSFKronDist,
