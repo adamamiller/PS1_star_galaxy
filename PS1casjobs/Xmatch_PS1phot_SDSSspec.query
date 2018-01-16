@@ -215,7 +215,7 @@ where sov.primaryDetection = 1
 -- Query 8 [To be run on PanSTARRS_DR1]
 
 select *, 
-(wwPSFFlux - (0.91375*wwKronFlux)/sqrt(1 + power(0.91375,2))) as wwPSFKronDist,
+(wwPSFFlux - (0.91375*wwKronFlux))/sqrt(1 + power(0.91375,2)) as wwPSFKronDist,
 wwPSFFlux/wwApFlux as wwPSFApRatio,
 wwPSFFlux/wwKronFlux as wwPSFKronRatio
 into mydb.sdssSP1_MLfeats
