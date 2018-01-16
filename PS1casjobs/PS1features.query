@@ -6,7 +6,7 @@ range of declinations that will be captured in each slice.
 */
 
 select *, 
-(wwPSFFlux - (0.91375*wwKronFlux)/sqrt(1 + power(0.91375,2))) as wwPSFKronDist,
+(wwPSFFlux - (0.91375*wwKronFlux))/sqrt(1 + power(0.91375,2)) as wwPSFKronDist,
 wwPSFFlux/wwApFlux as wwPSFApRatio,
 wwPSFFlux/wwKronFlux as wwPSFKronRatio
 from 
