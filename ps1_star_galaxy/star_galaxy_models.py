@@ -156,7 +156,7 @@ class RandomForestModel:
         """Get the training set for the RF model with HST-PS1 Xmatch sources 
         """
         hst_df = Table.read("HST_COSMOS_features_adamamiller.fit").to_pandas()
-        hst_det = np.where(hst_tbl.nDetections > 0)
+        hst_det = np.where(hst_df.nDetections > 0)
         self.hst_X = np.array(hst_df[features].ix[hst_det])
         self.hst_y = np.array(hst_df["MU_CLASS"].ix[hst_det] - 1)
     
