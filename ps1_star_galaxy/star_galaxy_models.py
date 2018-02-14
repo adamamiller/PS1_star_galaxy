@@ -3,7 +3,7 @@ import pandas as pd
 from astropy.table import Table
 from astropy.io import fits
 from sklearn.ensemble import RandomForestClassifier
-import cPickle as pickle
+import pickle
 
 
 class WhiteFluxModel:
