@@ -2,7 +2,14 @@ import numpy as np
 import pandas as pd
 from astropy.table import Table
 from astropy.io import fits
+from sklearn.ensemble import RandomForestClassifier
+import cPickle as pickle
 
+
+class WhiteFluxModel:
+    """
+    Generate a white flux model to separate stars and galaxies in PS1 data
+    """
 
 class RandomForestModel:
     """
@@ -138,4 +145,42 @@ class RandomForestModel:
         w_kwargs = {'wpsfKronRatio' : w_flux_ratio}
         self.X_df_ = self.X_df_.assign(**w_kwargs)
         self.X_df_.replace([-np.inf, np.inf], 1e6, inplace = True)
-            
+    
+    def get_hst_train(self, file = "HST_COSMOS_features_adamamiller.fit", 
+                      features = ['wwpsfChiSq', 'wwExtNSigma', 
+                                  'wwpsfLikelihood', 'wwPSFKronRatio', 
+                                  'wwPSFKronDist',  'wwPSFApRatio', 
+                                  'wwmomentRH', 'wwmomentXX', 
+                                  'wwmomentXY', 'wwmomentYY', 
+                                  'wwKronRad']):
+        """Get the training set for the RF model with HST-PS1 Xmatch sources 
+        """
+        hst_df = Table.read("HST_COSMOS_features_adamamiller.fit").to_pandas()
+        hst_det = np.where(hst_tbl.nDetections > 0)
+        self.hst_X = np.array(hst_tbl[features].ix[hst_det])
+        self.hst_y = np.array(hst_tbl["MU_CLASS"].ix[hst_det] - 1)
+    
+    def train_hst_rf(self, ntree=400, mtry=4, nodesize=2):
+        """Train the RF on the HST training set
+        """
+        
+        if not hasattr(self, hst_X):
+            self.get_hst_train()
+        
+        rf_clf = RandomForestClassifier(n_estimators=ntree, 
+                                        max_features=mtry,
+                                        min_samples_leaf=nodesize,
+                                        n_jobs=-1)
+        rf_clf.fit(self.hst_X, self.hst_Y)
+        self.rf_clf_ = rf_clf
+    
+    def save_rf_as_pickle(self, pkl_file="final_hst_rf.pkl"):
+        """Save the trained RF model as a pickle file"""
+        with open(pkl_file, "wb") as pf:
+            pickle.dump( self.rf_clf_, pf)
+    
+    def read_rf_from_pickle(self, pkl_file="final_hst_rf.pkl"):
+        """Load the trained RF model as a pickle file"""
+        with open(pkl_file, "rb") as pf:
+            self.rf_clf_ = pickle.load( pf )
+    
