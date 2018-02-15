@@ -164,14 +164,14 @@ class RandomForestModel:
         """Train the RF on the HST training set
         """
         
-        if not hasattr(self, hst_X):
+        if not hasattr(self, "hst_X"):
             self.get_hst_train()
         
         rf_clf = RandomForestClassifier(n_estimators=ntree, 
                                         max_features=mtry,
                                         min_samples_leaf=nodesize,
                                         n_jobs=-1)
-        rf_clf.fit(self.hst_X, self.hst_Y)
+        rf_clf.fit(self.hst_X, self.hst_y)
         self.rf_clf_ = rf_clf
     
     def save_rf_as_pickle(self, pkl_file="final_hst_rf.pkl"):
@@ -184,3 +184,19 @@ class RandomForestModel:
         with open(pkl_file, "rb") as pf:
             self.rf_clf_ = pickle.load( pf )
     
+    def classify_ps1_sources(self, ps1_fits_file,
+                             features = ['wwpsfChiSq', 'wwExtNSigma', 
+                                         'wwpsfLikelihood', 'wwPSFKronRatio', 
+                                         'wwPSFKronDist',  'wwPSFApRatio', 
+                                         'wwmomentRH', 'wwmomentXX', 
+                                         'wwmomentXY', 'wwmomentYY', 
+                                         'wwKronRad']):
+        """Read in FITS from PS1 casjobs and classify sources"""
+        ps1_df = Table.read(ps1_fits_file).to_pandas()
+        ps1_X = np.array(ps1_df[features])
+        rf_proba = self.rf_clf_.predict_proba(ps1_X)[:,1]
+        df_out = ps1_df.copy()[['objid', 'raStack', 'decStack', 'qualityFlag']]
+        df_out['rf_score'] = rf_proba
+        out_file = ps1_fits_file.split("_features")[0] + "classifications.h5"
+        df_out.to_hdf(out_file, "class_table")
+        
