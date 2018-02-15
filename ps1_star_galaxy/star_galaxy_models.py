@@ -197,6 +197,6 @@ class RandomForestModel:
         rf_proba = self.rf_clf_.predict_proba(ps1_X)[:,1]
         df_out = ps1_df.copy()[['objid', 'raStack', 'decStack', 'qualityFlag']]
         df_out['rf_score'] = rf_proba
-        out_file = ps1_fits_file.split("_features")[0] + "classifications.h5"
+        out_file = ps1_fits_file.split("_features")[0] + "_classifications.h5"
         df_out.to_hdf(out_file, "class_table")
         
