@@ -28,12 +28,43 @@ class RandomForestModel:
                                   'wwmomentRH', 'wwmomentXX', 
                                   'wwmomentXY', 'wwmomentYY', 
                                   'wwKronRad']):
+        a
         """Get the training set for the RF model with HST-PS1 Xmatch sources 
+        
+        Parameters
+        ----------
+        file : str, file name (default: "HST_COSMOS_features_adamamiller.fit")
+            Path to the fits file (or other astropy readable file) with the 
+            features and labels for the HST training set
+        
+        features : list-like (default: ['wwpsfChiSq', 'wwExtNSigma', 
+                                        'wwpsfLikelihood', 'wwPSFKronRatio', 
+                                        'wwPSFKronDist',  'wwPSFApRatio', 
+                                        'wwmomentRH', 'wwmomentXX', 
+                                        'wwmomentXY', 'wwmomentYY', 
+                                        'wwKronRad'])
+            A list of features to use in training the RF model. Features must 
+            correspond to columns in file.
+        
+        label : str (default: "MU_CLASS")
+            The column name of the label data for the training set. label must 
+            correspond to a single column in file.
+        
+        Attributes
+        ----------
+        hst_X_ : array-like
+            The scikit-learn compatible feature array for the HST training set
+        
+        hst_y_ : array-like
+            The scikit-learn compatible label array for the HST training set        
         """
         hst_df = Table.read("HST_COSMOS_features_adamamiller.fit").to_pandas()
         hst_det = np.where(hst_df.nDetections > 0)
-        self.hst_X = np.array(hst_df[features].ix[hst_det])
-        self.hst_y = np.array(hst_df["MU_CLASS"].ix[hst_det] - 1)
+        self.hst_X_ = np.array(hst_df[features].ix[hst_det])
+        if label == "MU_CLASS":
+            self.hst_y_ = np.array(hst_df["MU_CLASS"].ix[hst_det] - 1)
+        else:
+            self.hst_y_ = np.array(hst_df[label].ix[hst_det])
     
     def train_hst_rf(self, ntree=400, mtry=4, nodesize=2):
         """Train the RF on the HST training set
