@@ -96,7 +96,14 @@ class RandomForestModel:
         self.rf_clf_ = rf_clf
     
     def save_rf_as_pickle(self, pkl_file="final_hst_rf.pkl"):
-        """Save the trained RF model as a pickle file"""
+        """Save the trained RF model as a pickle file
+        
+        Parameters
+        ----------
+        pkl_file : str, file path
+            Full path to the pickle file that will store the HST-trained 
+            random forest classification model
+        """
         with open(pkl_file, "wb") as pf:
             pickle.dump( self.rf_clf_, pf)
     
