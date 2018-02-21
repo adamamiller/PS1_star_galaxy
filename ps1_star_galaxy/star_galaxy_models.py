@@ -28,7 +28,6 @@ class RandomForestModel:
                                   'wwmomentRH', 'wwmomentXX', 
                                   'wwmomentXY', 'wwmomentYY', 
                                   'wwKronRad']):
-        a
         """Get the training set for the RF model with HST-PS1 Xmatch sources 
         
         Parameters
@@ -68,16 +67,32 @@ class RandomForestModel:
     
     def train_hst_rf(self, ntree=400, mtry=4, nodesize=2):
         """Train the RF on the HST training set
+        
+        Parameters
+        ----------
+        ntree : int (default: 400)
+            The number of trees to include in the random forest model
+        
+        mtry : int (default: 4)
+            The number of features searched at each node in the model
+        
+        nodesize : int (default: 2)
+            The minimum acceptible number of samples for a terminal tree node
+        
+        Attributes
+        ----------
+        rf_clf_ : sklearn RandomForestClassifier object
+            A sklearn RandomForestClassifier object trained on the HST training set 
         """
         
-        if not hasattr(self, "hst_X"):
+        if not hasattr(self, "hst_X_"):
             self.get_hst_train()
         
         rf_clf = RandomForestClassifier(n_estimators=ntree, 
                                         max_features=mtry,
                                         min_samples_leaf=nodesize,
                                         n_jobs=-1)
-        rf_clf.fit(self.hst_X, self.hst_y)
+        rf_clf.fit(self.hst_X_, self.hst_y_)
         self.rf_clf_ = rf_clf
     
     def save_rf_as_pickle(self, pkl_file="final_hst_rf.pkl"):
