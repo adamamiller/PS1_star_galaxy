@@ -254,7 +254,7 @@ We did a decent job of separating stars and galaxies.
 
 \section{Model Data}
 
-Data for the star-galaxy model were obtained from the PS1 casjobs server.\footnote{http://mastweb.stsci.edu/ps1casjobs/home.aspx} The PS1 database provides flux measurements via aperture photometry, point-spread-function (PSF) photometry, and \citet{Kron80} photometry.\footnote{A subset of bright extended sources have additional photometric measurements, e.g., exponential or \citet{Sersic63} profiles, in the \textit{StackModelFitExp} and \textit{StackModelFitSer} tables, respectively. We ignore these measurements for this study as they are not available for all sources.} These flux measurements are produced by PS1 in 3 different ways. The mean brightness measured on the individual PS1 frames is reported in the \textit{MeanObject} table, the mean brightness measured via forced-PSF/aperture photometry on the individual PS1 frames is reported in the \textit{ForcedMeanObject} table, and finally, the brightness measured on the full-depth stacked PS1 images is reported in the \textit{StackObjectThin} table. 
+Data for the star-galaxy model were obtained from the PS1 casjobs server.\footnote{http://mastweb.stsci.edu/ps1casjobs/home.aspx} The PS1 database provides flux measurements via aperture photometry, point-spread-function (PSF) photometry, and \citet{Kron80} photometry.\footnote{A subset of bright sources ($i < 21\,\mathrm{mag}$) outside the Galactic plane have additional photometric measurements, e.g., exponential or \citet{Sersic63} profiles, in the \textit{StackModelFitExp} and \textit{StackModelFitSer} tables, respectively. We ignore these measurements for this study as they are not available for all sources.} These flux measurements are produced by PS1 in 3 different ways. The mean brightness measured on the individual PS1 frames is reported in the \textit{MeanObject} table, the mean brightness measured via forced-PSF/aperture photometry on the individual PS1 frames is reported in the \textit{ForcedMeanObject} table, and finally, the brightness measured on the full-depth stacked PS1 images is reported in the \textit{StackObjectThin} table. In addition to these flux measurements 
 
 % \begin{figure}[]
 %   \centering
@@ -265,8 +265,14 @@ Data for the star-galaxy model were obtained from the PS1 casjobs server.\footno
 % \end{figure}
 
 \section{Model Construction}
-\subsection{Simple Model}
-\subsection{Random Forest Model}
+\subsection{The PS1 Baseline Model}
+
+To establish a baseline for the performance of our star-galaxy separation models we adopt the classification criteria in the PS1 documentation, namely sources with
+$$ \mathtt{iPSFMag} - \mathtt{iKronMag} > 0.05\;\mathrm{mag},$$
+are classified as galaxies.\footnote{\url{https://outerspace.stsci.edu/display/PANSTARRS/How+to+separate+stars+and+galaxies}} The documentation notes that this classification can be performed using photometry from any of the \textit{MeanObject}, \textit{ForcedMeanObject}, or \textit{StackedObjectThin} tables. The PS1 documentation further notes that this basic cut does not perform well for sources with $i \gtrsim 21\,\mathrm{mag}$, which constitutes the majority of sources detected by PS1, and motivates us to generate our own star-galaxy separation models. We use the performance of the $\mathtt{iPSFMag} - \mathtt{iKronMag} > 0.05\;\mathrm{mag}$ model (hereafter, the PS1 model) as a baseline to compare to the models discussed below.
+
+\subsection{Simple Model}\label{sec:simple_model}
+\subsection{Random Forest Model}\label{sec:rf_model}
 
 \section{Results}
 
