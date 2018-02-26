@@ -250,7 +250,11 @@ We did a decent job of separating stars and galaxies.
 \section{Introduction}
 \label{sec:intro}
 
-\section{Training the Model}
+\yt{define ps1}
+
+\section{Model Data}
+
+Data for the star-galaxy model were obtained from the PS1 casjobs server.\footnote{http://mastweb.stsci.edu/ps1casjobs/home.aspx} The PS1 database provides flux measurements via aperture photometry, point-spread-function (PSF) photometry, and \citet{Kron80} photometry.\footnote{A subset of bright extended sources have additional photometric measurements, e.g., exponential or \citet{Sersic63} profiles, in the \textit{StackModelFitExp} and \textit{StackModelFitSer} tables, respectively. We ignore these measurements for this study as they are not available for all sources.} These flux measurements are produced by PS1 in 3 different ways. The mean brightness measured on the individual PS1 frames is reported in the \textit{MeanObject} table, the mean brightness measured via forced-PSF/aperture photometry on the individual PS1 frames is reported in the \textit{ForcedMeanObject} table, and finally, the brightness measured on the full-depth stacked PS1 images is reported in the \textit{StackObjectThin} table. 
 
 % \begin{figure}[]
 %   \centering
