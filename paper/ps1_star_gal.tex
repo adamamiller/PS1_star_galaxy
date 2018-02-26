@@ -141,6 +141,7 @@
 %%
 \newcommand{\yutaro}[1]{{\color{red} yt: {#1}}}
 \newcommand{\aam}[1]{{\color{blue} aam: {#1}}}
+\newcommand{\todo}[1]{{\color{magenta} to-do: {#1}}}
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -250,7 +251,7 @@ We did a decent job of separating stars and galaxies.
 \section{Introduction}
 \label{sec:intro}
 
-\yt{define ps1}
+\yutaro{define ps1}
 
 \section{Model Data}
 
@@ -258,7 +259,24 @@ Data for the star-galaxy model were obtained from the PS1 casjobs server.\footno
 
 \subsection{The \textit{HST} Training Set} 
 
-A fundamental challenge in the construction of a 
+A fundamental challenge in the construction of any supervised machine learning model is the curation of a high-fidelity training set. A subset of the data that requires classification must have known labels so that the machine can learn the proper mapping between features and labels. The superior image quality of the \textit{Hubble Space Telescope} (\textit{HST}) provides exceptionally accurate morphological classifications, making it an ideal source of a training set for lower quality ground-based imaging (e.g., \citealt{Lupton01}). The downside of \textit{HST} is that the field of view is relatively small, so it is difficult to construct a large and diverse training set suitable for predictions over the entire sky. 
+
+We use the largest contiguous area imaged by \textit{HST}, the 1.64\,deg$^2$
+COSMOS field, to construct a training set for our models. Morphological
+classifications of \textit{HST} COSMOS sources are provided in
+\citet{Leauthaud07}. \citeauthor{Leauthaud07} demonstrate reliable
+classifications down to $\sim$25\,mag, which is significantly deeper than the
+faintest sources detected by PS1. We identify counterparts in the PS1 and
+\textit{HST} data by performing a spatial crossmatch between the two catalogs
+using a 1\arcsec radius.\footnote{This matching radius is the same employed
+by PS1 to associate individual detections in the \textit{MeanObject} table
+with detections in the \textit{StackObjectAttributes} table.} \yutaro{I think
+there may be more details here for the filtering of this data - did you
+exclude some matches based on \texttt{MAG\_AUTO}, or something similar to
+that?} Following this procedure, we find that there are 87,431 sources in the
+\citet{Leauthaud07} catalog with PS1 counterparts. Of these, 80,974 are unique in that there is a one-to-one correspondence between \textit{HST} source and a single PS1 \textit{ObjID}. The training set is further reduced to 75,927 once our detection criteria are applied (see \S\ref{sec:simple_model}), and, of those, only 47,XXX have $\texttt{nDetections} \ge 1$ in the PS1 database. 
+
+\todo{Is there an interesting figure to show here that isn't redundant with other figures that we will show?}
 
 % \begin{figure}[]
 %   \centering
