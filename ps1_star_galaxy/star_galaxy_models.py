@@ -100,7 +100,7 @@ class RandomForestModel:
         
         Parameters
         ----------
-        pkl_file : str, file path
+        pkl_file : str, file path (default: "final_hst_rf.pkl")
             Full path to the pickle file that will store the HST-trained 
             random forest classification model
         """
@@ -108,7 +108,14 @@ class RandomForestModel:
             pickle.dump( self.rf_clf_, pf)
     
     def read_rf_from_pickle(self, pkl_file="final_hst_rf.pkl"):
-        """Load the trained RF model as a pickle file"""
+        """Load the trained RF model as a pickle file
+        
+        Parameters
+        ----------
+        pkl_file : str, file path (default: "final_hst_rf.pkl")
+            Full path to the pickle file that will store the HST-trained 
+            random forest classification model       
+        """
         with open(pkl_file, "rb") as pf:
             self.rf_clf_ = pickle.load( pf )
     
