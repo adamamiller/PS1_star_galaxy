@@ -126,7 +126,32 @@ class RandomForestModel:
                                          'wwmomentRH', 'wwmomentXX', 
                                          'wwmomentXY', 'wwmomentYY', 
                                          'wwKronRad']):
-        """Read in FITS from PS1 casjobs and classify sources"""
+        """Read in FITS from PS1 casjobs and output hdf5 classification catalog
+        
+        Parameters
+        ----------
+        ps1_fits_file : str, file path
+            Full path to the ps1 casjobs fits file that contains the features 
+            needed for classification
+        
+        features : list-like (default: ['wwpsfChiSq', 'wwExtNSigma', 
+                                        'wwpsfLikelihood', 'wwPSFKronRatio', 
+                                        'wwPSFKronDist',  'wwPSFApRatio', 
+                                        'wwmomentRH', 'wwmomentXX', 
+                                        'wwmomentXY', 'wwmomentYY', 
+                                        'wwKronRad'])
+            A list of features to use in training the RF model. Features must 
+            correspond to columns in ps1_fits_file.
+        
+        Notes
+        -----
+        The output file assumes that ps1_fits_file has "_features" in the name, 
+        and produces and hdf5 table with "_classifications.h5" in the name
+        
+        To-do
+        -----
+        Make filename handling more general
+        """
         ps1_df = Table.read(ps1_fits_file).to_pandas()
         ps1_X = np.array(ps1_df[features])
         rf_proba = self.rf_clf_.predict_proba(ps1_X)[:,1]
