@@ -63,9 +63,9 @@ class RandomForestModel:
         hst_det = np.where(hst_fits["nDetections"] > 0)
         self.hst_X_ = np.vstack([hst_fits[feat][hst_det] for feat in features]).T
         if label == "MU_CLASS":
-            self.hst_y_ = np.array(hst_df["MU_CLASS"].ix[hst_det] - 1)
+            self.hst_y_ = np.array(hst_fits["MU_CLASS"][hst_det] - 1)
         else:
-            self.hst_y_ = np.array(hst_df[label].ix[hst_det])
+            self.hst_y_ = np.array(hst_fits[label][hst_det])
     
     def train_hst_rf(self, ntree=400, mtry=4, nodesize=2):
         """Train the RF on the HST training set
