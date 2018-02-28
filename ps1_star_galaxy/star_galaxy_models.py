@@ -152,11 +152,14 @@ class RandomForestModel:
         -----
         Make filename handling more general
         """
-        ps1_df = Table.read(ps1_fits_file).to_pandas()
-        ps1_X = np.array(ps1_df[features])
+        ps1_fits = fits.getdata(ps1_fits_file)
+        ps1_X = np.vstack([ps1_fits[feat] for feat in features]).T
         rf_proba = self.rf_clf_.predict_proba(ps1_X)[:,1]
-        df_out = ps1_df.copy()[['objid', 'raStack', 'decStack', 'qualityFlag']]
+        df_out = pd.DataFrame(ps1_fits["objid"], columns = ["objid"])
+        for feat in ['raStack', 'decStack', 'qualityFlag']:
+            df_out[feat] = ps1_fits[feat]
         df_out['rf_score'] = rf_proba
+                
         out_file = ps1_fits_file.split("_features")[0] + "_classifications.h5"
         df_out.to_hdf(out_file, "class_table")
         
