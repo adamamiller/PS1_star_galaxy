@@ -27,7 +27,8 @@ class RandomForestModel:
                                   'wwPSFKronDist',  'wwPSFApRatio', 
                                   'wwmomentRH', 'wwmomentXX', 
                                   'wwmomentXY', 'wwmomentYY', 
-                                  'wwKronRad']):
+                                  'wwKronRad'],
+                      label = "MU_CLASS"):
         """Get the training set for the RF model with HST-PS1 Xmatch sources 
         
         Parameters
@@ -57,9 +58,9 @@ class RandomForestModel:
         hst_y_ : array-like
             The scikit-learn compatible label array for the HST training set        
         """
-        hst_df = Table.read(train_fits).to_pandas()
-        hst_det = np.where(hst_df.nDetections > 0)
-        self.hst_X_ = np.array(hst_df[features].ix[hst_det])
+        hst_fits = fits.getdata(train_fits)
+        hst_det = np.where(hst_fits["nDetections"] > 0)
+        self.hst_X_ = np.vstack([hst_fits[feat][hst_det] for feat in features]).T
         if label == "MU_CLASS":
             self.hst_y_ = np.array(hst_df["MU_CLASS"].ix[hst_det] - 1)
         else:
