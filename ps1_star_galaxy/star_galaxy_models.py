@@ -21,7 +21,8 @@ class RandomForestModel:
     def __init__(self):
         pass
     
-    def get_hst_train(self, train_fits = "HST_COSMOS_features_adamamiller.fit", 
+    def get_hst_train(self, 
+                      hst_ts = "HST_COSMOS_features_adamamiller.fit", 
                       features = ['wwpsfChiSq', 'wwExtNSigma', 
                                   'wwpsfLikelihood', 'wwPSFKronRatio', 
                                   'wwPSFKronDist',  'wwPSFApRatio', 
@@ -33,7 +34,7 @@ class RandomForestModel:
         
         Parameters
         ----------
-        file : str, file name (default: "HST_COSMOS_features_adamamiller.fit")
+        hst_ts : str, file path (default: "HST_COSMOS_features_adamamiller.fit")
             Path to the fits file (or other astropy readable file) with the 
             features and labels for the HST training set
         
@@ -58,7 +59,7 @@ class RandomForestModel:
         hst_y_ : array-like
             The scikit-learn compatible label array for the HST training set        
         """
-        hst_fits = fits.getdata(train_fits)
+        hst_fits = fits.getdata(hst_ts)
         hst_det = np.where(hst_fits["nDetections"] > 0)
         self.hst_X_ = np.vstack([hst_fits[feat][hst_det] for feat in features]).T
         if label == "MU_CLASS":
