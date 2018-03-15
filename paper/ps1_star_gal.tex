@@ -231,7 +231,7 @@ We did a decent job of separating stars and galaxies.
 %% Keywords should appear after the \end{abstract} command. 
 %% See the online documentation for the full list of available subject
 %% keywords and the rules for their use.
-\keywords{catalogs --- galaxies: statistics –-- methods: data analysis –-- methods: statistical --– stars: statistics --- surveys}
+\keywords{catalogs --- galaxies: statistics \UTF{2013}-- methods: data analysis \UTF{2013}-- methods: statistical --\UTF{2013} stars: statistics --- surveys}
 
 %% From the front matter, we move on to the body of the paper.
 %% Sections are demarcated by \section and \subsection, respectively.
@@ -270,10 +270,19 @@ faintest sources detected by PS1. We identify counterparts in the PS1 and
 \textit{HST} data by performing a spatial crossmatch between the two catalogs
 using a 1\arcsec radius.\footnote{This matching radius is the same employed
 by PS1 to associate individual detections in the \textit{MeanObject} table
-with detections in the \textit{StackObjectAttributes} table.} \yutaro{I think
+with detections in the \textit{StackObjectAttributes} table.} 
+\yutaro{I think
 there may be more details here for the filtering of this data - did you
 exclude some matches based on \texttt{MAG\_AUTO}, or something similar to
-that?} Following this procedure, we find that there are 87,431 sources in the
+that?
+$\leftarrow$ When we used \textit{StackObjectThin}, 
+I actually excluded sources with \texttt{MAG\_AUTO} $>$ 25 mag 
+because they are likely mis-crossmatched source 
+which is too faint to be detected PS1 and is within a 1\arcsec radius 
+from another PS1 source. 
+However in \textit{MeanObjectThin} the number of such source is very small, 
+so I did not perform the filtering for the final model.} 
+Following this procedure, we find that there are 87,431 sources in the
 \citet{Leauthaud07} catalog with PS1 counterparts. Of these, 80,974 are
 unique in that there is a one-to-one correspondence between \textit{HST}
 source and a single PS1 \textit{ObjID}. The training set is further reduced
@@ -300,6 +309,21 @@ are classified as galaxies.\footnote{\url{https://outerspace.stsci.edu/display/P
 
 \subsection{Simple Model}\label{sec:simple_model}
 \subsection{Random Forest Model}\label{sec:rf_model}
+
+%%%%%%%%
+\begin{table*}
+\begin{center}
+  \begin{tabular}{lccccc} \\ \hline\hline
+    False positive ratio & 
+    0.005 &  0.01 & 0.02 & 0.05 & 0.1  \\ \hline
+    True positive ratio  & 
+    $0.697 \pm 0.008$ &  $0.742 \pm 0.005$ & $0.786 \pm 0.003$ & $0.852 \pm 0.003$ & $0.899 \pm 0.003$ \\
+    Threshold & 
+    $0.76 \pm 0.05$ &  $0.65 \pm 0.04$ & $0.53 \pm 0.02$ & $0.36 \pm 0.01$ & $0.24 \pm 0.01$  \\ \hline
+  \end{tabular}
+\end{center}
+\end{table*}
+%%%%%%%%
 
 \section{Results}
 
