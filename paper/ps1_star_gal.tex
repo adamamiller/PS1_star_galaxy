@@ -301,13 +301,82 @@ $\texttt{nDetections} \ge 1$ in the PS1 database.
 % \end{figure}
 
 \section{Model Construction}
-\subsection{The PS1 Baseline Model}
+\subsection{The PS1 Baseline Model}\label{sec:ps1_model}
 
 To establish a baseline for the performance of our star-galaxy separation models we adopt the classification criteria in the PS1 documentation, namely sources with
 $$ \mathtt{iPSFMag} - \mathtt{iKronMag} > 0.05\;\mathrm{mag},$$
 are classified as galaxies.\footnote{\url{https://outerspace.stsci.edu/display/PANSTARRS/How+to+separate+stars+and+galaxies}} The documentation notes that this classification can be performed using photometry from any of the \textit{MeanObject}, \textit{ForcedMeanObject}, or \textit{StackedObjectThin} tables. The PS1 documentation further notes that this basic cut does not perform well for sources with $i \gtrsim 21\,\mathrm{mag}$, which constitutes the majority of sources detected by PS1, and motivates us to generate our own star-galaxy separation models. We use the performance of the $\mathtt{iPSFMag} - \mathtt{iKronMag} > 0.05\;\mathrm{mag}$ model (hereafter, the PS1 model) as a baseline to compare to the models discussed below.
 
 \subsection{Simple Model}\label{sec:simple_model}
+\yutaro{
+Since only the i-band photometric measurement is used for the star-galaxy separation  
+in the PS1 model as explained in \S\ref{sec:simple_model},  
+it is expected that the separation accuracy is improved 
+by the model with the photometric measurement in all of the five optical bands 
+provided by PS1 (g, r, i, z, and y), especially for the source 
+detected with a higher signal to noise ratio (S/N) by the other band than that of i-band. 
+We therefore created a simple model (hereafter, the simple model) for the separation 
+with the photometric measurement in all of the optical bands 
+for referring it as a new strict baseline model for the machine learning model  
+we developed (described in \S\ref{sec:rf_model}).
+
+The essential idea for the separation by the simple model is the same as the PS1 model;  
+sources with a ratio of the $\mathtt{KronFlux}$ to the $\mathtt{PSFFlux}$ 
+(corresponding to $\mathtt{PSFMag} - \mathtt{KronMag}$) larger than a threshold 
+are classified as galaxies, 
+but instead of $\mathtt{i[PSF, Kron]Mag}$,  
+we use the white flux measurements ($\mathtt{w[PSF,Kron]Flux}$) 
+defined by the weighted average of the flux in all of the optical band:   
+$$
+\mathtt{w[PSF, Kron]Flux} =  \frac{\sum w_c  F_c }{\sum w_c}, 
+\ w_c = \left( \frac{F_c}{e_c} \right)^2, 
+$$
+where $c = [\mathtt{g, r, i, z, y}]$,  $F$ is the $\mathtt{[PSF,Kron]Flux}$, 
+and $e$ is the $\mathtt{[PSF,Kron]FluxErr}$.  
+The weight $w = \mathrm{(S/N)}^2$ allows this model to perform better decision 
+than the normal average ($w = 1$) by retaining the flux information with high S/N more stronger. 
+
+In order to evaluate the probability of that each source is a star or a galaxy quantitatively, 
+we decided to use the orthogonal distance from the threshold line 
+($\mathtt{wPSFFlux} = a\times \mathtt{wKronFlux}$) 
+on the $\mathtt{wPSFFlux}$-$\mathtt{wKronFlux}$ plane for the simple model:  
+$$
+\mathtt{wPSFKronDist}(a) = 
+	\frac{\mathtt{wPSFFlux} - a\times\mathtt{wKronFlux}}{ \sqrt{1 + a^2}}, 
+$$
+where $a$ is the critical ratio of the $\mathtt{wPSFFlux}$ to the $\mathtt{wKronFlux}$ 
+(corresponding to 0.05 in the PS1 model). 
+A bright source, which can be classified clearly, 
+has larger $|\mathtt{wPSFKronDist}|$ than that of a faint source, 
+even if the ratio of the $\mathtt{wPSFFlux}$ to the $\mathtt{wKronFlux} $
+($\propto \mathtt{wPSFMag}  -  \mathtt{wKronMag}$) of them is the same. 
+We therefore can use the $\mathtt{wPSFKronDist}$ directly 
+as the likelihood of that the source is a star or a galaxy, 
+and furthermore, this treatment improves the true positive ratio (TPR) 
+at the low false positive ratio (FPR) dramatically (see \S*** and Fig.\ref{fig:cvroc_hst}). 
+
+In this paper, we use $a=0.91375$ derived by the average of $a$ 
+through 10-fold cross variation (CV) procedure;   
+the data set is split into 10 smaller sets 
+and obtain a $a$ by maximizing the TPR at FPR$ = 0.005$ 
+(called figure of merit; FoM) of 9 of the folds. 
+We repeat this procedure 10 times in total for all of the combination of 9 of the folds. 
+The distribution of the $\mathtt{wPSFKronDist}$ on $a=0.91375$ is shown in Fig.\ref{fig:psfkrondist}. 
+
+\begin{figure}[t]
+ \centering
+  \includegraphics[width=3.35in]{./Figures/whitePSFKronDist.pdf}
+%  \includegraphics[width=3.35in]{./Figures/whitePSFKronDist.eps}
+  \caption{The distribution of the $\mathtt{wPSFKronDist}$. 
+We show the entire behavior of the $\mathtt{wPSFKronDist}$ for the stars and galaxies 
+in the small window and the KDE of them at the faintest region is shown in the main panel. 
+The dashed line represents the threshold maximizing the separation accuracy for HST sources. }
+  %
+  \label{fig:psfkrondist}
+\end{figure}
+}
+
+
 \subsection{Random Forest Model}\label{sec:rf_model}
 
 %%%%%%%%
@@ -326,6 +395,16 @@ are classified as galaxies.\footnote{\url{https://outerspace.stsci.edu/display/P
 %%%%%%%%
 
 \section{Results}
+
+\begin{figure}[t]
+ \centering
+  \includegraphics[width=3.35in]{./Figures/CV_ROC_HST.pdf}
+%  \includegraphics[width=3.35in]{./Figures/CV_ROC_HST.eps}
+  \caption{}
+  %
+  \label{fig:cvroc_hst}
+\end{figure}
+
 
 \section{Discussion}
 
