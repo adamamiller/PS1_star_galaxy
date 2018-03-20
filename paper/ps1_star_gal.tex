@@ -78,6 +78,7 @@
 %% using \newcommand. Your macros should appear before
 %% the \begin{document} command.
 %%
+\usepackage{multirow}
 \newcommand{\vdag}{(v)^\dagger}
 \newcommand\aastex{AAS\TeX}
 \newcommand\latex{La\TeX}
@@ -384,14 +385,19 @@ The random forest model
 %%%%%%%%
 \begin{table*}
 \begin{center}
-  \begin{tabular}{lccccc} \\ \hline\hline
-    False positive ratio & 
-    0.005 &  0.01 & 0.02 & 0.05 & 0.1  \\ \hline
-    True positive ratio  & 
-    $0.697 \pm 0.008$ &  $0.742 \pm 0.005$ & $0.786 \pm 0.003$ & $0.852 \pm 0.003$ & $0.899 \pm 0.003$ \\
-    Threshold & 
-    $0.76 \pm 0.05$ &  $0.65 \pm 0.04$ & $0.53 \pm 0.02$ & $0.36 \pm 0.01$ & $0.24 \pm 0.01$  \\ \hline
-  \end{tabular}
+\caption{The true positive ratio and the threshold 
+corresponding to the false positive ratio = 0.005, 0.01, 0.02, 0.05, and 0.1. }
+\label{tbl:fpr}
+\begin{tabular}{llccccc}
+\hline\hline
+                                                 & False positive ratio & 0.005 & 0.01 & 0.02 & 0.05 & 0.1 \\ \hline
+\multicolumn{1}{l}{\multirow{2}{*}{All sources}} & True positive ratio  & $0.697 \pm 0.008$ &  $0.742 \pm 0.005$ & $0.786 \pm 0.003$ & $0.852 \pm 0.003$ & $0.899 \pm 0.003$  \\
+\multicolumn{1}{l}{}                             & Threshold & $0.76 \pm 0.05$ &  $0.65 \pm 0.04$ & $0.53 \pm 0.02$ & $0.36 \pm 0.01$ & $0.24 \pm 0.01$  \\ \hline
+\multirow{2}{*}{$\mathtt{rKornMag} < 21$} & True positive ratio  & $0.861 \pm 0.062$ &  $0.953 \pm 0.024$ & $0.986 \pm 0.002$ & $0.993 \pm 0.001$ & $0.996 \pm 0.001$ \\
+                                                 & Threshold & $0.82 \pm 0.17$ &  $0.70 \pm 0.18$ & $0.40 \pm 0.10$ & $0.16 \pm 0.06$ & $0.07 \pm 0.03$   \\ \hline
+\multirow{2}{*}{$\mathtt{rKornMag} < 20$}  & True positive ratio  & $0.841 \pm 0.075$ &  $0.958 \pm 0.028$ & $0.997 \pm 0.001$ & $0.998 \pm 0.001$ & $0.999 \pm 0.001$  \\
+                                                  & Threshold & $0.90 \pm 0.18$ &  $0.81 \pm 0.24$ & $0.77 \pm 0.26$ & $0.13 \pm 0.08$ & $0.06 \pm 0.04$ \\ \hline
+\end{tabular}
 \end{center}
 \end{table*}
 %%%%%%%%
