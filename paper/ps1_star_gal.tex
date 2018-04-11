@@ -252,14 +252,43 @@ We did a decent job of separating stars and galaxies.
 \section{Introduction}\label{sec:intro}
 
 \yutaro{define ps1}
+\yutaro{define features}
 
-\section{Model Data}
+\section{Model Data}\label{sec:model_data}
 
-Data for the star-galaxy model were obtained from the PS1 casjobs server.\footnote{http://mastweb.stsci.edu/ps1casjobs/home.aspx} The PS1 database provides flux measurements via aperture photometry, point-spread-function (PSF) photometry, and \citet{Kron80} photometry.\footnote{A subset of bright sources ($i < 21\,\mathrm{mag}$) outside the Galactic plane have additional photometric measurements, e.g., exponential or \citet{Sersic63} profiles, in the \textit{StackModelFitExp} and \textit{StackModelFitSer} tables, respectively. We ignore these measurements for this study as they are not available for all sources.} These flux measurements are produced by PS1 in 3 different ways. The mean brightness measured on the individual PS1 frames is reported in the \textit{MeanObject} table, the mean brightness measured via forced-PSF/aperture photometry on the individual PS1 frames is reported in the \textit{ForcedMeanObject} table, and finally, the brightness measured on the full-depth stacked PS1 images is reported in the \textit{StackObjectThin} table. The \textit{StackObjectAttributes} table further supplements these tables with point-source object shape measurements, which are very useful to discriminate stars and galaxies. Ultimately, see \S\ref{sec:simple_model}, we use flux measurements from the \textit{StackObjectThin} table and shape measurements from the \textit{StackObjectAttributes} to build our models.
+Data for the star-galaxy model were obtained from the PS1 casjobs
+server.\footnote{http://mastweb.stsci.edu/ps1casjobs/home.aspx} The PS1
+database provides flux measurements via aperture photometry,
+point-spread-function (PSF) photometry, and \citet{Kron80}
+photometry.\footnote{A subset of bright sources ($i < 21\,\mathrm{mag}$)
+outside the Galactic plane have additional photometric measurements, e.g.,
+exponential or \citet{Sersic63} profiles, in the \textit{StackModelFitExp} and
+\textit{StackModelFitSer} tables, respectively. We ignore these measurements
+for this study as they are not available for all sources.} These flux
+measurements are produced by PS1 in 3 different ways. The mean brightness
+measured on the individual PS1 frames is reported in the \textit{MeanObject}
+table, the mean brightness measured via forced-PSF/aperture photometry on the
+individual PS1 frames is reported in the \textit{ForcedMeanObject} table, and
+finally, the brightness measured on the full-depth stacked PS1 images is
+reported in the \textit{StackObjectThin} table. The
+\textit{StackObjectAttributes} table further supplements these tables with
+point-source object shape measurements, which are very useful to discriminate
+stars and galaxies. Ultimately, see \S\ref{sec:simple_model}, we use flux
+measurements from the \textit{StackObjectThin} table and shape measurements
+from the \textit{StackObjectAttributes} to build our models.
 
 \subsection{The \textit{HST} Training Set} 
 
-A fundamental challenge in the construction of any supervised machine learning model is the curation of a high-fidelity training set. A subset of the data that requires classification must have known labels so the machine can learn the proper mapping between features and labels. The superior image quality of the \textit{Hubble Space Telescope} (\textit{HST}) provides exceptionally accurate morphological classifications, making it an ideal source of a training set for lower quality ground-based imaging (e.g., \citealt{Lupton01}). The downside of \textit{HST} is that the field of view is relatively small, so it is difficult to construct a large and diverse training set suitable for predictions over the entire sky. 
+A fundamental challenge in the construction of any supervised machine learning
+model is the curation of a high-fidelity training set. A subset of the data
+that requires classification must have known labels so the machine can learn
+the proper mapping between features and labels. The superior image quality of
+the \textit{Hubble Space Telescope} (\textit{HST}) provides exceptionally
+accurate morphological classifications, making it an ideal source of a training
+set for lower quality ground-based imaging (e.g., \citealt{Lupton01}). The
+downside of \textit{HST} is that the field of view is relatively small, so it
+is difficult to construct a large and diverse training set suitable for
+predictions over the entire sky.
 
 We use the largest contiguous area imaged by \textit{HST}, the 1.64\,deg$^2$
 COSMOS field, to construct a training set for our models. Morphological
@@ -268,25 +297,33 @@ classifications of \textit{HST} COSMOS sources are provided in
 classifications down to $\sim$25\,mag, which is significantly deeper than the
 faintest sources detected by PS1. We identify counterparts in the PS1 and
 \textit{HST} data by performing a spatial crossmatch between the two catalogs
-using a 1\arcsec radius.\footnote{This matching radius is the same employed
-by PS1 to associate individual detections in the \textit{MeanObject} table
-with detections in the \textit{StackObjectAttributes} table.} We further excluded sources from the \citet{Leauthaud07} catalog with $\texttt{MAG\_AUTO} > 25$\,mag, as these sources are too faint to be detected by PS1 meaning their crossmatch counterparts are likely spurious. Following this procedure, we find that there are 87,431 sources in the
-\citet{Leauthaud07} catalog with PS1 counterparts. Of these, 80,974 are
-unique in that there is a one-to-one correspondence between \textit{HST}
-source and a single PS1 \textit{ObjID}. The training set is further reduced
-to 75,927 once our detection criteria are applied (see
-\S\ref{sec:simple_model}), and, of those, only 47,093 have
-$\texttt{nDetections} \ge 1$ in the PS1 database.\footnote{$\texttt{nDetections}$ refers to the number of detections in individual PS1 exposures. Thus, \textit{StackObjectThin} souces can have $\texttt{nDetections}$ = 0 if the source is only detected in the PS1 stack images.}
+using a 1\arcsec radius.\footnote{This matching radius is the same employed by
+PS1 to associate individual detections in the \textit{MeanObject} table with
+detections in the \textit{StackObjectAttributes} table.} We further excluded
+sources from the \citet{Leauthaud07} catalog with $\texttt{MAG\_AUTO} >
+25$\,mag, as these sources are too faint to be detected by PS1 meaning their
+crossmatch counterparts are likely spurious. Following this procedure, we find
+that there are 87,431 sources in the \citet{Leauthaud07} catalog with PS1
+counterparts. Of these, 80,974 are unique in that there is a one-to-one
+correspondence between \textit{HST} source and a single PS1 \textit{ObjID}. The
+training set is further reduced to 75,927 once our detection criteria are
+applied (see \S\ref{sec:simple_model}), and, of those, only 47,093 have
+$\texttt{nDetections} \ge 1$ in the PS1
+database.\footnote{$\texttt{nDetections}$ refers to the number of detections in
+individual PS1 exposures. Thus, \textit{StackObjectThin} souces can have
+$\texttt{nDetections}$ = 0 if the source is only detected in the PS1 stack
+images.}
 
 \todo{Is there an interesting figure to show here that isn't redundant with other figures that we will show?}
 
-% \begin{figure}[]
-%   \centering
-%   \includegraphics[width=3.35in]{.pdf}
-%   \caption{ }
-%   %
-%   \label{fig:}
-% \end{figure}
+\subsection{The SDSS Training Set}
+
+\section{Model Features}\label{sec:model_features}
+
+In addition to developing a training set, we must select features to use as an input for the model. As noted in \S\ref{sec:model_data}, the PS1 database provides flux and shape measurements in each of the $grizy$ filters. Adopting each of these measurements as features for the model presents a significant problem: missing data. There are relatively few sources in the PS1 database that are detected in all 5 filters. There are two general solutions to this problem: (i) remove sources detected in fewer than 5 filters, or (ii) assign some value, via either imputation (e.g., \citealt{Miller17}) or the use of a dummy variable, to the missing data. Given that the vast majority of PS1 sources are faint and are not detected in all 5 filters, neither of these possiblities is attractive for our present purposes.
+
+Rather than use the raw features from the database, we engineer a series of ``white flux'' features that combine the relevant measurements across all filters in which a source is detected. We define a detection as a source having psf, kron, ap flux > 0....
+
 
 \section{Model Construction}
 \subsection{The PS1 Baseline Model}\label{sec:ps1_model}
@@ -296,6 +333,9 @@ $$ \mathtt{iPSFMag} - \mathtt{iKronMag} > 0.05\;\mathrm{mag},$$
 are classified as galaxies.\footnote{\url{https://outerspace.stsci.edu/display/PANSTARRS/How+to+separate+stars+and+galaxies}} The documentation notes that this classification can be performed using photometry from any of the \textit{MeanObject}, \textit{ForcedMeanObject}, or \textit{StackedObjectThin} tables. The PS1 documentation further notes that this basic cut does not perform well for sources with $i \gtrsim 21\,\mathrm{mag}$, which constitutes the majority of sources detected by PS1, and motivates us to generate our own star-galaxy separation models. We use the performance of the $\mathtt{iPSFMag} - \mathtt{iKronMag} > 0.05\;\mathrm{mag}$ model (hereafter, the PS1 model) as a baseline to compare to the models discussed below.
 
 \subsection{Simple Model}\label{sec:simple_model}
+
+While our ultimate goal is to build a machine learning model to separate stars and galaxies (\S\ref{sec:rf_model}), we first construct a straightforward model. This model is inspired by the SDSS \texttt{photo} pipeline \citep{Lupton01}, and combines the flux in each of the 5 PS1 filters to improve the signal-to-noise ratio (SNR) relative to any individual band. In addition to being easy to interpret, this model (hereafter, the simple model), which utilizes the difference between the PSF flux and the Kron-aperture flux for classification, serves as an additional baseline to test the need for a more complicated machine learning model. 
+
 \yutaro{
 Since only the i-band photometric measurement is used for the star-galaxy separation  
 in the PS1 model as explained in \S\ref{sec:simple_model},  
