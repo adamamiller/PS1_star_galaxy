@@ -318,6 +318,8 @@ images.}
 
 \subsection{The SDSS Training Set}
 
+\todo{Need to explain why we use the HST set to train the model}
+
 \section{Model Features}\label{sec:model_features}
 
 In addition to developing a training set, we must select features to use as an input for the model. As noted in \S\ref{sec:model_data}, the PS1 database provides flux and shape measurements in each of the $grizy$ filters. Adopting each of these measurements as features for the model presents a significant problem: missing data. There are relatively few sources in the PS1 database that are detected in all 5 filters. There are two general solutions to this problem: (i) remove sources detected in fewer than 5 filters, or (ii) assign some value, via either imputation (e.g., \citealt{Miller17}) or the use of a dummy variable, to the missing data. Given that the vast majority of PS1 sources are faint and are not detected in all 5 filters, neither of these possiblities is attractive for our present purposes.
@@ -336,19 +338,21 @@ where the sum is over all 5 PS1 filters, \texttt{Feat} is the feature from the \
 %
 equivalent to signal-to-noise ratio (SNR) squared in the given filter. Ultimately, the ``white flux'' features correspond to a weighted mean, with weights equal to the square of the SNR. 
 
-Our final model includes 11 ``white flux'' features to separate stars and galaxies. The database features include: \texttt{PSFFlux}\footnote{For the \texttt{PSFFlux} feature $w_f = (\mathtt{PSFFlux}_f/\mathtt{PSFFluxErr}_f)^2$.}, \texttt{KronFlux}, \texttt{ApFlux}\footnote{For the \texttt{ApFlux} feature $w_f = (\mathtt{ApFlux}_f/\mathtt{ApFluxErr}_f)^2$.}, \texttt{ExtNSigma}, \texttt{KronRad}, \texttt{psfChiSq}, \texttt{psfLikelihood}, \texttt{momentYY}, \texttt{momentXY}, \texttt{momentXX}, and \texttt{momentRH}. The remaining features in the database were either uninformative or would bias the model, such as R.A.\ and Dec.\ (see e.g., \citealt{Richards12a,Miller17}). 
+Our final model includes 11 ``white flux'' features to separate stars and galaxies. The database features include: \texttt{PSFFlux}\footnote{For the \texttt{PSFFlux} feature $w_f = (\mathtt{PSFFlux}_f/\mathtt{PSFFluxErr}_f)^2$.}, \texttt{KronFlux}, \texttt{ApFlux}\footnote{For the \texttt{ApFlux} feature $w_f = (\mathtt{ApFlux}_f/\mathtt{ApFluxErr}_f)^2$.}, \texttt{ExtNSigma}, \texttt{KronRad}, \texttt{psfChiSq}, \texttt{psfLikelihood}, \texttt{momentYY}, \texttt{momentXY}, \texttt{momentXX}, and \texttt{momentRH}. The remaining features in the database were either uninformative or would bias the model, such as R.A.\ and Dec.\ (see e.g., \citealt{Richards12a,Miller17}). We do not directly include \texttt{whitePSFFlux}, \texttt{whiteKronFlux}, and \texttt{whiteApFlux} in the model. We found that the inclusion of these features resulted in a bias whereby all sources brighter than $\sim$16\,mag were automatically classified as stars. Instead, we include the ratio of the different flux measures: \texttt{whitePSFKronRatio} = \texttt{whitePSFFlux}/\texttt{whiteKronFlux}, \texttt{whitePSFApRatio} = \texttt{whitePSFFlux}/\texttt{whiteApFlux}, as well as a third feature \texttt{whitePSFKronDist} (see \S\ref{sec:simple_model}).
 
-
-The distribution of ``white flux'' features is shown in Figure~\ref{}
+As we previously alluded to, the primary benefit of the ``white flux'' features is that they can be calculated for every source in PS1 thus allowing each to be compared on common ground. Furthermore, the SNR for the ``white flux'' features is greater than the SNR for the equivalent feature in a single filter. The downside of these features is that for some sources, especially at the bright end, color information is lost. While a blue source and red source with identical \texttt{whitePSFFlux} values are intrinsically very different, the ``white flux'' features obscure that information for the classifier. Ultimately, we tested models with and without the ``white flux'' features and found that models using only the ``white flux'' features outperform those that do not. We conclude that the benefits of this approach outweigh any loss of color information. 
 
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in]{./Figures/whiteFeatures.pdf}
-%  \includegraphics[width=3.35in]{./Figures/whitePSFKronDist.eps}
-  \caption{}
+  \includegraphics[width=3.5in]{./Figures/whiteFeatures.pdf}
+  \caption{\yutaro{details for this caption: (i) what colors means, (ii) how whiteKronMag is defined, (iii) what the contours represent, (iv) the meaning of the different KDE PDF estimates.}}
   %
   \label{fig:features}
 \end{figure}
+
+The distribution of ``white flux'' features for stars and galaxies in the \textit{HST} training set is shown in Figure~\ref{fig:features} (\texttt{whitePSFKronDist} is shown in Figure~\ref{fig:psfkrondist}). As might be expected, it is clear from Figure~\ref{fig:features} that stars and galaxies are easily separated at the bright end ($\lesssim 20$\,mag), but there is significant overlap in the featurespace between the two populations at the faint end ($\sim$23\,mag). Machine learning algorithms are capable of capturing non-linear behavior in multidimentional data sets, which will prove especially useful for the sources under consideration in the PS1 data set. 
+
+
 
 \section{Model Construction}
 \subsection{The PS1 Baseline Model}\label{sec:ps1_model}
