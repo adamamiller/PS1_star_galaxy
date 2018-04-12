@@ -322,8 +322,33 @@ images.}
 
 In addition to developing a training set, we must select features to use as an input for the model. As noted in \S\ref{sec:model_data}, the PS1 database provides flux and shape measurements in each of the $grizy$ filters. Adopting each of these measurements as features for the model presents a significant problem: missing data. There are relatively few sources in the PS1 database that are detected in all 5 filters. There are two general solutions to this problem: (i) remove sources detected in fewer than 5 filters, or (ii) assign some value, via either imputation (e.g., \citealt{Miller17}) or the use of a dummy variable, to the missing data. Given that the vast majority of PS1 sources are faint and are not detected in all 5 filters, neither of these possiblities is attractive for our present purposes.
 
-Rather than use the raw features from the database, we engineer a series of ``white flux'' features that combine the relevant measurements across all filters in which a source is detected. We define a detection as a source having psf, kron, ap flux > 0....
+Rather than use the raw features from the database, we engineer a series of ``white flux'' features that combine the relevant measurements across all filters in which a source is detected. In a given filter, a source is detected if the $\mathtt{PSFFlux}_f$, $\mathtt{KronFlux}_f$, and $\mathtt{ApFlux}_f$ are \textit{all $> 0$}, where the $f$ subscript refers to a specific filter. The ``white flux'' feature is then created as:
+%
+\begin{equation}
+    \mathtt{white[Feat]} =  \frac{\sum_f^{f = grizy} w_f  \, \mathtt{Feat}_f \, \mathrm{det}_f}{\sum_f^{f = grizy} w_f}, 
+\end{equation}
+%
+where the sum is over all 5 PS1 filters, \texttt{Feat} is the feature from the \textit{StackObjectAttributes} table, $\mathrm{det}_f = 1$ if the source is detected in the $f$ filter, as defined above, or $\mathrm{det}_f = 0$ if not detected, and $w_f$ is the weight assigned to each filter:
+%
+\begin{equation}
+    w_f = \left(\frac{\mathtt{KronFlux}_f}{\mathtt{KronFluxErr}_f}\right)^2,
+\end{equation}
+%
+equivalent to signal-to-noise ratio (SNR) squared in the given filter. Ultimately, the ``white flux'' features correspond to a weighted mean, with weights equal to the square of the SNR. 
 
+Our final model includes 11 ``white flux'' features to separate stars and galaxies. The database features include: \texttt{PSFFlux}\footnote{For the \texttt{PSFFlux} feature $w_f = (\mathtt{PSFFlux}_f/\mathtt{PSFFluxErr}_f)^2$.}, \texttt{KronFlux}, \texttt{ApFlux}\footnote{For the \texttt{ApFlux} feature $w_f = (\mathtt{ApFlux}_f/\mathtt{ApFluxErr}_f)^2$.}, \texttt{ExtNSigma}, \texttt{KronRad}, \texttt{psfChiSq}, \texttt{psfLikelihood}, \texttt{momentYY}, \texttt{momentXY}, \texttt{momentXX}, and \texttt{momentRH}. The remaining features in the database were either uninformative or would bias the model, such as R.A.\ and Dec.\ (see e.g., \citealt{Richards12a,Miller17}). 
+
+
+The distribution of ``white flux'' features is shown in Figure~\ref{}
+
+\begin{figure}[t]
+ \centering
+  \includegraphics[width=3.35in]{./Figures/whiteFeatures.pdf}
+%  \includegraphics[width=3.35in]{./Figures/whitePSFKronDist.eps}
+  \caption{}
+  %
+  \label{fig:features}
+\end{figure}
 
 \section{Model Construction}
 \subsection{The PS1 Baseline Model}\label{sec:ps1_model}
@@ -334,7 +359,7 @@ are classified as galaxies.\footnote{\url{https://outerspace.stsci.edu/display/P
 
 \subsection{Simple Model}\label{sec:simple_model}
 
-While our ultimate goal is to build a machine learning model to separate stars and galaxies (\S\ref{sec:rf_model}), we first construct a straightforward model. This model is inspired by the SDSS \texttt{photo} pipeline \citep{Lupton01}, and combines the flux in each of the 5 PS1 filters to improve the signal-to-noise ratio (SNR) relative to any individual band. In addition to being easy to interpret, this model (hereafter, the simple model), which utilizes the difference between the PSF flux and the Kron-aperture flux for classification, serves as an additional baseline to test the need for a more complicated machine learning model. 
+While our ultimate goal is to build a machine learning model to separate stars and galaxies (\S\ref{sec:rf_model}), we first construct a straightforward model. This model is inspired by the SDSS \texttt{photo} pipeline \citep{Lupton01}, and combines the flux in each of the 5 PS1 filters to improve the SNR relative to any individual band. In addition to being easy to interpret, this model (hereafter, the simple model), which utilizes the difference between the PSF flux and the Kron-aperture flux for classification, serves as an additional baseline to test the need for a more complicated machine learning model. 
 
 \yutaro{
 Since only the i-band photometric measurement is used for the star-galaxy separation  
@@ -457,7 +482,10 @@ the Data Science Fellowship Program.
 
 \facility{PS1}
 
-\software{\texttt{astropy} \citep{Astropy-Collaboration13},  }.
+\software{\texttt{astropy} \citep{Astropy-Collaboration13}, 
+          \texttt{scipy} \citep{Jones01}, 
+          \texttt{matplotlib} \citep{Hunter07},
+          \texttt{pandas} \citep{McKinney10}}
 
 
 \appendix
