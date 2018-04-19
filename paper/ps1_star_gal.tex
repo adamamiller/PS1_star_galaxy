@@ -141,6 +141,7 @@
 %% The following section defines new commands for comments from co-authors
 %%
 \newcommand{\yutaro}[1]{{\color{red} yt: {#1}}}
+\newcommand{\NC}[1]{{\color{gray} NC: {#1}}}
 \newcommand{\aam}[1]{{\color{blue} aam: {#1}}}
 \newcommand{\todo}[1]{{\color{magenta} to-do: {#1}}}
 %%
@@ -344,8 +345,18 @@ As we previously alluded to, the primary benefit of the ``white flux'' features 
 
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.5in]{./Figures/whiteFeatures.pdf}
-  \caption{\yutaro{details for this caption: (i) what colors means, (ii) how whiteKronMag is defined, (iii) what the contours represent, (iv) the meaning of the different KDE PDF estimates.}}
+  \includegraphics[width=3.5in, bb = 139 113 862 1163]{./Figures/whiteFeatures.pdf}
+  \caption{
+  \NC{KDE of the PDF for white features as a function of \texttt{whiteKronMag}
+  ($=-2.5\log_{10}[\mathtt{whiteKronFlux}/3631]$) 
+  for all PS1 sources with HST classification. 
+  The population density for stars and galaxies of each feature is represented by the depth of red and green, respectively, 
+  and white lines on them show the contours of the population density at from 0.1 to 1.0 by an interval of 0.1.
+  The density is scaled relative to the total number of stars and galaxies in the dataset we used for the training of the ML model. 
+  The differing PSDs for the two populations ({\textit i.e.,} stars and galaxies) suggest that 
+  the machine learning method capturing non-linear behavior in multidimensional features 
+  may produce a significant improvement over both of the PS1 model and the simple model. }
+  }
   %
   \label{fig:features}
 \end{figure}
@@ -365,7 +376,7 @@ are classified as galaxies.\footnote{\url{https://outerspace.stsci.edu/display/P
 
 While our ultimate goal is to build a machine learning model to separate stars and galaxies (\S\ref{sec:rf_model}), we first construct a straightforward model. This model is inspired by the SDSS \texttt{photo} pipeline \citep{Lupton01}, and combines the flux in each of the 5 PS1 filters to improve the SNR relative to any individual band. In addition to being easy to interpret, this model (hereafter, the simple model), which utilizes the difference between the PSF flux and the Kron-aperture flux for classification, serves as an additional baseline to test the need for a more complicated machine learning model. 
 
-\yutaro{
+\NC{
 Since only the i-band photometric measurement is used for the star-galaxy separation  
 in the PS1 model as explained in \S\ref{sec:simple_model},  
 it is expected that the separation accuracy is improved 
@@ -422,12 +433,12 @@ The distribution of the $\mathtt{wPSFKronDist}$ on $a=0.91375$ is shown in Fig.\
 
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in]{./Figures/whitePSFKronDist.pdf}
-%  \includegraphics[width=3.35in]{./Figures/whitePSFKronDist.eps}
-  \caption{The distribution of the $\mathtt{wPSFKronDist}$. 
-We show the entire behavior of the $\mathtt{wPSFKronDist}$ for the stars and galaxies 
-in the small window and the KDE of them at the faintest region is shown in the main panel. 
-The dashed line represents the threshold maximizing the separation accuracy for HST sources. }
+  \includegraphics[width=3.35in, bb = 0 0 576 432]{./Figures/whitePSFKronDist.pdf}
+  \caption{{The distribution of the $\mathtt{wPSFKronDist}$. 
+  We show the entire behavior of the $\mathtt{wPSFKronDist}$ for the stars and galaxies 
+  in the small window and the KDE of them at the faintest region is shown in the main panel.  
+  The dashed line represents the threshold maximizing the separation accuracy for HST sources. }
+ }
   %
   \label{fig:psfkrondist}
 \end{figure}
@@ -462,7 +473,7 @@ corresponding to the false positive ratio = 0.005, 0.01, 0.02, 0.05, and 0.1. }
 
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in]{./Figures/CV_ROC_HST.pdf}
+  \includegraphics[width=3.35in, bb = 0 0 576 360]{./Figures/CV_ROC_HST.pdf}
 %  \includegraphics[width=3.35in]{./Figures/CV_ROC_HST.eps}
   \caption{}
   %
