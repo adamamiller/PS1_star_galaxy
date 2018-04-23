@@ -141,6 +141,7 @@
 %% The following section defines new commands for comments from co-authors
 %%
 \newcommand{\yutaro}[1]{{\color{red} yt: {#1}}}
+\newcommand{\NC}[1]{{\color{gray} NC: {#1}}}
 \newcommand{\aam}[1]{{\color{blue} aam: {#1}}}
 \newcommand{\todo}[1]{{\color{magenta} to-do: {#1}}}
 %%
@@ -252,6 +253,36 @@ We did a decent job of separating stars and galaxies.
 \section{Introduction}\label{sec:intro}
 
 \yutaro{define ps1}
+\NC{
+To develop the star/galaxy classifier applicable for any variable sources detected by ZTF project, 
+the wide-field 3$\pi$ Pan-STARRS1 (PS1) survey \citep{Chambers16} 
+would provide the most felicitous data set. 
+
+The PS1 survey uses a wide-field f/4.4 optical telescope system 
+at the Haleakala Observatory on the island of Maui in Hawaii. 
+The system comprises a 1.8 m primary and 0.9 m secondary mirrors \citep{Hodapp04}, 
+produces a field of view of 3.3 deg$^2$ with 60 CCD chips each of 4800$\times$4800 pixels, 
+and the pixel resolution is 0.258 arcsec pixel$^{-1}$ at the focal plane. 
+The filter system consists of five main broadband filters, 
+$g_{\mathrm{P1}}$, $r_{\mathrm{P1}}$, $i_{\mathrm{P1}}$, $z_{\mathrm{P1}}$, and $y_{\mathrm{P1}}$, 
+and that effective wavelength is 481 nm, 617 nm, 752 nm, 866 nm, and 962 nm, 
+respectively \citep{Tonry12, Schlafly12}. 
+The typical 5$\sigma$ depth of stack image is 23.3, 23.2, 23.1, 22.3, and 21.3 mag 
+white that of a single epoch is 22.0, 21.8, 21.5, 20.9, and 19.7 mag in the AB system, 
+with a median seeing of 1.31, 1.19, 1.11, 1.07, and 1.02 arcsec, respectively \citep{Chambers16}. 
+
+The first Pan-STARRS data release (DR1) provides the pixel-based shape measurements 
+({\it e.g.,} the half radial moment \texttt{momentRH}, the major axis of FWHM \texttt{psfMajorFWHM}; 
+\citealt{Flewelling16}) 
+for $>$3 billion sources based off of the stack images in the five filters \citep{Magnier16b}, 
+using the imaging data from 3$\pi$ survey ($\mathrm{Decl.}>-30\ \mathrm{deg}$) 
+carried out several times per filter and over a four-year time span. 
+
+
+
+
+}
+
 \yutaro{define features}
 
 \section{Model Data}\label{sec:model_data}
@@ -338,14 +369,24 @@ where the sum is over all 5 PS1 filters, \texttt{Feat} is the feature from the \
 %
 equivalent to signal-to-noise ratio (SNR) squared in the given filter. Ultimately, the ``white flux'' features correspond to a weighted mean, with weights equal to the square of the SNR. 
 
-Our final model includes 11 ``white flux'' features to separate stars and galaxies. The database features include: \texttt{PSFFlux}\footnote{For the \texttt{PSFFlux} feature $w_f = (\mathtt{PSFFlux}_f/\mathtt{PSFFluxErr}_f)^2$.}, \texttt{KronFlux}, \texttt{ApFlux}\footnote{For the \texttt{ApFlux} feature $w_f = (\mathtt{ApFlux}_f/\mathtt{ApFluxErr}_f)^2$.}, \texttt{ExtNSigma}, \texttt{KronRad}, \texttt{psfChiSq}, \texttt{psfLikelihood}, \texttt{momentYY}, \texttt{momentXY}, \texttt{momentXX}, and \texttt{momentRH}. The remaining features in the database were either uninformative or would bias the model, such as R.A.\ and Dec.\ (see e.g., \citealt{Richards12a,Miller17}). We do not directly include \texttt{whitePSFFlux}, \texttt{whiteKronFlux}, and \texttt{whiteApFlux} in the model. We found that the inclusion of these features resulted in a bias whereby all sources brighter than $\sim$16\,mag were automatically classified as stars. Instead, we include the ratio of the different flux measures: \texttt{whitePSFKronRatio} = \texttt{whitePSFFlux}/\texttt{whiteKronFlux}, \texttt{whitePSFApRatio} = \texttt{whitePSFFlux}/\texttt{whiteApFlux}, as well as a third feature \texttt{whitePSFKronDist} (see \S\ref{sec:simple_model}).
+Our final model includes 11 ``white flux'' features to separate stars and galaxies. The database features include: \texttt{PSFFlux}\footnote{For the \texttt{PSFFlux} feature $w_f = (\mathtt{PSFFlux}_f/\mathtt{PSFFluxErr}_f)^2$.}, \texttt{KronFlux}, \texttt{ApFlux}\footnote{For the \texttt{ApFlux} feature $w_f = (\mathtt{ApFlux}_f/\mathtt{ApFluxErr}_f)^2$.}, \texttt{ExtNSigma}, \texttt{KronRad}, \texttt{psfChiSq}, \texttt{psfLikelihood}, \texttt{momentYY}, \texttt{momentXY}, \texttt{momentXX}, and \texttt{momentRH}\footnote{\NC{We normalized the shape measurements using the average of \texttt{psfMajorFWHM} and  \texttt{psfMinorFWHM} before utilizing them for training the classifier. }}. The remaining features in the database were either uninformative or would bias the model, such as R.A.\ and Dec.\ (see e.g., \citealt{Richards12a,Miller17}). We do not directly include \texttt{whitePSFFlux}, \texttt{whiteKronFlux}, and \texttt{whiteApFlux} in the model. We found that the inclusion of these features resulted in a bias whereby all sources brighter than $\sim$16\,mag were automatically classified as stars. Instead, we include the ratio of the different flux measures: \texttt{whitePSFKronRatio} = \texttt{whitePSFFlux}/\texttt{whiteKronFlux}, \texttt{whitePSFApRatio} = \texttt{whitePSFFlux}/\texttt{whiteApFlux}, as well as a third feature \texttt{whitePSFKronDist} (see \S\ref{sec:simple_model}).
 
 As we previously alluded to, the primary benefit of the ``white flux'' features is that they can be calculated for every source in PS1 thus allowing each to be compared on common ground. Furthermore, the SNR for the ``white flux'' features is greater than the SNR for the equivalent feature in a single filter. The downside of these features is that for some sources, especially at the bright end, color information is lost. While a blue source and red source with identical \texttt{whitePSFFlux} values are intrinsically very different, the ``white flux'' features obscure that information for the classifier. Ultimately, we tested models with and without the ``white flux'' features and found that models using only the ``white flux'' features outperform those that do not. We conclude that the benefits of this approach outweigh any loss of color information. 
 
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.5in]{./Figures/whiteFeatures.pdf}
-  \caption{\yutaro{details for this caption: (i) what colors means, (ii) how whiteKronMag is defined, (iii) what the contours represent, (iv) the meaning of the different KDE PDF estimates.}}
+  \includegraphics[width=3.5in, bb = 139 113 862 1163]{./Figures/whiteFeatures.pdf}
+  \caption{
+  \NC{KDE of the PDF for white features as a function of \texttt{whiteKronMag}
+  ($=-2.5\log_{10}[\mathtt{whiteKronFlux}/3631]$) 
+  for all PS1 sources with HST classification. 
+  The population density for stars and galaxies of each feature is represented by the depth of red and green, respectively, 
+  and white lines on them show the contours of the population density at from 0.1 to 1.0 by an interval of 0.1.
+  The density is scaled relative to the total number of stars and galaxies in the dataset we used for the training of the ML model. 
+  The differing PSDs for the two populations ({\textit i.e.,} stars and galaxies) suggest that 
+  the machine learning method capturing non-linear behavior in multidimensional features 
+  may produce a significant improvement over both of the PS1 model and the simple model. }
+  }
   %
   \label{fig:features}
 \end{figure}
@@ -365,7 +406,7 @@ are classified as galaxies.\footnote{\url{https://outerspace.stsci.edu/display/P
 
 While our ultimate goal is to build a machine learning model to separate stars and galaxies (\S\ref{sec:rf_model}), we first construct a straightforward model. This model is inspired by the SDSS \texttt{photo} pipeline \citep{Lupton01}, and combines the flux in each of the 5 PS1 filters to improve the SNR relative to any individual band. In addition to being easy to interpret, this model (hereafter, the simple model), which utilizes the difference between the PSF flux and the Kron-aperture flux for classification, serves as an additional baseline to test the need for a more complicated machine learning model. 
 
-\yutaro{
+\NC{
 Since only the i-band photometric measurement is used for the star-galaxy separation  
 in the PS1 model as explained in \S\ref{sec:simple_model},  
 it is expected that the separation accuracy is improved 
@@ -422,12 +463,12 @@ The distribution of the $\mathtt{wPSFKronDist}$ on $a=0.91375$ is shown in Fig.\
 
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in]{./Figures/whitePSFKronDist.pdf}
-%  \includegraphics[width=3.35in]{./Figures/whitePSFKronDist.eps}
-  \caption{The distribution of the $\mathtt{wPSFKronDist}$. 
-We show the entire behavior of the $\mathtt{wPSFKronDist}$ for the stars and galaxies 
-in the small window and the KDE of them at the faintest region is shown in the main panel. 
-The dashed line represents the threshold maximizing the separation accuracy for HST sources. }
+  \includegraphics[width=3.35in, bb = 0 0 576 432]{./Figures/whitePSFKronDist.pdf}
+  \caption{{The distribution of the $\mathtt{wPSFKronDist}$. 
+  We show the entire behavior of the $\mathtt{wPSFKronDist}$ for the stars and galaxies 
+  in the small window and the KDE of them at the faintest region is shown in the main panel.  
+  The dashed line represents the threshold maximizing the separation accuracy for HST sources. }
+ }
   %
   \label{fig:psfkrondist}
 \end{figure}
@@ -435,7 +476,75 @@ The dashed line represents the threshold maximizing the separation accuracy for 
 
 
 \subsection{Random Forest Model}\label{sec:rf_model}
-The random forest model
+\NC{
+\subsubsection{The Random Forest Algorithm}\label{sec:rf_alg}
+For constructing the machine learning model (hereafter ML model) 
+to capture non-linear behavior in multidimensional data sets, 
+we use random forest (RF) algorithm in this study.  
+This algorithm is based on decision tree models \citep{Quinlan93} 
+and bagging, 
+wherein bootstrap samples of the training set are used to construct 
+each of the $N_{\mathrm{tree}}$ total trees in the forest,
+for classification problems \citep{Breiman96, Breiman01}. 
+Each tree in the forest is trained by only a random subset of $m_{\mathrm{try}}$ 
+features selected from the full feature set, 
+and the use of bagging and random selected $m_{\mathrm{try}}$ features 
+allows the final model to provide low-bias and low-variance predictions, 
+where the number of terminal node (the depth) of individual tree is limited to be larger than \texttt{nodesize}. 
+
+The final predictions for a new unknown source are determined by voting or averaging the predictions 
+from each of the individual trees. 
+Because of its insensitivity to noisy or meaningless features and also outlier values in them, 
+RF algorithms have recently applied for astronomical data sets frequently, 
+such as light curve classification ({\it e.g., } \citealt{Richards12a, Huppenkothen17}), 
+real and bogus discrimination of difference image ({\it e.g., }  \citealt{Brink13, Wright15}), 
+and star and galaxy separation ({\it e.g., } \citealt{Vasconcellos11, Miller17}). 
+We utilize the \texttt{Python scikit-learn} implementation of the RF algorithm \citep{Pedregosa12} in this study. 
+
+\subsubsection{Feature Selection}
+As we mentioned in \S\ref{sec:model_features}, 11 image features are utilized for training the machine learning classifier: 
+\texttt{ExtNSigma}, \texttt{KronRad}, \texttt{psfChiSq}, \texttt{psfLikelihood}, \texttt{momentYY}, \texttt{momentXY}, \texttt{momentXX}, \texttt{momentRH}, 
+\texttt{whitePSFKronRatio}, \texttt{whitePSFApRatio} (Figure \ref{fig:features}), 
+and \texttt{whitePSFKronDist} (Figure \ref{fig:psfkrondist}). 
+
+While the ML model trained by RF algorithm 
+would provide low-variance and low-biased predictions 
+in the presence of strongly correlated features\footnote{Some features have a relatively strong correlation coefficient: 
+$\sim0.94$ between \texttt{whiteExtNSigma} and \texttt{whitepsfLikelihood}, 
+$\sim0.69$ between \texttt{whiteMomentXX} and \texttt{whiteMomentYY}, and 
+$\sim0.50$ between \texttt{whitePSFApRatio} and \texttt{whitePSFKronRatio}. }
+ or weak/uninformative features ({\it e.g.,} \citealt{Richards12a}), 
+it is worthful to investigate whether the model performance is improved by removing some features. 
+We employ two methods to test the full feature set: 
+(1) forward feature selection ({\it e.g.,} \citealt{Richards12a, Miller17}) and 
+(2) backward feature selection ({\it e.g.,} \citealt{Brink13}). 
+In the forward feature selection, 
+we construct a series of ML models whereby we iteratively add one feature 
+at a time to each successive model starting with the most-important-RF feature 
+and ending with the least-important-RF feature 
+based on the ranking of \texttt{importance} provided by the RF methods, 
+that reflects the contribution of an individual feature to the final decision in RF models \citep{Breiman01, Breiman02}. 
+On the other hand, in the backward feature selection, 
+we remove a feature that provides nouseful information or hurt the classification performance 
+successively from the RF model trained with the full set of features. 
+In both cases, we found that any removal of features does not improve the performance of the ML model 
+in terms of FoM\footnote{Figure of merit; the true positive ratio at the false positive ratio equal to 0.5\% in this study. } 
+significantly. 
+We therefore decide to use all of 11 features to train the final ML model. 
+
+\subsubsection{Optimizing the Model Tuning Parameters}
+The RF algorithm has the two most important hyperparameters, $N_{\mathrm{tree}}$ and $m_{\mathrm{try}}$, 
+and an additional parameter \texttt{nodesize} (see \S\ref{sec:rf_alg}), 
+for controlling the smoothness of the model projection in multidimensional feature space. 
+To construct the optimal ML model, we perform a grid search over the RF tuning parameters 
+$N_{\mathrm{tree}}$, $m_{\mathrm{try}}$ and \texttt{nodesize}. 
+Averaging over ten-fold cross-validated FoM, 
+we found that the performance of the ML model is maximized for the model 
+($N_{\mathrm{tree}} = 400$, $m_{\mathrm{try}} = 4$, $\mathtt{nodesize} = 2$). 
+We note that the final ML model prediction is not sensitive to change in these parameters: 
+most of the FoM of ML model with different parameters is within the standard deviation 
+of CV FoM derived by the optimal ML model. 
+}
 
 
 %%%%%%%%
@@ -462,7 +571,7 @@ corresponding to the false positive ratio = 0.005, 0.01, 0.02, 0.05, and 0.1. }
 
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in]{./Figures/CV_ROC_HST.pdf}
+  \includegraphics[width=3.35in, bb = 0 0 576 360]{./Figures/CV_ROC_HST.pdf}
 %  \includegraphics[width=3.35in]{./Figures/CV_ROC_HST.eps}
   \caption{}
   %
