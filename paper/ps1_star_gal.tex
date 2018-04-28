@@ -307,6 +307,30 @@ stars and galaxies. Ultimately, see \S\ref{sec:simple_model}, we use flux
 measurements from the \textit{StackObjectThin} table and shape measurements
 from the \textit{StackObjectAttributes} to build our models.
 
+
+\subsection{The SDSS Training Set}\label{sec:sdss}
+
+\todo{Need to explain why we use the HST set to train the model}
+
+\begin{figure*}[t]
+ \centering
+  \includegraphics[width=7in, bb = 79 3 1061 333]{./Figures/ColorMagDiagramComb.pdf}
+  \caption{
+  \NC{
+  Color magnitude diagrams (CMDs) for sources in the PS1 catalog selected through three different procedures. 
+  From left to right, we show a KDE of the PDF of the CMD for randomly selected 1M PS1 sources, 
+  PS1 sources cross-matched against the HST COSMOS sources, 
+  and those against the SDSS spectroscopic sources. 
+  The population density is represented as grayscale colormap, 
+  and white lines on the KDE show contours of it at from 0.1 to 1.0 by 0.1 interval. 
+  A KDE of the PDF of the color ($\mathrm{gKronMag} - \mathrm{rKronMag}$) and \texttt{rKornMag} 
+  is also shown in the upper side and the left side of the CMD for each data set. 
+  }
+  }
+  %
+  \label{fig:cmd}
+\end{figure*}
+
 \subsection{The \textit{HST} Training Set} 
 
 A fundamental challenge in the construction of any supervised machine learning
@@ -345,10 +369,6 @@ $\texttt{nDetections}$ = 0 if the source is only detected in the PS1 stack
 images.}
 
 \todo{Is there an interesting figure to show here that isn't redundant with other figures that we will show?}
-
-\subsection{The SDSS Training Set}\label{sec:sdss}
-
-\todo{Need to explain why we use the HST set to train the model}
 
 \section{Model Features}\label{sec:model_features}
 
@@ -735,7 +755,7 @@ and the ROC AUC score for each model is
 %%% fig:acc_sdss %%%
 \begin{figure*}[t]
  \centering
-  \includegraphics[width=6.7in, bb = 0 0 900 360]{./Figures/Accuracy_SDSS_ML_model.pdf}
+  \includegraphics[width=6.5in, bb = 0 0 900 360]{./Figures/Accuracy_SDSS_ML_model.pdf}
   \caption{
   \NC{ 
   Prediction accuracy of the SDSS photo model and the ML model 
