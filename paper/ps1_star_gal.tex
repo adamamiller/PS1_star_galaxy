@@ -251,14 +251,80 @@ We did a decent job of separating stars and galaxies.
 %% to the KEY in the \bibitem in the reference list below. 
 
 \section{Introduction}\label{sec:intro}
-
 \NC{
-To develop the star/galaxy classifier applicable for any variable sources detected by ZTF project, 
-the wide-field 3$\pi$ Pan-STARRS1 (PS1) survey \citep{Chambers16} 
-would provide the most felicitous data set. 
+In recent years, the large quantity of sky image data has been being produced with a high cadence 
+by various of wide and deep time-domain survey projects aiming to explore the transient universe. 
 
+The Zwicky Transient Facility (ZTF; 
+\citealt{Kulkarni12, Bellm14, Smith14, Dekany16, Bellm17})\footnote{\url{http://www.ztf.caltech.edu/}} 
+was started and had first light at Palomar Observatory in 2017, 
+as the next generation Palomar time-domain survey 
+subsequent to the Palomar Transient Facility (PTF; \citealt{Rau09, Law09}) 
+and the intermediate Palomar Transient Facility (iPTF; \citealt{Kulkarni13}). 
+A dedicated survey of the variable sky by ZTF is ongoing with the new camera 
+utilizing the entire focal plane on 47 deg$^2$ of the Palomar 48-inch Samuel Oschin Schmidt telescope. 
+ZTF is scanning more than 3,750 deg$^2$ an hour to depth $R < 20.4$ mag ($5\sigma$ detection), 
+and will produce a photometric variability catalog with nearly 300 observations each year. 
+A primary motivation for ZTF is the search for fast transients 
+including ``kilonovae'' 
+associated with gravitational waves, 
+the result of binary neutron star mergers 
+(GW170817; {\it e.g.,} \citealt{Abbott17, Cowperthwaite17, Lipunov17, Kasliwal17, Utsumi17, Tanaka17}). 
+
+ZTF surveys the sky at a rate that is $\sim 15$ times faster than PTF/iPTF. 
+The increase in the amount of astronomical data with a rapidly accelerating pace 
+results in the necessity of automated classification and filtering by machines to investigate objects 
+that we are potentially interested in. 
+To identify fast-transient candidates, including gravitational wave (GW) counterparts especially, 
+astronomers have contended with significant foreground contamination in the form of stellar flares 
+and/or orbital modulation ({\it e.g.,} \citealt{Kulkarni06, Berger12}). 
+The systematic removal of faint stars from extragalactic candidate lists 
+enable us to follow-up such exotic sources efficiently under the limitation of time, instrumental, and human resources. 
+The follow-up efficiency will be required more strongly from the beginning of the third observing run of LIGO/VIRGO 
+collaborating with KAGRA in 2019. 
+
+\cite{Miller17} developed a star--galaxy separation model for PTF 
+with machine-learning (ML) methodology utilizing the random forest (RF) algorithm 
+to identify as many stars as possible (true positives; TPs) 
+and also to reduce the number of galaxies misclassified as stars (false positives; FPs) 
+for identifying fast transients and GW counterparts. 
+Despite its much superior performance to that of \texttt{SExtractor} 
+which provided the best discriminant between stars and galaxies in PTF images, 
+however, they pointed out that the PTF point source-catalog 
+excludes $\sim 8\times10^7$ point sources as false negatives. 
+Thus there still are several potential improvements that could be made to improve the performance 
+of the star--galaxy separation model. 
+
+Our purpose is developing wide and high-performance star--galaxy separation model 
+applicable for any transients detected by ZTF.  
+The wide-field 3$\pi$ Pan-STARRS1 (PS1) survey \citep{Chambers16} 
+would provide the most felicitous data set for it. 
 The PS1 survey uses a wide-field f/4.4 optical telescope system 
-at the Haleakala Observatory on the island of Maui in Hawaii. 
+at the Haleakala Observatory on the island of Maui in Hawaii \citep{Hodapp04}. 
+The filter system consists of five main broadband filters, 
+$g_{\mathrm{P1}}$, $r_{\mathrm{P1}}$, $i_{\mathrm{P1}}$, $z_{\mathrm{P1}}$, and $y_{\mathrm{P1}}$, 
+and the typical 5$\sigma$ depth of stack image is 23.2 mag in the $r$-band 
+with a median seeing of 1.19 arcsec \citep{Tonry12, Schlafly12, Chambers16}. 
+The first Pan-STARRS data release (DR1) provides a bunch of pixel-based shape measurements 
+\citep{Flewelling16} 
+for $>$3 billion sources based off of the stack images in the five filters \citep{Magnier16b}, 
+using the imaging data from 3$\pi$ survey ($\mathrm{Decl.}>-30\ \mathrm{deg}$) 
+carried out several times per filter and over a four-year time span. 
+
+Here, we construct a star--galaxy separation model 
+utilizing image features provided by PS1 DR1 
+by employing ML methodology with RF algorithm. 
+The paper is organized as follows; 
+the model data for constructing the classifier is mentioned in Section 2, 
+the definition of model features utilized for the classification is described in Section 3, 
+the procedure to construct the model is explained in Section 4, 
+the performance of the ML model is evaluated by comparison with several other models in Section 5, 
+a description of how the catalog is used by ZTF is provided in Section 6, 
+and then we summarize our results in Section 7. 
+}
+
+%%%
+\if0
 The system comprises a 1.8 m primary and 0.9 m secondary mirrors \citep{Hodapp04}, 
 produces a field of view of 3.3 deg$^2$ with 60 CCD chips each of 4800$\times$4800 pixels, 
 and the pixel resolution is 0.258 arcsec pixel$^{-1}$ at the focal plane. 
@@ -269,22 +335,29 @@ respectively \citep{Tonry12, Schlafly12}.
 The typical 5$\sigma$ depth of stack image is 23.3, 23.2, 23.1, 22.3, and 21.3 mag 
 white that of a single epoch is 22.0, 21.8, 21.5, 20.9, and 19.7 mag in the AB system, 
 with a median seeing of 1.31, 1.19, 1.11, 1.07, and 1.02 arcsec, respectively \citep{Chambers16}. 
+\fi
+%%%
 
-The first Pan-STARRS data release (DR1) provides the pixel-based shape measurements 
-({\it e.g.,} the half radial moment \texttt{momentRH}, the major axis of FWHM \texttt{psfMajorFWHM}; 
-\citealt{Flewelling16}) 
-for $>$3 billion sources based off of the stack images in the five filters \citep{Magnier16b}, 
-using the imaging data from 3$\pi$ survey ($\mathrm{Decl.}>-30\ \mathrm{deg}$) 
-carried out several times per filter and over a four-year time span. 
-
-
-
-
-}
-
-\yutaro{define features}
 
 \section{Model Data}\label{sec:model_data}
+\begin{figure*}[t]
+ \centering
+  \includegraphics[width=7in, bb = 79 3 1061 333]{./Figures/ColorMagDiagramComb.pdf}
+  \caption{
+  \NC{
+  Color magnitude diagrams (CMDs) for sources in the PS1 catalog selected through three different procedures. 
+  From left to right, we show a KDE of the PDF of the CMD for randomly selected 1M PS1 sources, 
+  PS1 sources cross-matched against the HST COSMOS sources, 
+  and those against the SDSS spectroscopic sources. 
+  The population density is represented as grayscale colormap, 
+  and white lines on the KDE show contours of it at from 0.1 to 1.0 by 0.1 interval. 
+  A KDE of the PDF of the color ($\mathrm{gKronMag} - \mathrm{rKronMag}$) and \texttt{rKornMag} 
+  is also shown in the upper side and the left side of the CMD for each data set, respectively. 
+  }
+  }
+  %
+  \label{fig:cmd}
+\end{figure*}
 
 Data for the star-galaxy model were obtained from the PS1 casjobs
 server.\footnote{http://mastweb.stsci.edu/ps1casjobs/home.aspx} The PS1
@@ -307,7 +380,7 @@ stars and galaxies. Ultimately, see \S\ref{sec:simple_model}, we use flux
 measurements from the \textit{StackObjectThin} table and shape measurements
 from the \textit{StackObjectAttributes} to build our models.
 
-\subsection{The \textit{HST} Training Set} 
+\subsection{The \textit{HST} Training Set} \label{sec:hst_train}
 
 A fundamental challenge in the construction of any supervised machine learning
 model is the curation of a high-fidelity training set. A subset of the data
@@ -347,8 +420,28 @@ images.}
 \todo{Is there an interesting figure to show here that isn't redundant with other figures that we will show?}
 
 \subsection{The SDSS Training Set}\label{sec:sdss}
+\NC{
+The Sloan Digital Sky Survey (SDSS; \citealt{York00}) spectroscopic catalog 
+provides the spectral classification of objects into stars, galaxies, and quasi-stellar objects (QSOs), 
+and 3,822,297 sources in the SDSS spectroscopic catalog can be cross-matched with PS1 sources 
+through the same criteria as the case of the construction of {\it HST} training set (see \S\ref{sec:hst_train}). 
 
-\todo{Need to explain why we use the HST set to train the model}
+The accuracy of classifications based on spectra would be higher than that by morphology. 
+However we decide to use SDSS spectroscopic classifications only for testing the performance of the model, 
+not for training, 
+because the SDSS spectroscopic survey was intentionally biased toward observing 
+luminous red galaxies (LRGs; see, e.g., \citealt{Eisenstein01}). 
+
+The left panel of Figure \ref{fig:cmd} shows the color-magnitude diagram (CMD) for random-selected PS1 sources, 
+while the right panel shows that for PS1 sources cross-matched with SDSS spectroscopic catalog. 
+The CMD for SDSS sources is completely different from that for random-selected PS1 sources, 
+meaning the selection bias is clearly represented. 
+The final model predictions for the full data set will strongly reflect any biases in the training data set. 
+To avoid it and for constructing the star--galaxy separation model 
+based on the population of celestial sources in the real universe, 
+we decide to use the PS1 sources cross-matched with {\ HST} COSMOS sources for training the final ML model 
+which has substantially lower selection bias as shown in the middle panel of Figure \ref{fig:cmd}. 
+}
 
 \section{Model Features}\label{sec:model_features}
 
@@ -735,7 +828,7 @@ and the ROC AUC score for each model is
 %%% fig:acc_sdss %%%
 \begin{figure*}[t]
  \centering
-  \includegraphics[width=6.7in, bb = 0 0 900 360]{./Figures/Accuracy_SDSS_ML_model.pdf}
+  \includegraphics[width=6.5in, bb = 0 0 900 360]{./Figures/Accuracy_SDSS_ML_model.pdf}
   \caption{
   \NC{ 
   Prediction accuracy of the SDSS photo model and the ML model 
