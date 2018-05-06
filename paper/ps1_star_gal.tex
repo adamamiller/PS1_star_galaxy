@@ -257,7 +257,7 @@ by various of wide and deep time-domain survey projects aiming to explore the tr
 
 The Zwicky Transient Facility (ZTF; 
 \citealt{Kulkarni12, Bellm14, Smith14, Dekany16, Bellm17})\footnote{\url{http://www.ztf.caltech.edu/}} 
-was started and had first light at Palomar Observatory in 2017, 
+was started and had the first light at Palomar Observatory in 2017, 
 as the next generation Palomar time-domain survey 
 subsequent to the Palomar Transient Facility (PTF; \citealt{Rau09, Law09}) 
 and the intermediate Palomar Transient Facility (iPTF; \citealt{Kulkarni13}). 
@@ -271,40 +271,41 @@ associated with gravitational waves,
 the result of binary neutron star mergers 
 (GW170817; {\it e.g.,} \citealt{Abbott17, Cowperthwaite17, Lipunov17, Kasliwal17, Utsumi17, Tanaka17}). 
 
-ZTF surveys the sky at a rate that is $\sim 15$ times faster than PTF/iPTF. 
+ZTF surveys the sky at a rate that is $\sim15$ times faster than PTF/iPTF. 
 The increase in the amount of astronomical data with a rapidly accelerating pace 
 results in the necessity of automated classification and filtering by machines to investigate objects 
 that we are potentially interested in. 
 To identify fast-transient candidates, including gravitational wave (GW) counterparts especially, 
 astronomers have contended with significant foreground contamination in the form of stellar flares 
-and/or orbital modulation ({\it e.g.,} \citealt{Kulkarni06, Berger12}). 
+and/or orbital modulation ({\it e.g.,} \citealt{Kulkarni06, Berger12, Kasliwal16}). 
 The systematic removal of faint stars from extragalactic candidate lists 
-enable us to follow-up such exotic sources efficiently under the limitation of time, instrumental, and human resources. 
+enables us to follow-up such exotic sources efficiently under the limitation of time, instrumental, and human resources. 
 The follow-up efficiency will be required more strongly from the beginning of the third observing run of LIGO/VIRGO 
 collaborating with KAGRA in 2019. 
 
 \cite{Miller17} developed a star--galaxy separation model for PTF 
 with machine-learning (ML) methodology utilizing the random forest (RF) algorithm 
 to identify as many stars as possible (true positives; TPs) 
-and also to reduce the number of galaxies misclassified as stars (false positives; FPs) 
-for identifying fast transients and GW counterparts. 
-Despite its much superior performance to that of \texttt{SExtractor} 
-which provided the best discriminant between stars and galaxies in PTF images, 
-however, they pointed out that the PTF point source-catalog 
+and also to reduce the number of galaxies misconceived as stars (false positives; FPs) 
+for discovering fast transients and GW counterparts. 
+However, despite its much superior performance to that of \texttt{SExtractor}, 
+which had provided the best discriminant between stars and galaxies in PTF images, 
+they pointed out that the PTF point source-catalog 
 excludes $\sim 8\times10^7$ point sources as false negatives. 
 Thus there still are several potential improvements that could be made to improve the performance 
 of the star--galaxy separation model. 
 
-Our purpose is developing wide and high-performance star--galaxy separation model 
+Our purpose is developing a wide-coverage and high-performance star--galaxy separation model 
 applicable for any transients detected by ZTF.  
 The wide-field 3$\pi$ Pan-STARRS1 (PS1) survey \citep{Chambers16} 
 would provide the most felicitous data set for it. 
+
 The PS1 survey uses a wide-field f/4.4 optical telescope system 
 at the Haleakala Observatory on the island of Maui in Hawaii \citep{Hodapp04}. 
 The filter system consists of five main broadband filters, 
-$g_{\mathrm{P1}}$, $r_{\mathrm{P1}}$, $i_{\mathrm{P1}}$, $z_{\mathrm{P1}}$, and $y_{\mathrm{P1}}$, 
-and the typical 5$\sigma$ depth of stack image is 23.2 mag in the $r$-band 
-with a median seeing of 1.19 arcsec \citep{Tonry12, Schlafly12, Chambers16}. 
+$g_{\mathrm{P1}}$, $r_{\mathrm{P1}}$, $i_{\mathrm{P1}}$, $z_{\mathrm{P1}}$, and $y_{\mathrm{P1}}$. 
+The typical 5$\sigma$ depth of stack image is 23.2 mag 
+with a median seeing of 1.19 arcsec  in the $r$-band \citep{Tonry12, Schlafly12, Chambers16}. 
 The first Pan-STARRS data release (DR1) provides a bunch of pixel-based shape measurements 
 \citep{Flewelling16} 
 for $>$3 billion sources based off of the stack images in the five filters \citep{Magnier16b}, 
@@ -314,7 +315,7 @@ carried out several times per filter and over a four-year time span.
 Here, we construct a star--galaxy separation model 
 utilizing image features provided by PS1 DR1 
 by employing ML methodology with RF algorithm. 
-The paper is organized as follows; 
+This paper is organized as follows; 
 the model data for constructing the classifier is mentioned in Section 2, 
 the definition of model features utilized for the classification is described in Section 3, 
 the procedure to construct the model is explained in Section 4, 
@@ -344,7 +345,6 @@ with a median seeing of 1.31, 1.19, 1.11, 1.07, and 1.02 arcsec, respectively \c
  \centering
   \includegraphics[width=7in, bb = 79 3 1061 333]{./Figures/ColorMagDiagramComb.pdf}
   \caption{
-  \NC{
   Color magnitude diagrams (CMDs) for sources in the PS1 catalog selected through three different procedures. 
   From left to right, we show a KDE of the PDF of the CMD for randomly selected 1M PS1 sources, 
   PS1 sources cross-matched against the HST COSMOS sources, 
@@ -353,7 +353,6 @@ with a median seeing of 1.31, 1.19, 1.11, 1.07, and 1.02 arcsec, respectively \c
   and white lines on the KDE show contours of it at from 0.1 to 1.0 by 0.1 interval. 
   A KDE of the PDF of the color ($\mathrm{gKronMag} - \mathrm{rKronMag}$) and \texttt{rKornMag} 
   is also shown in the upper side and the left side of the CMD for each data set, respectively. 
-  }
   }
   %
   \label{fig:cmd}
@@ -422,16 +421,21 @@ images.}
 \subsection{The SDSS Training Set}\label{sec:sdss}
 \NC{
 The Sloan Digital Sky Survey (SDSS; \citealt{York00}) spectroscopic catalog 
+<<<<<<< HEAD
 provides the spectral classification of objects into stars, galaxies, and quasi-stellar objects (QSOs), 
 and 3,822,297 sources in the SDSS spectroscopic catalog can be cross-matched with PS1 sources 
 through the same criteria as the case of the construction of {\it HST} training set (see \S\ref{sec:hst_train}). 
+=======
+provides the spectral classification of objects into stars, galaxies, and quasi-stellar objects (QSOs). 
+We found 3,822,297 sources in the SDSS spectroscopic catalog can be cross-matched with PS1 sources 
+through the same criteria with the case of the construction of the {\it HST} training set (see \S\ref{sec:hst_train}). 
+>>>>>>> notebook-dev
 
-The accuracy of classifications based on spectra would be higher than that by morphology. 
-However we decide to use SDSS spectroscopic classifications only for testing the performance of the model, 
+The accuracy of classifications based on spectra would be greater than that by morphology. 
+However, we decide to use SDSS spectroscopic classifications only for testing the performance of the model, 
 not for training, 
 because the SDSS spectroscopic survey was intentionally biased toward observing 
 luminous red galaxies (LRGs; see, e.g., \citealt{Eisenstein01}). 
-
 The left panel of Figure \ref{fig:cmd} shows the color-magnitude diagram (CMD) for random-selected PS1 sources, 
 while the right panel shows that for PS1 sources cross-matched with SDSS spectroscopic catalog. 
 The CMD for SDSS sources is completely different from that for random-selected PS1 sources, 
@@ -469,7 +473,7 @@ As we previously alluded to, the primary benefit of the ``white flux'' features 
  \centering
   \includegraphics[width=3.5in, bb = 139 113 862 1163]{./Figures/whiteFeatures.pdf}
   \caption{
-  \NC{KDE of the PDF for white features as a function of \texttt{whiteKronMag}
+  KDE of the PDF for white features as a function of \texttt{whiteKronMag}
   ($=-2.5\log_{10}[\mathtt{whiteKronFlux}/3631]$) 
   for all PS1 sources with HST classification. 
   The population density for stars and galaxies of each feature is represented by the depth of red and green, respectively, 
@@ -478,7 +482,6 @@ As we previously alluded to, the primary benefit of the ``white flux'' features 
   The differing PSDs for the two populations ({\textit i.e.,} stars and galaxies) suggest that 
   the machine learning method capturing non-linear behavior in multidimensional features 
   may produce a significant improvement over both of the PS1 model and the simple model. }
-  }
   %
   \label{fig:features}
 \end{figure}
@@ -543,7 +546,7 @@ even if the ratio of the $\mathtt{wPSFFlux}$ to the $\mathtt{wKronFlux} $
 We therefore can use the $\mathtt{wPSFKronDist}$ directly 
 as the likelihood of that the source is a star or a galaxy, 
 and furthermore, this treatment improves the true positive ratio (TPR) 
-at the low false positive ratio (FPR) dramatically (see \S*** and Fig.\ref{fig:cvroc_hst}). 
+at the low false positive ratio (FPR) dramatically (see \S\ref{sec:comp_hst} and Fig.\ref{fig:cvroc_hst}). 
 
 In this paper, we use $a=0.91375$ derived by the average of $a$ 
 through 10-fold cross variation (CV) procedure;   
@@ -569,14 +572,13 @@ The distribution of the $\mathtt{wPSFKronDist}$ on $a=0.91375$ is shown in Fig.\
 
 
 \subsection{Random Forest Model}\label{sec:rf_model}
-\NC{
 \subsubsection{The Random Forest Algorithm}\label{sec:rf_alg}
-For constructing the machine learning model (hereafter ML model) 
+\NC{For constructing the machine learning model (hereafter ML model) 
 to capture non-linear behavior in multidimensional data sets, 
 we use random forest (RF) algorithm in this study.  
 This algorithm is based on decision tree models \citep{Quinlan93} 
 and bagging, 
-wherein bootstrap samples of the training set are used to construct 
+wherein bootstrap samples of the training set are utilized to construct 
 each of the $N_{\mathrm{tree}}$ total trees in the forest,
 for classification problems \citep{Breiman96, Breiman01}. 
 Each tree in the forest is trained by only a random subset of $m_{\mathrm{try}}$ 
@@ -640,34 +642,10 @@ We note that the final ML model prediction is not sensitive to change in these p
 most of the FoM of ML model with different parameters is within the standard deviation 
 of CV FoM derived by the optimal ML model. 
 }
-
-
-%%%%%%%%
-\begin{table*}
-\begin{center}
-\caption{The true positive ratio and the threshold 
-corresponding to the false positive ratio = 0.005, 0.01, 0.02, 0.05, and 0.1. }
-\label{tbl:fpr}
-\begin{tabular}{llccccc}
-\hline\hline
-                                                 & False positive ratio & 0.005 & 0.01 & 0.02 & 0.05 & 0.1 \\ \hline
-\multicolumn{1}{l}{\multirow{2}{*}{All sources}} & True positive ratio  & $0.697 \pm 0.008$ &  $0.742 \pm 0.005$ & $0.786 \pm 0.003$ & $0.852 \pm 0.003$ & $0.899 \pm 0.003$  \\
-\multicolumn{1}{l}{}                             & Threshold & $0.76 \pm 0.05$ &  $0.65 \pm 0.04$ & $0.53 \pm 0.02$ & $0.36 \pm 0.01$ & $0.24 \pm 0.01$  \\ \hline
-\multirow{2}{*}{$\mathtt{rKornMag} < 21$} & True positive ratio  & $0.861 \pm 0.062$ &  $0.953 \pm 0.024$ & $0.986 \pm 0.002$ & $0.993 \pm 0.001$ & $0.996 \pm 0.001$ \\
-                                                 & Threshold & $0.82 \pm 0.17$ &  $0.70 \pm 0.18$ & $0.40 \pm 0.10$ & $0.16 \pm 0.06$ & $0.07 \pm 0.03$   \\ \hline
-\multirow{2}{*}{$\mathtt{rKornMag} < 20$}  & True positive ratio  & $0.841 \pm 0.075$ &  $0.958 \pm 0.028$ & $0.997 \pm 0.001$ & $0.998 \pm 0.001$ & $0.999 \pm 0.001$  \\
-                                                  & Threshold & $0.90 \pm 0.18$ &  $0.81 \pm 0.24$ & $0.77 \pm 0.26$ & $0.13 \pm 0.08$ & $0.06 \pm 0.04$ \\ \hline
-\end{tabular}
-\end{center}
-\end{table*}
-%%%%%%%%
-
-
-\NC{
 \section{Classification Performance}
 
 \subsection{PS1, Simple, ML model Comparison}\label{sec:comp_hst}
-To test the classification performance of the ML model, 
+\NC{To test the classification performance of the ML model, 
 we first assess the ROC curve and the prediction accuracy 
 of the ML model by comparing that of PS1 model, and the simple model, 
 via a 10-fold CV run on the training set ({\it i.e.,} PS1 sources cross-matched against the HST COSMOS catalog) 
@@ -677,7 +655,7 @@ by comparing predictions of each model with HST classifications.
  \centering
   \includegraphics[width=3.35in, bb = 0 0 576 360]{./Figures/CV_ROC_HST.pdf}
   \caption{
-  \NC{ ROC curves comparing the relative performance of the PS1, the simple, and the ML model. 
+  ROC curves comparing the relative performance of the PS1, the simple, and the ML model. 
   We use PS1 sources cross-matched against the HST COSMOS catalog with 
   $\mathtt{iPSFMag} - \mathtt{iKronMag} \neq \mathrm{NaN}$ 
   so that any source in the dataset has a classification from all each model 
@@ -688,7 +666,6 @@ by comparing predictions of each model with HST classifications.
   The ROC curves around FPR = 0.005 (grey solid line) are shown in the inset panel 
   (the ROC curve for the PS1 model is located at substantially below of the TPR range shown in the inset panel). 
   }
-  }
   %
   \label{fig:cvroc_hst}
 \end{figure}
@@ -696,7 +673,7 @@ by comparing predictions of each model with HST classifications.
 
 Figure \ref{fig:cvroc_hst} shows the CV ROC curve of each models, 
 and reveals the ML model is apparently outperformed to the other models. 
-The overall ROC curve of the simple model, the new baseline of the performance of the star and galaxy separation, 
+The overall ROC curve of the simple model, the new baseline for the performance of the star and galaxy separation, 
 superiors to that of the PS1 model. 
 The higher SNR of the difference between 
 the \texttt{PSFFlux} and the \texttt{KronFlux} for each source 
@@ -708,11 +685,11 @@ In the simple model, a source difficult to judge whether it is star or galaxy ({
 has a score close to 0, 
 while the source which can be distinguished clearly from a point source on the image 
 has a large negative score (and vise versa for a point source). 
-As most of stars do not have such large negative values, 
+As most stars do not have such large negative values, 
 the lower FPR and the higher TPR is obtained at a large minus threshold for the star-galaxy classification. 
 In the PS1 model, on the other hand, the classification is decided by $\mathtt{iPSFMag} - \mathtt{iKronMag}$, 
 has an (essentially) identical score $\sim$0 for all stars independently of its distinguishability. 
-The difference of the scoring method make substantial improvement of the performance of the PS1 model 
+The difference of the scoring method makes substantial improvement in the performance of the PS1 model 
 from that of the simple model at low FPR end. 
 
 Since the ML model is trained with the 11 features 
@@ -733,7 +710,6 @@ evaluated via the PS1-HST data set as a function of \texttt{whiteKronMag}.
  \centering
   \includegraphics[width=3.35in, bb = 0 0 576 360]{./Figures/CV_Accuracy_HST.pdf}
   \caption{
-  \NC{
   Predication accuracy of the PS1 model (orange filled circles), the simple model (blue filled circles), 
   and the ML model (black filled circles), as a function of \texttt{whiteKronMag} 
   for PS1 sources cross-matched against the HST COSMOS catalog. 
@@ -744,7 +720,6 @@ evaluated via the PS1-HST data set as a function of \texttt{whiteKronMag}.
   to the full number of sources in the data set, respectively. 
   The KDE of the PDF for all sources in the dataset is also shown in grey.
   }
-  }
   %
   \label{fig:cvacc_hst}
 \end{figure}
@@ -754,27 +729,27 @@ to the level of random predictions (accuracy $\sim$ 0.5) for sources with $\math
 In the simple model, on the other hand, 
 although is starting to decrease from $\mathtt{whiteKronMag} \sim $ 20 mag gradually to the faintest end, 
 the accuracy is above 80\% even for sources fainter than $\mathtt{whiteKronMag} \sim $ 23.5 mag. 
-This is mainly because higher SNR in ``white feature'' of the difference 
+This is mainly because of higher SNR in ``white feature'' of the difference 
 between \texttt{Kron} flux measurement and \texttt{PSF} flux measurement for each source (see \S\ref{sec:model_features}), 
-differs to the case of the improvement of the ROC curve. 
+that differs to the case of the improvement of the ROC curve mentioned above. 
 
 The performance of the ML model is the best among other baseline models in almost all brightness of a source in the dataset, 
 but one notice to the similarity of the accuracy curve of the ML model and the simple model. 
 This is because of the highest importance of the \texttt{whitepsfKronDist} 
-among all of 11 features for the classification of ML model. 
+among all of 11 features for the classification of the ML model. 
 The overall CV accuracy of the ML model, the simple model, and the PS1 model is 
-***, ***, and ***. 
+93.3\%, 91.6\%, and 78.4\%. 
 As previously mentioned, the ML model provides superior predictions 
 especially for faint sources, which will enable to us to best identify stars in ZTF survey imaging 
 even outside the COSMOS field. 
 Figure \ref{fig:cvacc_hst} also shows a KDE of the PSD of stars and galaxies in the PS1-HST data set 
 as a function of \texttt{whiteKronMag}. 
-The KDEs indicate that most of sources brighter than $\mathtt{whiteKronmag} \lesssim 19$ is star, 
+The KDEs indicate that most sources brighter than $\mathtt{whiteKronmag} \lesssim 19$ is star, 
 while the number of galaxies overwhelms that of stars from $\mathtt{whiteKronmag} \gtrsim 21$ to the faintest end. 
 The KDE of PDF for stars and galaxies has a peak around $\mathtt{whiteKronMag} \sim 21.5$ and $\sim 22$, 
 respectively. 
-We note that such distribution should be quite low-biased for the PS1 catalog 
-since all of the sources in the catalog are taken from imaging data sets. 
+We note that such distribution should be low-biased for the PS1 sources 
+since all of the sources are taken from imaging data sets. 
 
 \subsection{ML Comparison with SDSS photo}
 %%% fig:roc_sdss %%%
@@ -782,7 +757,6 @@ since all of the sources in the catalog are taken from imaging data sets.
  \centering
   \includegraphics[width=3.35in, bb = 0 0 576 360]{./Figures/ROC_curves.pdf}
   \caption{
-  \NC{
   ROC curves comparing the relative performance 
   of the SDSS photo model (green solid line), the PS1 model (orange solid line), 
   the simple model (blue solid line), and the Ml model (black solid line) 
@@ -791,17 +765,16 @@ since all of the sources in the catalog are taken from imaging data sets.
   due to the binary nature of the SDSS photometric classification. 
   The inset panel shows ROC curves around the FPR = 0.005 (grey solid line). 
   }
-  }
   %
   \label{fig:roc_sdss}
 \end{figure}
 %%%%%%%%%%%%%
-Next, we assess the performance of ML model by comparing with SDSS photometric classification 
+Next, we assess the performance of the ML model by comparing with SDSS photometric classification 
 by using PS1-SDSS spectroscopic catalog. 
 Figure \ref{fig:roc_sdss} shows the ROC curve for 
 the SDSS photo, the PS1 model, the simple model, and the ML model, 
 by comparing predictions with SDSS spectroscopic classifications, 
-which is independent with the training data set; PS1-HST cross-matched catalog. 
+which are independent of the training data set; PS1-HST cross-matched catalog. 
 For sources in PS1-SDSS catalog, broadly, 
 the performance of classifications by each model is better than that for sources in PS1-HST catalog. 
 This is simply because that the distribution of sources, especially galaxies, in PS1-SDSS catalog 
@@ -830,7 +803,6 @@ and the ROC AUC score for each model is
  \centering
   \includegraphics[width=6.5in, bb = 0 0 900 360]{./Figures/Accuracy_SDSS_ML_model.pdf}
   \caption{
-  \NC{ 
   Prediction accuracy of the SDSS photo model and the ML model 
   as a function of \texttt{whiteKronmag} for PS1 sources cross-matched against the SDSS spectroscopic catalog. 
   In the left panel, the green filled square and the green filled triangle 
@@ -838,7 +810,7 @@ and the ROC AUC score for each model is
   and the black filled square and the black filled triangle show that of the ML model for galaxies and stars, respectively. 
   Accuracies are calculated in each 0.5 mag bin. 
   The KDE of the normalized PDF of stars and galaxies 
-  in the PS1-SDSS cross-matched catalog is also shown in red and green, respectively (same way as Fig. \ref{fig:cvacc_hst}). 
+  in the PS1-SDSS cross-matched catalog is also shown in red and green, respectively (same manner as Fig. \ref{fig:cvacc_hst}). 
   In the right panel, the overall accuracy of the SDSS photo model and the ML model 
   as a function of \texttt{whiteKronMag} is shown by filled green circle and filled black circle, respectively. 
   The accuracy in each bin is calculated for stars and galaxies picked up 
@@ -846,7 +818,6 @@ and the ROC AUC score for each model is
   so that the ratio the number of stars and galaxies in each bin is 
   same with that in the PS1-HST cross-matched catalog. 
   The KDE of PDF of stars and galaxies in PS1-HST cross-matched catalog is shown in red and green, respectively. 
-  }
   } 
   %
   \label{fig:acc_sdss}
@@ -875,16 +846,10 @@ The prediction accuracies shows that the performance of each model is similar
 down to $\mathtt{whiteKronMag} \sim20.5$, 
 while the performance of the SDSS photo model quickly degrades for fainter sources. 
 This is to be expected based on the poor performance for faint galaxies of the SDSS photo model; 
-the PS1-HST catalog (and also the real universe) contains much large number of faint galaxies than faint stars. 
+the PS1-HST catalog (and also the real universe) contains much larger number of faint galaxies than faint stars. 
 The final ML model, which is optimized to classify stars and galaxies following this population, 
 will provide the most accurate classification for sources in high-latitude sky. 
 } 
-
-
-
-
-
-
 \section{Discussion}
 
 \section{The PS1 Catalog Deployed: Integration in ZTF}
@@ -892,6 +857,31 @@ will provide the most accurate classification for sources in high-latitude sky.
 \todo{provide a description for how the catalog is used by ZTF in real-time ops}
 
 \section{Conclusions}
+
+%%%%%%%%
+\begin{table*}
+\begin{center}
+\caption{The true positive ratio and the threshold 
+corresponding to the false positive ratio = 0.005, 0.01, 0.02, 0.05, and 0.1. }
+\label{tbl:fpr}
+\begin{tabular}{lcc|lccccc}
+\hline\hline
+                 Source               & Num. & Acc. & FPR & 0.005 & 0.01 & 0.02 & 0.05 & 0.1 \\ \hline
+\multirow{2}{*}{All sources} & \multirow{2}{*}{47,093} & \multirow{2}{*}{93.1\%} & 
+                                              TPR  & $0.697 \pm 0.008$ &  $0.742 \pm 0.005$ & $0.786 \pm 0.003$ & $0.852 \pm 0.003$ & $0.899 \pm 0.003$  \\
+\multicolumn{1}{l}{}                             & & & Threshold & $0.76 \pm 0.05$ &  $0.65 \pm 0.04$ & $0.53 \pm 0.02$ & $0.36 \pm 0.01$ & $0.24 \pm 0.01$  \\ \hline
+\multirow{2}{*}{$\mathtt{rKornMag} < 21$} & \multirow{2}{*}{13,766} & \multirow{2}{*}{97.8\%} & 
+                                              TPR  & $0.861 \pm 0.062$ &  $0.953 \pm 0.024$ & $0.986 \pm 0.002$ & $0.993 \pm 0.001$ & $0.996 \pm 0.001$ \\
+                                                & & & Threshold & $0.82 \pm 0.17$ &  $0.70 \pm 0.18$ & $0.40 \pm 0.10$ & $0.16 \pm 0.06$ & $0.07 \pm 0.03$   \\ \hline
+\multirow{2}{*}{$\mathtt{rKornMag} < 20$}  & \multirow{2}{*}{6,992}& \multirow{2}{*}{98.8\%} & 
+                                              TPR  & $0.841 \pm 0.075$ &  $0.958 \pm 0.028$ & $0.997 \pm 0.001$ & $0.998 \pm 0.001$ & $0.999 \pm 0.001$  \\
+                                                 & &  & Threshold & $0.90 \pm 0.18$ &  $0.81 \pm 0.24$ & $0.77 \pm 0.26$ & $0.13 \pm 0.08$ & $0.06 \pm 0.04$ \\ \hline
+\end{tabular}
+\end{center}
+\end{table*}
+%%%%%%%%
+
+The performance of the ML model is summarized in Table \ref{tbl:fpr}
 
 \acknowledgements
 
