@@ -289,10 +289,10 @@ The PTF star--galaxy catalog was developed using \texttt{SExtractor}
 \citep{bertin96} flux and shape measurements made on deep stacks of PTF
 imaging. Stars and galaxies were separated using a machine learning
 methodology utilizing the random forest (RF) algorithm \citep{Breiman01}.
-Briefly, machine learning methods build a non-parametric mapping between
-\textit{features}, measured properties, and \textit{labels}, the target
-classification, via a training set. The training set contains sources for
-which the labels are already known, facilitating the construction of a
+Briefly, supervised machine learning methods build a non-parametric mapping
+between \textit{features}, measured properties, and \textit{labels}, the
+target classification, via a training set. The training set contains sources
+for which the labels are already known, facilitating the construction of a
 features to labels mapping. Following this training, the machine learning
 model can produce predictions on new observations where the labels are
 unknown.
@@ -342,25 +342,9 @@ with a median seeing of 1.31, 1.19, 1.11, 1.07, and 1.02 arcsec, respectively \c
 
 
 \section{Model Data}\label{sec:model_data}
-\begin{figure*}[t]
- \centering
-  \includegraphics[width=7.2in]{./Figures/ColorMagDiagramComb.pdf}
-  \caption{
-  Color magnitude diagrams (CMDs) for sources in the PS1 catalog selected through three different procedures. 
-  From left to right, we show a KDE of the PDF of the CMD for randomly selected 1M PS1 sources, 
-  PS1 sources cross-matched against the HST COSMOS sources, 
-  and those against the SDSS spectroscopic sources. 
-  The population density is represented as grayscale colormap, 
-  and white lines on the KDE show contours of it at from 0.1 to 1.0 by 0.1 interval. 
-  A KDE of the PDF of the color ($\mathrm{gKronMag} - \mathrm{rKronMag}$) and \texttt{rKornMag} 
-  is also shown in the upper side and the left side of the CMD for each data set, respectively. 
-  }
-  %
-  \label{fig:cmd}
-\end{figure*}
 
 Data for the star-galaxy model were obtained from the PS1 casjobs
-server.\footnote{http://mastweb.stsci.edu/ps1casjobs/home.aspx} The PS1
+server.\footnote{\url{http://mastweb.stsci.edu/ps1casjobs/home.aspx}} The PS1
 database provides flux measurements via aperture photometry,
 point-spread-function (PSF) photometry, and \citet{Kron80}
 photometry.\footnote{A subset of bright sources ($i < 21\,\mathrm{mag}$)
@@ -375,7 +359,7 @@ individual PS1 frames is reported in the \textit{ForcedMeanObject} table, and
 finally, the brightness measured on the full-depth stacked PS1 images is
 reported in the \textit{StackObjectThin} table. The
 \textit{StackObjectAttributes} table further supplements these tables with
-point-source object shape measurements, which are very useful to discriminate
+point-source object shape measurements, which prove useful to discriminate
 stars and galaxies. Ultimately, see \S\ref{sec:simple_model}, we use flux
 measurements from the \textit{StackObjectThin} table and shape measurements
 from the \textit{StackObjectAttributes} to build our models.
@@ -397,50 +381,59 @@ We use the largest contiguous area imaged by \textit{HST}, the 1.64\,deg$^2$
 COSMOS field, to construct a training set for our models. Morphological
 classifications of \textit{HST} COSMOS sources are provided in
 \citet{Leauthaud07}. \citeauthor{Leauthaud07} demonstrate reliable
-classifications down to $\sim$25\,mag, which is significantly deeper than the
+classifications to $\sim$25\,mag, which is significantly deeper than the
 faintest sources detected by PS1. We identify counterparts in the PS1 and
 \textit{HST} data by performing a spatial crossmatch between the two catalogs
-using a 1\arcsec radius.\footnote{This matching radius is the same employed by
-PS1 to associate individual detections in the \textit{MeanObject} table with
-detections in the \textit{StackObjectAttributes} table.} We further excluded
-sources from the \citet{Leauthaud07} catalog with $\texttt{MAG\_AUTO} >
-25$\,mag, as these sources are too faint to be detected by PS1 meaning their
-crossmatch counterparts are likely spurious. Following this procedure, we find
-that there are 87,431 sources in the \citet{Leauthaud07} catalog with PS1
-counterparts. Of these, 80,974 are unique in that there is a one-to-one
-correspondence between \textit{HST} source and a single PS1 \textit{ObjID}. The
-training set is further reduced to 75,927 once our detection criteria are
-applied (see \S\ref{sec:simple_model}), and, of those, only 47,093 have
-$\texttt{nDetections} \ge 1$ in the PS1
-database.\footnote{$\texttt{nDetections}$ refers to the number of detections in
-individual PS1 exposures. Thus, \textit{StackObjectThin} souces can have
-$\texttt{nDetections}$ = 0 if the source is only detected in the PS1 stack
-images.}
-
-\todo{Is there an interesting figure to show here that isn't redundant with other figures that we will show?}
+using a 1\arcsec radius.\footnote{This matching radius is the same employed
+by PS1 to associate individual detections in the \textit{MeanObject} table
+with detections in the \textit{StackObjectAttributes} table.} We further
+excluded sources from the \citet{Leauthaud07} catalog with
+$\texttt{MAG\_AUTO} > 25$\,mag, as these sources are too faint to be detected
+by PS1 meaning their crossmatch counterparts are likely spurious. Following
+this procedure, we find that there are 87,431 sources in the
+\citet{Leauthaud07} catalog with PS1 counterparts. Of these, 80,974 are
+unique in that there is a one-to-one correspondence between \textit{HST}
+source and a single PS1 \textit{ObjID}. The training set is further reduced
+to 75,927 once our detection criteria are applied (see
+\S\ref{sec:simple_model}), and, of those, only 47,093 have
+$\texttt{nDetections} \ge 1$ in the PS1 database (hereafter, the \textit{HST}
+training set).\footnote{$\texttt{nDetections}$ refers to the number of
+detections in individual PS1 exposures. Thus, \textit{StackObjectThin} souces
+can have $\texttt{nDetections}$ = 0 if they are only detected in the PS1
+stack images.}
 
 \subsection{The SDSS Training Set}\label{sec:sdss}
-\NC{
-The Sloan Digital Sky Survey (SDSS; \citealt{York00}) spectroscopic catalog 
-provides the spectral classification of objects into stars, galaxies, and quasi-stellar objects (QSOs). 
-We found 3,822,297 sources in the SDSS spectroscopic catalog can be cross-matched with PS1 sources 
-through the same criteria with the case of the construction of the {\it HST} training set (see \S\ref{sec:hst_train}). 
 
-The accuracy of classifications based on spectra would be greater than that by morphology. 
-However, we decide to use SDSS spectroscopic classifications only for testing the performance of the model, 
-not for training, 
-because the SDSS spectroscopic survey was intentionally biased toward observing 
-luminous red galaxies (LRGs; see, e.g., \citealt{Eisenstein01}). 
-The left panel of Figure \ref{fig:cmd} shows the color-magnitude diagram (CMD) for random-selected PS1 sources, 
-while the right panel shows that for PS1 sources cross-matched with SDSS spectroscopic catalog. 
-The CMD for SDSS sources is completely different from that for random-selected PS1 sources, 
-meaning the selection bias is clearly represented. 
-The final model predictions for the full data set will strongly reflect any biases in the training data set. 
-To avoid it and for constructing the star--galaxy separation model 
-based on the population of celestial sources in the real universe, 
-we decide to use the PS1 sources cross-matched with {\ HST} COSMOS sources for training the final ML model 
-which has substantially lower selection bias as shown in the middle panel of Figure \ref{fig:cmd}. 
-}
+\begin{figure*}[htb]
+ \centering
+  \includegraphics[width=7.2in]{./Figures/ColorMagDiagramComb.pdf}
+  \caption{
+  PS1 color-magnitude diagrams for \textit{left}: $10^6$ randomly selected sources, \textit{center}: the \textit{HST} training set, and \textit{right}: the SDSS training set. The primary panels show a two-dimensional (2D) Gaussian kernel density estimate (KDE) of the probability density function (PDF) of each subset of sources in the $r_\mathrm{PS1}$--$g_\mathrm{PS1} - r_\mathrm{PS1}$ plane. The shown contour levels extend from 0.9 to 0.1 in 0.1 intervals. To the top and right of the primary panels are marginalized 1D KDEs of the PDF for the $g_\mathrm{PS1} - r_\mathrm{PS1}$ color and $r_\mathrm{PS1}$ brightness, respectively. Kron aperture measurements from the \textit{StackObjectThin} table are used to estimate each of the PDFs. \yutaro{Is this last sentence correct?}
+  }
+  %
+  \label{fig:cmd}
+\end{figure*}
+
+The SDSS spectroscopic catalog classifies everything it observes as either a
+star, galaxy, or quasi-stellar object (QSO). Using a $1\arcsec$ cross-match
+radius, we find 3,822,297 sources with SDSS optical spectra have PS1
+counterparts (hereafter, the SDSS training set). Thus, with an orders of
+magnitude larger training set, and spectroscopic classifications that should
+be pristine and superior to mophological clsasifications, one might expect
+the SDSS training set to be optimal for training the machine learning model.
+However, as noted in \citep{Miller17}, the SDSS spectroscopic targeting
+algorithms were highly biased, and as a result prove challenging as a
+training set.
+
+Color-magnitude diagrams (CMDs) of the \textit{HST} and SDSS training sets
+are compared to a random selection of $10^6$ sources from the PS1 database in
+Figure~\ref{fig:cmd}. It is clear from Figure~\ref{fig:cmd} that the SDSS
+training set is completely different from typical sources in PS1 and that
+there are few SDSS sources in the highest density regions of the PS1 CMD.
+Given the stark mismatch between typical PS1 sources and the SDSS training
+set, we adopt the \textit{HST} training set for the development of our model.
+We retain the SDSS training set as an independent test set to assess the
+accuracy of the model following construction.
 
 \section{Model Features}\label{sec:model_features}
 
