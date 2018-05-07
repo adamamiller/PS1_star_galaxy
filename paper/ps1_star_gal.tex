@@ -251,78 +251,79 @@ We did a decent job of separating stars and galaxies.
 %% to the KEY in the \bibitem in the reference list below. 
 
 \section{Introduction}\label{sec:intro}
-\NC{
-In recent years, the large quantity of sky image data has been being produced with a high cadence 
-by various of wide and deep time-domain survey projects aiming to explore the transient universe. 
 
-The Zwicky Transient Facility (ZTF; 
-\citealt{Kulkarni12, Bellm14, Smith14, Dekany16, Bellm17})\footnote{\url{http://www.ztf.caltech.edu/}} 
-was started and had the first light at Palomar Observatory in 2017, 
-as the next generation Palomar time-domain survey 
-subsequent to the Palomar Transient Facility (PTF; \citealt{Rau09, Law09}) 
-and the intermediate Palomar Transient Facility (iPTF; \citealt{Kulkarni13}). 
-A dedicated survey of the variable sky by ZTF is ongoing with the new camera 
-utilizing the entire focal plane on 47 deg$^2$ of the Palomar 48-inch Samuel Oschin Schmidt telescope. 
-ZTF is scanning more than 3,750 deg$^2$ an hour to depth $R < 20.4$ mag ($5\sigma$ detection), 
-and will produce a photometric variability catalog with nearly 300 observations each year. 
-A primary motivation for ZTF is the search for fast transients 
-including ``kilonovae'' 
-associated with gravitational waves, 
-the result of binary neutron star mergers 
-(GW170817; {\it e.g.,} \citealt{Abbott17, Cowperthwaite17, Lipunov17, Kasliwal17, Utsumi17, Tanaka17}). 
+\yutaro{I've restructured the intro, I think we should pitch the paper as PS1
+catalog used by ZTF, rather than ZTF project. That way other people will
+hopefully use the catalog even if they do not use ZTF.}
 
-ZTF surveys the sky at a rate that is $\sim15$ times faster than PTF/iPTF. 
-The increase in the amount of astronomical data with a rapidly accelerating pace 
-results in the necessity of automated classification and filtering by machines to investigate objects 
-that we are potentially interested in. 
-To identify fast-transient candidates, including gravitational wave (GW) counterparts especially, 
-astronomers have contended with significant foreground contamination in the form of stellar flares 
-and/or orbital modulation ({\it e.g.,} \citealt{Kulkarni06, Berger12, Kasliwal16}). 
-The systematic removal of faint stars from extragalactic candidate lists 
-enables us to follow-up such exotic sources efficiently under the limitation of time, instrumental, and human resources. 
-The follow-up efficiency will be required more strongly from the beginning of the third observing run of LIGO/VIRGO 
-collaborating with KAGRA in 2019. 
+The proliferation of wide-field optical detectors has led to a plethora of
+imaging catalogs in the past two decades. \yutaro{I think we should add some
+general text here about the importance of separating stars and galaxies here
+- do you want to take the first effort for that?}
 
-\cite{Miller17} developed a star--galaxy separation model for PTF 
-with machine-learning (ML) methodology utilizing the random forest (RF) algorithm 
-to identify as many stars as possible (true positives; TPs) 
-and also to reduce the number of galaxies misconceived as stars (false positives; FPs) 
-for discovering fast transients and GW counterparts. 
-However, despite its much superior performance to that of \texttt{SExtractor}, 
-which had provided the best discriminant between stars and galaxies in PTF images, 
-they pointed out that the PTF point source-catalog 
-excludes $\sim 8\times10^7$ point sources as false negatives. 
-Thus there still are several potential improvements that could be made to improve the performance 
-of the star--galaxy separation model. 
+Given the many applications for a catalog that separates point sources from
+galaxies, we turn our attention to the wide-field Pan-STARRS1 (PS1) survey
+\citep{Chambers16}, whose 3$\pi$ survey provides a felicitous data set.
 
-Our purpose is developing a wide-coverage and high-performance star--galaxy separation model 
-applicable for any transients detected by ZTF.  
-The wide-field 3$\pi$ Pan-STARRS1 (PS1) survey \citep{Chambers16} 
-would provide the most felicitous data set for it. 
+The 1.8\,m PS1 telescope is equipped with a wide-field ($\sim$7\,deg$^2$) 1.4
+gigapixel camera and is located at Haleakala Observatory in Hawaii
+\citep{Hodapp04}. PS1 primarily uses five broadband filters,
+$g_{\mathrm{P1}}$, $r_{\mathrm{P1}}$, $i_{\mathrm{P1}}$, $z_{\mathrm{P1}}$,
+and $y_{\mathrm{P1}}$ (hereafter $grizy_{\mathrm{P1}}$). The PS1 3$\pi$
+survey scanned the entire visible sky ($\mathrm{Dec.}>-30^\circ$) 60 times in
+the five filters over a four-year time span \citep{Chambers16}. This repeated
+imaging was used to create deep stacks \citep{Magnier16b}, with a typical
+5$\sigma$ depth of $\sim$23.2\,mag with a median seeing of $1.19\arcsec$ in
+the $r$-band \citep{Tonry12, Schlafly12, Chambers16}. The first PS1 data
+release (DR1) provides flux and pixel-based shape measurements for $>$3
+billion sources \citep{Flewelling16}.
 
-The PS1 survey uses a wide-field f/4.4 optical telescope system 
-at the Haleakala Observatory on the island of Maui in Hawaii \citep{Hodapp04}. 
-The filter system consists of five main broadband filters, 
-$g_{\mathrm{P1}}$, $r_{\mathrm{P1}}$, $i_{\mathrm{P1}}$, $z_{\mathrm{P1}}$, and $y_{\mathrm{P1}}$. 
-The typical 5$\sigma$ depth of stack image is 23.2 mag 
-with a median seeing of 1.19 arcsec  in the $r$-band \citep{Tonry12, Schlafly12, Chambers16}. 
-The first Pan-STARRS data release (DR1) provides a bunch of pixel-based shape measurements 
-\citep{Flewelling16} 
-for $>$3 billion sources based off of the stack images in the five filters \citep{Magnier16b}, 
-using the imaging data from 3$\pi$ survey ($\mathrm{Decl.}>-30\ \mathrm{deg}$) 
-carried out several times per filter and over a four-year time span. 
+Our aim is to develop a large, deep catalog of stars (point sources) and
+galaxies using PS1 data. The catalog is to be general purpose, however, our
+immediate goal is to support the real-time search for transients in the
+Zwicky Transient Facility (ZTF; \citealt{Bellm18}). Previously, a similar
+catalog was developed using Palomar Transient Factory (PTF) data
+\citep{Miller17}. 
 
-Here, we construct a star--galaxy separation model 
-utilizing image features provided by PS1 DR1 
-by employing ML methodology with RF algorithm. 
-This paper is organized as follows; 
-the model data for constructing the classifier is mentioned in Section 2, 
-the definition of model features utilized for the classification is described in Section 3, 
-the procedure to construct the model is explained in Section 4, 
-the performance of the ML model is evaluated by comparison with several other models in Section 5, 
-a description of how the catalog is used by ZTF is provided in Section 6, 
-and then we summarize our results in Section 7. 
-}
+The PTF star--galaxy catalog was developed using \texttt{SExtractor}
+\citep{bertin96} flux and shape measurements made on deep stacks of PTF
+imaging. Stars and galaxies were separated using a machine learning
+methodology utilizing the random forest (RF) algorithm \citep{Breiman01}.
+Briefly, machine learning methods build a non-parametric mapping between
+\textit{features}, measured properties, and \textit{labels}, the target
+classification, via a training set. The training set contains sources for
+which the labels are already known, facilitating the construction of a
+features to labels mapping. Following this training, the machine learning
+model can produce predictions on new observations where the labels are
+unknown.
+
+The PTF point-source catalog was constructed to support the real-time search
+for electromagetic counterparts to gravitational wave events. Given that
+these events are expected to be very rare (\todo{citation}), the figure of
+merit (FoM) for the PTF model was defined as the true positive rate
+(corresponding to the fraction of stars that are correctly classified) at a
+fixed false positive rate (fraction of galaxies that are misclassified) equal
+to 0.005 \citep{Miller17}. While the PTF point-source catalog includes
+$\sim$1.7$\times 10^8$ objects, it is expected that a full
+$\sim$8$\times10^7$ point sources are excluded as false negatives
+\citep{Miller17}.
+
+A star--galaxy separation model built on PS1 data will produce dramatic
+improvements over the PTF catalog. PS1 observations are deeper, feature
+better seeing, and include 5 filters (the PTF catalog was built with
+observations in a single filter, $R_\mathrm{PTF}$). Additionally, one of the
+12 CCDs in the PTF camera did not work \citep{Law09}, meaning $\sim$8\% of
+the sky above $\mathrm{Dec.} = 30^\circ$ has no classifications in the PTF
+catalog.
+
+Here, we construct a new star--galaxy separation model using PS1 DR1 data in
+conjunction with a new machine learning methodology. The model is trained
+using \textit{Hubble Space Telescope} observations, which should provide an
+improvement over the Sloan Digital Sky Survey (SDSS; \citealt{York00})
+spectroscopic training set used in \citet{Miller17}. As in \citet{Miller17},
+we use the RF algorithm to separate point sources and extended sources. Our
+new PS1 model outperforms alternatives and has already been incorporated into
+the ZTF real-time pipeline.
 
 %%%
 \if0
@@ -851,6 +852,35 @@ will provide the most accurate classification for sources in high-latitude sky.
 \section{The PS1 Catalog Deployed: Integration in ZTF}
 
 \todo{provide a description for how the catalog is used by ZTF in real-time ops}
+
+The Zwicky Transient Facility (ZTF; 
+\citealt{Kulkarni12, Bellm14, Smith14, Dekany16, Bellm17})\footnote{\url{http://www.ztf.caltech.edu/}} 
+was started and had the first light at Palomar Observatory in 2017, 
+as the next generation Palomar time-domain survey 
+subsequent to the Palomar Transient Facility (PTF; \citealt{Rau09, Law09}) 
+and the intermediate Palomar Transient Facility (iPTF; \citealt{Kulkarni13}). 
+A dedicated survey of the variable sky by ZTF is ongoing with the new camera 
+utilizing the entire focal plane on 47 deg$^2$ of the Palomar 48-inch Samuel Oschin Schmidt telescope. 
+ZTF is scanning more than 3,750 deg$^2$ an hour to depth $R < 20.4$ mag ($5\sigma$ detection), 
+and will produce a photometric variability catalog with nearly 300 observations each year. 
+A primary motivation for ZTF is the search for fast transients 
+including ``kilonovae'' 
+associated with gravitational waves, 
+the result of binary neutron star mergers 
+(GW170817; {\it e.g.,} \citealt{Abbott17, Cowperthwaite17, Lipunov17, Kasliwal17, Utsumi17, Tanaka17}). 
+
+ZTF surveys the sky at a rate that is $\sim15$ times faster than PTF/iPTF. 
+The increase in the amount of astronomical data with a rapidly accelerating pace 
+results in the necessity of automated classification and filtering by machines to investigate objects 
+that we are potentially interested in. 
+To identify fast-transient candidates, including gravitational wave (GW) counterparts especially, 
+astronomers have contended with significant foreground contamination in the form of stellar flares 
+and/or orbital modulation ({\it e.g.,} \citealt{Kulkarni06, Berger12, Kasliwal16}). 
+The systematic removal of faint stars from extragalactic candidate lists 
+enables us to follow-up such exotic sources efficiently under the limitation of time, instrumental, and human resources. 
+The follow-up efficiency will be required more strongly from the beginning of the third observing run of LIGO/VIRGO 
+collaborating with KAGRA in 2019. 
+
 
 \section{Conclusions}
 
