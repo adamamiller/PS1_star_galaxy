@@ -78,7 +78,7 @@
 %% using \newcommand. Your macros should appear before
 %% the \begin{document} command.
 %%
-\usepackage{multirow}
+\usepackage{multirow, amsmath}
 \newcommand{\vdag}{(v)^\dagger}
 \newcommand\aastex{AAS\TeX}
 \newcommand\latex{La\TeX}
@@ -325,6 +325,8 @@ we use the RF algorithm to separate point sources and extended sources. Our
 new PS1 model outperforms alternatives and has already been incorporated into
 the ZTF real-time pipeline.
 
+\todo{Need to add something about optimizing the same FoM as the first Miller paper}
+
 %%%
 \if0
 The system comprises a 1.8 m primary and 0.9 m secondary mirrors \citep{Hodapp04}, 
@@ -527,92 +529,123 @@ losses from the exclusion of color information.
   \label{fig:features}
 \end{figure*}
 
-The distribution of ``white flux'' features for stars and galaxies in the \textit{HST} training set is shown in Figure~\ref{fig:features} (\texttt{whitePSFKronDist} is shown in Figure~\ref{fig:psfkrondist}). As might be expected, it is clear from Figure~\ref{fig:features} that stars and galaxies are easily separated at the bright end ($\lesssim 20$\,mag), but there is significant overlap in the featurespace between the two populations at the faint end ($\sim$23\,mag). Machine learning algorithms are capable of capturing non-linear behavior in multidimentional data sets, which will prove especially useful for the sources under consideration in the PS1 data set. 
-
-
+The distribution of ``white flux'' features for stars and galaxies in the
+\textit{HST} training set is shown in Figure~\ref{fig:features}
+(\texttt{whitePSFKronDist} is shown in Figure~\ref{fig:psfkrondist}). As
+might be expected, it is clear from Figure~\ref{fig:features} that stars and
+galaxies are easily separated at the bright end ($\lesssim 20$\,mag), but
+there is significant overlap in the featurespace between the two populations
+at the faint end ($\sim$23\,mag). Machine learning algorithms are capable of
+capturing non-linear behavior in multidimentional data sets, which will
+prove especially useful for the sources under consideration in the PS1 data
+set.
 
 \section{Model Construction}
 \subsection{The PS1 Baseline Model}\label{sec:ps1_model}
 
-To establish a baseline for the performance of our star-galaxy separation models we adopt the classification criteria in the PS1 documentation, namely sources with
+To establish a baseline for the performance of our star-galaxy separation
+models we adopt the classification criteria in the PS1 documentation, namely
+sources with 
+%
 $$ \mathtt{iPSFMag} - \mathtt{iKronMag} > 0.05\;\mathrm{mag},$$
-are classified as galaxies.\footnote{\url{https://outerspace.stsci.edu/display/PANSTARRS/How+to+separate+stars+and+galaxies}} The documentation notes that this classification can be performed using photometry from any of the \textit{MeanObject}, \textit{ForcedMeanObject}, or \textit{StackedObjectThin} tables. The PS1 documentation further notes that this basic cut does not perform well for sources with $i \gtrsim 21\,\mathrm{mag}$, which constitutes the majority of sources detected by PS1, and motivates us to develop alternative models. We use the performance of the $\mathtt{iPSFMag} - \mathtt{iKronMag} > 0.05\;\mathrm{mag}$ model (hereafter, the PS1 model) as a baseline to compare to the models discussed below.
+%
+are classified as
+galaxies.\footnote{\url{https://outerspace.stsci.edu/display/PANSTARRS/How+to+
+separate+stars+and+galaxies}} The documentation notes that this
+classification can be performed using photometry from any of the
+\textit{MeanObject}, \textit{ForcedMeanObject}, or \textit{StackedObjectThin}
+tables. The PS1 documentation further notes that this basic cut does not
+perform well for sources with $i \gtrsim 21\,\mathrm{mag}$, which constitutes
+the majority of sources detected by PS1, and motivates us to develop
+alternative models. We use the performance of the $\mathtt{iPSFMag} -
+\mathtt{iKronMag} > 0.05\;\mathrm{mag}$ model (hereafter, the PS1 model) as a
+baseline to compare to the models discussed below.
 
 \subsection{Simple Model}\label{sec:simple_model}
 
-While our ultimate goal is to build a machine learning model to separate stars and galaxies (\S\ref{sec:rf_model}), we first construct a straightforward model. This model is inspired by the SDSS \texttt{photo} pipeline \citep{Lupton01}, and combines the flux in each of the 5 PS1 filters to improve the SNR relative to any individual band. In addition to being easy to interpret, this model (hereafter, the simple model), which utilizes the difference between the PSF flux and the Kron-aperture flux for classification, serves as an additional baseline to test the need for a more complicated machine learning model. 
+While our ultimate goal is to build a machine learning model to separate
+stars and galaxies (\S\ref{sec:rf_model}), we first construct a
+straightforward model. This model is inspired by the SDSS \texttt{photo}
+pipeline \citep{Lupton01}, and combines the flux in each of the 5 PS1 filters
+to improve the SNR relative to any individual band. In addition to being easy
+to interpret, this model (hereafter, the simple model), which utilizes the
+difference between the PSF flux and the Kron-aperture flux for
+classification, serves as an additional baseline to test the need for a more
+complicated machine learning model.
 
-\NC{
-Since only the i-band photometric measurement is used for the star-galaxy separation  
-in the PS1 model as explained in \S\ref{sec:simple_model},  
-it is expected that the separation accuracy is improved 
-by the model with the photometric measurement in all of the five optical bands 
-provided by PS1 (g, r, i, z, and y), especially for the source 
-detected with a higher signal to noise ratio (S/N) by the other band than that of i-band. 
-We therefore created a simple model (hereafter, the simple model) for the separation 
-with the photometric measurement in all of the optical bands 
-for referring it as a new strict baseline model for the machine learning model  
-we developed (described in \S\ref{sec:rf_model}).
+It stands to reason that a model built on all five PS1 filters should outperform a model constructed from a single filter. To that end, we examine the \texttt{whitePSFKronRatio} (equivalent to $\mathtt{whitePSFMag} - \mathtt{whiteKronMag}$) to discriminate between stars and galaxies. The upper left panel of Figure~\ref{fig:features} shows that sources with $\mathtt{whitePSFKronRatio} \gtrsim 1$ are very likely to be stars. A single hard cut on \texttt{whitePSFKronRatio}, similar to the SDSS \texttt{photo} pipeline or the PS1 model, removes any sense of confidence in the corresponding classification. For example, a source with $\mathtt{whitePSFKronRatio} = 1.1$ and $\mathtt{whiteKronMag} \approx 17\,\mathrm{mag}$ is far more likely to be a star than a source with the same \texttt{whitePSFKronRatio} value but $\mathtt{whiteKronMag} \approx 23\,\mathrm{mag}$ (see Figure~\ref{fig:features}).
 
-The essential idea for the separation by the simple model is the same as the PS1 model;  
-sources with a ratio of the $\mathtt{KronFlux}$ to the $\mathtt{PSFFlux}$ 
-(corresponding to $\mathtt{PSFMag} - \mathtt{KronMag}$) larger than a threshold 
-are classified as galaxies, 
-but instead of $\mathtt{i[PSF, Kron]Mag}$,  
-we use the white flux measurements ($\mathtt{w[PSF,Kron]Flux}$) 
-defined by the weighted average of the flux in all of the optical band:   
-$$
-\mathtt{w[PSF, Kron]Flux} =  \frac{\sum w_c  F_c }{\sum w_c}, 
-\ w_c = \left( \frac{F_c}{e_c} \right)^2, 
-$$
-where $c = [\mathtt{g, r, i, z, y}]$,  $F$ is the $\mathtt{[PSF,Kron]Flux}$, 
-and $e$ is the $\mathtt{[PSF,Kron]FluxErr}$.  
-The weight $w = \mathrm{(S/N)}^2$ allows this model to perform better decision 
-than the normal average ($w = 1$) by retaining the flux information with high S/N more stronger. 
+To address this issue of classification confidence, we measure the
+orthogonal distance from a line ($\mathtt{whitePSFFlux} = a\times
+\mathtt{whiteKronFlux}$) for all sources in the
+$\mathtt{whitePSFFlux}$--$\mathtt{whiteKronFlux}$ plane to define the simple model:
+%
+\begin{multline}
+ \mathtt{whitePSFKronDist}(a) = \\
+ \frac{\mathtt{whitePSFFlux} - a\times\mathtt{whiteKronFlux}}{ \sqrt{1 + a^2}},
+ \label{eqn:psfkrondist}
+\end{multline}
+%
+where $a$ is the slope of the line. For $a \approx 1$, which is similar to a
+hard cut with $\mathtt{whitePSFKronRatio} = a$, bright stars will have
+large, positive values of \texttt{whitePSFKronDist}, while bright galaxies
+will have large, negative values of \texttt{whitePSFKronDist}.
+Simultaneously, faint sources, which are more difficult to classify, will
+have small values of \texttt{whitePSFKronDist}. The simple model allows us
+to produce a rank ordered classification, which in turn allows us to
+evaluate the optimal classification threshold for the separation of stars
+and galaxies (see \S\ref{sec:comp_hst}).
 
-In order to evaluate the probability of that each source is a star or a galaxy quantitatively, 
-we decided to use the orthogonal distance from the threshold line 
-($\mathtt{wPSFFlux} = a\times \mathtt{wKronFlux}$) 
-on the $\mathtt{wPSFFlux}$-$\mathtt{wKronFlux}$ plane for the simple model:  
-$$
-\mathtt{wPSFKronDist}(a) = 
-	\frac{\mathtt{wPSFFlux} - a\times\mathtt{wKronFlux}}{ \sqrt{1 + a^2}}, 
-$$
-where $a$ is the critical ratio of the $\mathtt{wPSFFlux}$ to the $\mathtt{wKronFlux}$ 
-(corresponding to 0.05 in the PS1 model). 
-A bright source, which can be classified clearly, 
-has larger $|\mathtt{wPSFKronDist}|$ than that of a faint source, 
-even if the ratio of the $\mathtt{wPSFFlux}$ to the $\mathtt{wKronFlux} $
-($\propto \mathtt{wPSFMag}  -  \mathtt{wKronMag}$) of them is the same. 
-We therefore can use the $\mathtt{wPSFKronDist}$ directly 
-as the likelihood of that the source is a star or a galaxy, 
-and furthermore, this treatment improves the true positive ratio (TPR) 
-at the low false positive ratio (FPR) dramatically (see \S\ref{sec:comp_hst} and Fig.\ref{fig:cvroc_hst}). 
+The optimal value for $a$ is determined via $k$-fold cross validation (CV).
+We adopt identical procedures to optimize both the simple model and the
+machine learning model (see \S\ref{sec:rf_model}). We employ the use of an
+inner and outter CV loop, both of which have $k = 10$ folds. In the outter
+CV loop, the training set is split into 10 separate partitions, each
+iteratively withheld from the training. For each partition in the outter CV
+loop, an inner 10-fold CV is applied to the remaining $\sim$90\% of the
+training set to determine the optimal model parameters. Predictions on the
+sources withheld in the outter loop are made with the optimal model from the
+inner loop to provide model predictions for every source in the training
+set. We adopt final, optimal tuning parameters from the mean of the values
+determined in the inner CV.
 
-In this paper, we use $a=0.91375$ derived by the average of $a$ 
-through 10-fold cross variation (CV) procedure;   
-the data set is split into 10 smaller sets 
-and obtain a $a$ by maximizing the TPR at FPR$ = 0.005$ 
-(called figure of merit; FoM) of 9 of the folds. 
-We repeat this procedure 10 times in total for all of the combination of 9 of the folds. 
-The distribution of the $\mathtt{wPSFKronDist}$ on $a=0.91375$ is shown in Fig.\ref{fig:psfkrondist}. 
+For the simple model, we employ a grid search over $a$ in the inner CV loops
+to maximize the FoM and thereby determine the optimal value of $a$.
+Initially, a wide grid from 0 to 2 was searched, followed by a fine grid
+search over $a$ from 0.75 to 1.25 with step size = 0.0025. The average
+optimal $a$ from the inner loops, and hence final model value, is 0.91375,
+with sample standard deviation $\sim$0.01. From this procedure, we find that
+for the simple model the $\mathrm{FoM} = 0.62 \pm 0.02$, where the
+uncertainty is estimated from the scatter in the outter CV
+results.\footnote{We find that PS1 flux measurements from the
+\textit{StackObjectThin} table produce a higher FoM for the simple model
+than flux measurements from the \textit{MeanObject} and
+\textit{ForcedMeanObject} tables. Thus, we adopt \textit{StackObjectThin}
+fluxes for both the simple model and the machine learning model, as noted in
+\S\ref{sec:model_data}.}
+
 
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in, bb = 0 0 576 432]{./Figures/whitePSFKronDist.pdf}
-  \caption{
-  \NC{The distribution of the $\mathtt{wPSFKronDist}$. 
-  We show the entire behavior of the $\mathtt{wPSFKronDist}$ for the stars and galaxies 
-  in the small window and the KDE of them at the faintest region is shown in the main panel.  
-  The dashed line represents the threshold maximizing the separation accuracy for HST sources. }
- }
+  \includegraphics[width=3.55in]{./Figures/whitePSFKronDist.pdf}
+  %
+  \caption{ The distribution of $\mathtt{whitePSFKronDist}$ values for
+  \textit{HST} training set stars and galaxies as a function of
+  \texttt{whiteKronMag}. The colors and contours are the same as
+  Figure~\ref{fig:features}. The horizontal dashed line shows the optimal
+  threshold ($\mathtt{whitePSFKronDist} \ge 9.2 \times 10^{-7}$) for
+  star--galaxy classification. The upper-right inset shows a zoom-out
+  highlighting the stark difference between stars and galaxies at the bright
+  end. }
   %
   \label{fig:psfkrondist}
 \end{figure}
-}
 
+
+The distribution of $\mathtt{whitePSFKronDist}(a=0.91375)$ is shown for \textit{HST} training set stars and galaxies in Figure~\ref{fig:psfkrondist}. $\mathtt{whitePSFKronDist}$ provides an excellent discriminant between bright ($\lesssim 20\,\mathrm{mag}$) stars and galaxies. We further find that adopting a stellar classification threshold of $\mathtt{whitePSFKronDist} \ge 9.2 \times 10^{-7}$ produces a classification accuracy of $\sim$91\%.
 
 \subsection{Random Forest Model}\label{sec:rf_model}
+
 \subsubsection{The Random Forest Algorithm}\label{sec:rf_alg}
 \NC{For constructing the machine learning model (hereafter ML model) 
 to capture non-linear behavior in multidimensional data sets, 
