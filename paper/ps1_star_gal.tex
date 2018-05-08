@@ -641,36 +641,42 @@ fluxes for both the simple model and the machine learning model, as noted in
   \label{fig:psfkrondist}
 \end{figure}
 
-
-The distribution of $\mathtt{whitePSFKronDist}(a=0.91375)$ is shown for \textit{HST} training set stars and galaxies in Figure~\ref{fig:psfkrondist}. $\mathtt{whitePSFKronDist}$ provides an excellent discriminant between bright ($\lesssim 20\,\mathrm{mag}$) stars and galaxies. We further find that adopting a stellar classification threshold of $\mathtt{whitePSFKronDist} \ge 9.2 \times 10^{-7}$ produces a classification accuracy of $\sim$91\%.
+The distribution of $\mathtt{whitePSFKronDist}(a=0.91375)$ is shown for
+\textit{HST} training set stars and galaxies in
+Figure~\ref{fig:psfkrondist}. $\mathtt{whitePSFKronDist}$ provides an
+excellent discriminant between bright ($\lesssim 20\,\mathrm{mag}$) stars
+and galaxies. We further find that adopting a stellar classification
+threshold of $\mathtt{whitePSFKronDist} \ge 9.2 \times 10^{-7}$ produces a
+classification accuracy of $\sim$91\%.
 
 \subsection{Random Forest Model}\label{sec:rf_model}
 
 \subsubsection{The Random Forest Algorithm}\label{sec:rf_alg}
-\NC{For constructing the machine learning model (hereafter ML model) 
-to capture non-linear behavior in multidimensional data sets, 
-we use random forest (RF) algorithm in this study.  
-This algorithm is based on decision tree models \citep{Quinlan93} 
-and bagging, 
-wherein bootstrap samples of the training set are utilized to construct 
-each of the $N_{\mathrm{tree}}$ total trees in the forest,
-for classification problems \citep{Breiman96, Breiman01}. 
-Each tree in the forest is trained by only a random subset of $m_{\mathrm{try}}$ 
-features selected from the full feature set, 
-and the use of bagging and random selected $m_{\mathrm{try}}$ features 
-allows the final model to provide low-bias and low-variance predictions, 
-where the number of terminal node (the depth) of individual tree is limited to be larger than \texttt{nodesize}. 
 
-The final predictions for a new unknown source are determined by voting or averaging the predictions 
-from each of the individual trees. 
-Because of its insensitivity to noisy or meaningless features and also outlier values in them, 
-RF algorithms have recently applied for astronomical data sets frequently, 
-such as light curve classification ({\it e.g., } \citealt{Richards12a, Huppenkothen17}), 
-real and bogus discrimination of difference image ({\it e.g., }  \citealt{Brink13, Wright15}), 
-and star and galaxy separation ({\it e.g., } \citealt{Vasconcellos11, Miller17}). 
-We utilize the \texttt{Python scikit-learn} implementation of the RF algorithm \citep{Pedregosa12} in this study. 
+Based on its success in previous astronomical applications (e.g., \citealt{Richards12a, Huppenkothen17, Brink13, Wright15, Goldstein15}), including
+star--galaxy separation (e.g., \citealt{Vasconcellos11,Miller17}), we adopt
+the RF algorithm \citep{Breiman01} for our machine learning model. Briefly,
+RF is built on decision tree models \citep{Quinlan93} that utilize bagging
+\citep{Breiman96}, wherein bootstrap samples of the training set are used to
+train each of the $N_{\mathrm{tree}}$ individual trees. Within the
+individual trees, only $m_{\mathrm{try}}$ randomly selected features are
+used to separate sources at each node, and nodes cannot be further split if
+there are fewer than \texttt{nodesize} sources in the node. The randomness
+introduced by both bagging and the use of $m_{\mathrm{try}}$ features
+reduces the variance of RF predicitions relative to single decision tree
+models. Final RF classifications are determined via a majority vote from
+each of the $N_{\mathrm{tree}}$ individual trees. Thus, RF models are
+capable of producing low-variance, low-bias predictions. We utilize the
+\texttt{Python scikit-learn} implementation of the RF algorithm
+\citep{Pedregosa12} in this study.
+
+
+ 
+ 
 
 \subsubsection{Feature Selection}
+
+\NC{
 As we mentioned in \S\ref{sec:model_features}, 11 image features are utilized for training the machine learning classifier: 
 \texttt{whiteExtNSigma}, \texttt{whiteKronRad}, \texttt{whitepsfChiSq}, \texttt{whitepsfLikelihood}, 
 \texttt{whitemomentYY}, \texttt{whitemomentXY}, \texttt{whitemomentXX}, \texttt{whitemomentRH}, 
