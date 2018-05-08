@@ -678,21 +678,12 @@ In either case, we find that removing features does not improve the CV FoM, and 
 
 \subsubsection{Optimizing the Model Tuning Parameters}
 
-NC{The RF algorithm has the two most important hyperparameters, $N_{\mathrm{tree}}$ and $m_{\mathrm{try}}$, 
-and an additional parameter \texttt{nodesize} (see \S\ref{sec:rf_alg}), 
-for controlling the smoothness of the model projection in multidimensional feature space. 
-To construct the optimal ML model, we perform a grid search over the RF tuning parameters 
-$N_{\mathrm{tree}}$, $m_{\mathrm{try}}$ and \texttt{nodesize}. 
-Averaging over 10-fold cross-validated FoM, 
-we found that the performance of the ML model is maximized for the model 
-($N_{\mathrm{tree}} = 400$, $m_{\mathrm{try}} = 4$, $\mathtt{nodesize} = 2$). 
-We note that the final ML model prediction is not sensitive to change in these parameters: 
-most of the FoM of ML model with different parameters is within the standard deviation 
-of CV FoM derived by the optimal ML model. 
-}
+As noted in \S\ref{sec:simple_model}, we optimize the RF model tuning parameters via an outter and inner 10-fold CV procedure. We perform a grid search over $N_{\mathrm{tree}}$, $m_{\mathrm{try}}$ and \texttt{nodesize}, and find that the FoM of \textit{HST} training is maximized with $N_{\mathrm{tree}} = 400$, $m_{\mathrm{try}} = 4$, and $\mathtt{nodesize} = 2$. The final model FoM is not strongly sensitive to the choice of these parameters: changing any of the optimal parameters by a factor of $\sim$2 does not decrease the optimal CV FoM, 0.72, by more than the scatter measured from the individual folds, 0.02. Finally, while a detailed comparison is presented in \S\ref{sec:comp_hst}, we note that the FoM for the ML model is significantly higher than the 
+
 \section{Classification Performance}
 
 \subsection{PS1, Simple, ML model Comparison}\label{sec:comp_hst}
+
 \NC{To test the classification performance of the ML model, 
 we first assess the ROC curve and the prediction accuracy 
 of the ML model by comparing that of PS1 model, and the simple model, 
