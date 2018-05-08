@@ -670,47 +670,15 @@ capable of producing low-variance, low-bias predictions. We utilize the
 \texttt{Python scikit-learn} implementation of the RF algorithm
 \citep{Pedregosa12} in this study.
 
-
- 
- 
-
 \subsubsection{Feature Selection}
 
-\NC{
-As we mentioned in \S\ref{sec:model_features}, 11 image features are utilized for training the machine learning classifier: 
-\texttt{whiteExtNSigma}, \texttt{whiteKronRad}, \texttt{whitepsfChiSq}, \texttt{whitepsfLikelihood}, 
-\texttt{whitemomentYY}, \texttt{whitemomentXY}, \texttt{whitemomentXX}, \texttt{whitemomentRH}, 
-\texttt{whitePSFKronRatio}, \texttt{whitePSFApRatio} (Figure \ref{fig:features}), 
-and \texttt{whitePSFKronDist} (Figure \ref{fig:psfkrondist}). 
-
-While the ML model trained by RF algorithm 
-would provide low-variance and low-biased predictions 
-in the presence of strongly correlated features\footnote{Some features have a relatively strong correlation coefficient: 
-$\sim0.94$ between \texttt{whiteExtNSigma} and \texttt{whitepsfLikelihood}, 
-$\sim0.69$ between \texttt{whiteMomentXX} and \texttt{whiteMomentYY}, and 
-$\sim0.50$ between \texttt{whitePSFApRatio} and \texttt{whitePSFKronRatio}. }
- or weak/uninformative features ({\it e.g.,} \citealt{Richards12a}), 
-it is worthful to investigate whether the model performance is improved by removing some features. 
-We employ two methods to test the full feature set: 
-(1) forward feature selection ({\it e.g.,} \citealt{Richards12a, Miller17}) and 
-(2) backward feature selection ({\it e.g.,} \citealt{Brink13}). 
-In the forward feature selection, 
-we construct a series of ML models whereby we iteratively add one feature 
-at a time to each successive model starting with the most-important-RF feature 
-and ending with the least-important-RF feature 
-based on the ranking of \texttt{importance} provided by the RF methods, 
-that reflects the contribution of an individual feature to the final decision in RF models \citep{Breiman01, Breiman02}. 
-On the other hand, in the backward feature selection, 
-we remove a feature that provides no
-useful information or hurt the classification performance 
-successively from the RF model trained with the full set of features. 
-In both cases, we found that any removal of features does not improve the performance of the ML model 
-in terms of FoM\footnote{Figure of merit; the true positive ratio at the false positive ratio equal to 0.5\% in this study. } 
-significantly. 
-We therefore decide to use all of 11 features to train the final ML model. 
+While the RF algorithm is relatively insensitive to correlated and/or weak/uninformative features (e.g., \citealt{Richards12a}), we nevertheless investigate if removing features from our feature set improves the model performance.\footnote{For example, we find a strong correlation between \texttt{whiteExtNSigma} and \texttt{whitepsfLikelihood}, $r \approx 0.94$, which may harm the final model classification. \yutaro{Is this the Pearson correlation coefficient? We should give an exact number here.}}
+ We do this via forward and backward feature selection (\yutaro{there is a good reference for this - check my 2015 paper if you haven't read it}). Forward and backward feature selection involve the iterative addition or removal of features from the model, respectively. Like \citet{Richards12a}, we rank order the features for either addition or subtraction based on their RF-determined importance \citep{Breiman02}.
+In either case, we find that removing features does not improve the CV FoM, and therefore include all 11 features from \S\ref{sec:model_features} the final ML model.
 
 \subsubsection{Optimizing the Model Tuning Parameters}
-The RF algorithm has the two most important hyperparameters, $N_{\mathrm{tree}}$ and $m_{\mathrm{try}}$, 
+
+NC{The RF algorithm has the two most important hyperparameters, $N_{\mathrm{tree}}$ and $m_{\mathrm{try}}$, 
 and an additional parameter \texttt{nodesize} (see \S\ref{sec:rf_alg}), 
 for controlling the smoothness of the model projection in multidimensional feature space. 
 To construct the optimal ML model, we perform a grid search over the RF tuning parameters 
