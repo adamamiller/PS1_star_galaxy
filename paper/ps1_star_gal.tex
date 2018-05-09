@@ -694,45 +694,79 @@ capable of producing low-variance, low-bias predictions. We utilize the
 
 While the RF algorithm is relatively insensitive to correlated and/or weak/uninformative features (e.g., \citealt{Richards12a}), we nevertheless investigate if removing features from our feature set improves the model performance.\footnote{For example, we find a strong correlation between \texttt{whiteExtNSigma} and \texttt{whitepsfLikelihood}, $r \approx 0.94$, which may harm the final model classification. \yutaro{Is this the Pearson correlation coefficient? We should give an exact number here.}}
  We do this via forward and backward feature selection (\yutaro{there is a good reference for this - check my 2015 paper if you haven't read it}). Forward and backward feature selection involve the iterative addition or removal of features from the model, respectively. Like \citet{Richards12a}, we rank order the features for either addition or subtraction based on their RF-determined importance \citep{Breiman02}.
-In either case, we find that removing features does not improve the CV FoM, and therefore include all 11 features from \S\ref{sec:model_features} the final ML model.
+In either case, we find that removing features does not improve the CV FoM, and therefore include all 11 features from \S\ref{sec:model_features} the final RF model.
 
 \subsubsection{Optimizing the Model Tuning Parameters}
 
-As noted in \S\ref{sec:simple_model}, we optimize the RF model tuning parameters via an outter and inner 10-fold CV procedure. We perform a grid search over $N_{\mathrm{tree}}$, $m_{\mathrm{try}}$ and \texttt{nodesize}, and find that the FoM of \textit{HST} training is maximized with $N_{\mathrm{tree}} = 400$, $m_{\mathrm{try}} = 4$, and $\mathtt{nodesize} = 2$. The final model FoM is not strongly sensitive to the choice of these parameters: changing any of the optimal parameters by a factor of $\sim$2 does not decrease the optimal CV FoM, 0.72, by more than the scatter measured from the individual folds, 0.02. Finally, while a detailed comparison is presented in \S\ref{sec:comp_hst}, we note that the FoM for the ML model is significantly higher than the 
+As noted in \S\ref{sec:simple_model}, we optimize the RF model tuning parameters via an outter and inner 10-fold CV procedure. We perform a grid search over $N_{\mathrm{tree}}$, $m_{\mathrm{try}}$ and \texttt{nodesize}, and find that the FoM of \textit{HST} training is maximized with $N_{\mathrm{tree}} = 400$, $m_{\mathrm{try}} = 4$, and $\mathtt{nodesize} = 2$. The final model FoM is not strongly sensitive to the choice of these parameters: changing any of the optimal parameters by a factor of $\sim$2 does not decrease the optimal CV FoM, 0.72, by more than the scatter measured from the individual folds, 0.02. Finally, while a detailed comparison is presented in \S\ref{sec:comp_hst}, we note that the RF model significantly outperforms the simple model based on the CV FoM.
+
+\todo{check why FoM does not match Table 1}
 
 \section{Classification Performance}
 
-\subsection{PS1, Simple, ML model Comparison}\label{sec:comp_hst}
+\subsection{PS1, Simple, and RF Model Comparison}\label{sec:comp_hst}
 
-\NC{To test the classification performance of the ML model, 
-we first assess the ROC curve and the prediction accuracy 
-of the ML model by comparing that of PS1 model, and the simple model, 
-via a 10-fold CV run on the training set ({\it i.e.,} PS1 sources cross-matched against the HST COSMOS catalog) 
-by comparing predictions of each model with HST classifications. 
+We assess the relative performance of the RF model by comparing it to both
+the PS1 and simple models. To do so, we select the subset of sources from
+the \textit{HST} training set that have $\mathrm{det}_{i_\mathrm{PS1}} = 1$
+(the PS1 model cannot classify sources that are not detected in the
+$i_\mathrm{PS1}$ band), which results in \yutaro{NNN} sources.
+
+Figure~\ref{fig:cvroc_hst} shows that the RF model and simple model provide
+substantial improvements over the PS1 model, with $\sim$10,000\% and
+$\sim$9,200\% respective increases in the FoM relative to the PS1 model.
+\yutaro{check these numbers after checking ROC procedure} We additionally
+show Receiver Operating Characteristic (ROC) curves for the 3 models in
+Figure~\ref{fig:cvroc_hst}. ROC curves show how the true positive rate
+($\mathrm{TPR} = \mathrm{TP}/(\mathrm{TP} + \mathrm{FP})$, where TP is the
+total number of true positive classifications and FP is the number of false
+positives) and false positive rate ($\mathrm{FPR} = \mathrm{FP}/(\mathrm{FP}
++ \mathrm{TN})$, where TN is the number of true negatives) vary as a
+function of classification threshold. As a reminder, stars are considered
+the positive class in this study. For the RF model we vary the
+classification threshold from 1 (star) to 0 (galaxy), while for the simple
+model we vary the classification threshold from \yutaro{max(wPSFKronDist)}
+to \yutaro{max(wPSFKronDist)}, and finally, we create an ROC curve for the
+PS1 model by varying the classification threshold from $\mathtt{iPSFMag} -
+\mathtt{iKronMag} > \yutaro{max(iPSF-iKron)}\;\mathrm{mag}$ to
+$\yutaro{min(iPSF-iKron)}\;\mathrm{mag}$.
+
+Summary statistics showing the superior performance of the RF model relative
+to the simple and PS1 models are presented in Table~\ref{}. [\yutaro{We
+should maybe include a table with the FoM+threshold, accuracy, ROC AUC for
+each of these models. What do you think?}] These statistics include the FoM,
+the integrated area under the ROC curve (ROC AUC), and the overall accuracy
+of the 3 models as evaluted on the subset of \textit{HST} training set
+sources with $i_\mathrm{PS1}$ detections. We use 10-fold CV to measure the
+summary statistics, with identical folds for each model. Strictly speaking,
+this CV procedure is only needed for the RF model, which needs to be
+re-trained for every fold, but testing the simple and PS1 models on the
+individual folds provides an estimate in the scatter of the final reported
+metrics. From Table~\ref{} it is clear that the RF model greatly outperforms
+the simple and PS1 models.
+
+
+
 %%% fig:cvroc_hst %%%
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in, 
-  bb = 0 0 576 360
-  ]{./Figures/CV_ROC_HST.pdf}
-  \caption{
-  ROC curves comparing the relative performance of the PS1, the simple, and the ML model. 
-  We use PS1 sources cross-matched against the HST COSMOS catalog with 
-  $\mathtt{iPSFMag} - \mathtt{iKronMag} \neq \mathrm{NaN}$ 
-  so that any source in the dataset has a classification from all each model 
-  for a fair comparison. 
-  The solid orange, blue, and black line show the ROC curve 
-  for the PS1 model, the simple model, and ML model, respectively. 
-  Color-shadowed regions represent the standard deviation of each TPRs derived by 10-fold CV. 
-  The ROC curves around FPR = 0.005 (grey solid line) are shown in the inset panel 
-  (the ROC curve for the PS1 model is located at substantially below of the TPR range shown in the inset panel). 
-  }
+  \includegraphics[width=3.35in]{./Figures/CV_ROC_HST.pdf}
+  %
+  \caption{ ROC curves comparing the relative performance of the PS1,
+  simple, and RF models as tested by the subset of \textit{HST} training set
+  sources with $i_\mathrm{PS1}$ detections. The thick, solid orange, blue,
+  and black lines show the ROC curves for the PS1, simple, and RF models,
+  respectively. The light, shaded regions bounding these lines show the
+  10-fold CV scatter about the mean model. The inset on the right shows a
+  zoom in around FPR = 0.005, shown as a vertical line, corresponding to the
+  FoM (the PS1 model is not shown in the inset, because it has very low
+  FoM). }
   %
   \label{fig:cvroc_hst}
 \end{figure}
 %%%%%%%%%%%%%
 
-Figure \ref{fig:cvroc_hst} shows the CV ROC curve of each models, 
+\NC{Figure \ref{fig:cvroc_hst} shows the CV ROC curve of each models, 
 and reveals the ML model is apparently outperformed to the other models. 
 The overall ROC curve of the simple model, the new baseline for the performance of the star and galaxy separation, 
 superiors to that of the PS1 model. 
@@ -917,7 +951,8 @@ the PS1-HST catalog (and also the real universe) contains much larger number of 
 The final ML model, which is optimized to classify stars and galaxies following this population, 
 will provide the most accurate classification for sources in high-latitude sky. 
 } 
-\section{Discussion}
+
+% \section{Discussion}
 
 \section{The PS1 Catalog Deployed: Integration in ZTF}
 
