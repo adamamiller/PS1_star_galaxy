@@ -260,6 +260,22 @@ The proliferation of wide-field optical detectors has led to a plethora of
 imaging catalogs in the past two decades. \yutaro{I think we should add some
 general text here about the importance of separating stars and galaxies here
 - do you want to take the first effort for that?}
+\NC{
+Separating point sources (mostly stars) from extended sources (galaxies), 
+especially in faint samples, 
+is one of the most challenging and important steps in the 
+extraction of sensitive astronomical information 
+from such imaging catalogs, 
+and boosts the progress in our understanding for the universe. 
+The characteristic of dark matter can be investigated 
+by tracing the structure in the Milky Way halo ({\it e.g.}, \citealt{Belokurov06}), 
+measuring galaxy-galaxy correlation functions ({\it e.g.}, \citealt{Ross11, Ho15})
+including dwarf galaxies that can be searched by stellar overdensities \citep{Belokurov07}, 
+and detecting the weak lensing signal from cosmic shear \citep{Soumagnac15}. 
+The number count density of galaxies as a function of luminosity (luminosity function) 
+can be used for the assessment of the geometry of the universe \citep{Yasuda01} 
+and the theory of galaxy formation ({\it e.g.}, \citealt{Loveday12, Moorman15}). 
+}
 
 Given the many applications for a catalog that separates point sources from
 galaxies, we turn our attention to the wide-field Pan-STARRS1 (PS1) survey
@@ -408,7 +424,9 @@ stack images.}
 
 \begin{figure*}[htb]
  \centering
-  \includegraphics[width=7.2in]{./Figures/ColorMagDiagramComb.pdf}
+  \includegraphics[width=7.2in
+  %,bb = 79 3 1061 333
+  ]{./Figures/ColorMagDiagramComb.pdf}
   \caption{
   PS1 color-magnitude diagrams for \textit{left}: $10^6$ randomly selected sources, \textit{center}: the \textit{HST} training set, and \textit{right}: the SDSS training set. The primary panels show a two-dimensional (2D) Gaussian kernel density estimate (KDE) of the probability density function (PDF) of each subset of sources in the $r_\mathrm{PS1}$--$g_\mathrm{PS1} - r_\mathrm{PS1}$ plane. The shown contour levels extend from 0.9 to 0.1 in 0.1 intervals. To the top and right of the primary panels are marginalized 1D KDEs of the PDF for the $g_\mathrm{PS1} - r_\mathrm{PS1}$ color and $r_\mathrm{PS1}$ brightness, respectively. Kron aperture measurements from the \textit{StackObjectThin} table are used to estimate each of the PDFs. \yutaro{Is this last sentence correct? Also - I think we should use some color here to break the monotony of the black text on a white background}
   }
@@ -510,7 +528,7 @@ losses from the exclusion of color information.
 \begin{figure*}[htb]
  \centering
   \includegraphics[width=5.75in
-  % , bb = 139 113 862 1163
+%  , bb = 139 113 862 1163
   ]{./Figures/whiteFeatures.pdf}
   \caption{
   The primary square panels show KDEs of the PDF for each of the ``white
@@ -627,7 +645,9 @@ fluxes for both the simple model and the machine learning model, as noted in
 
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.55in]{./Figures/whitePSFKronDist.pdf}
+  \includegraphics[width=3.55in
+%  ,bb = 0 0 576 432
+  ]{./Figures/whitePSFKronDist.pdf}
   %
   \caption{ The distribution of $\mathtt{whitePSFKronDist}$ values for
   \textit{HST} training set stars and galaxies as a function of
@@ -692,7 +712,9 @@ by comparing predictions of each model with HST classifications.
 %%% fig:cvroc_hst %%%
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in, bb = 0 0 576 360]{./Figures/CV_ROC_HST.pdf}
+  \includegraphics[width=3.35in, 
+  bb = 0 0 576 360
+  ]{./Figures/CV_ROC_HST.pdf}
   \caption{
   ROC curves comparing the relative performance of the PS1, the simple, and the ML model. 
   We use PS1 sources cross-matched against the HST COSMOS catalog with 
@@ -747,7 +769,9 @@ evaluated via the PS1-HST data set as a function of \texttt{whiteKronMag}.
 %%% fig:cvacc_hst %%%
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in, bb = 0 0 576 360]{./Figures/CV_Accuracy_HST.pdf}
+  \includegraphics[width=3.35in, 
+  bb = 0 0 576 360
+  ]{./Figures/CV_Accuracy_HST.pdf}
   \caption{
   Predication accuracy of the PS1 model (orange filled circles), the simple model (blue filled circles), 
   and the ML model (black filled circles), as a function of \texttt{whiteKronMag} 
@@ -794,7 +818,9 @@ since all of the sources are taken from imaging data sets.
 %%% fig:roc_sdss %%%
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in, bb = 0 0 576 360]{./Figures/ROC_curves.pdf}
+  \includegraphics[width=3.35in
+%  ,bb = 0 0 576 360
+  ]{./Figures/ROC_curves.pdf}
   \caption{
   ROC curves comparing the relative performance 
   of the SDSS photo model (green solid line), the PS1 model (orange solid line), 
@@ -840,7 +866,9 @@ and the ROC AUC score for each model is
 %%% fig:acc_sdss %%%
 \begin{figure*}[t]
  \centering
-  \includegraphics[width=6.5in, bb = 0 0 900 360]{./Figures/Accuracy_SDSS_ML_model.pdf}
+  \includegraphics[width=6.5in
+%  ,bb = 0 0 900 360
+  ]{./Figures/Accuracy_SDSS_ML_model.pdf}
   \caption{
   Prediction accuracy of the SDSS photo model and the ML model 
   as a function of \texttt{whiteKronmag} for PS1 sources cross-matched against the SDSS spectroscopic catalog. 
