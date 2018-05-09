@@ -152,7 +152,7 @@
 
 \begin{document}
 
-\title{\textbf{something better needed} A Machine Learning Model to Separate Stars and Galaxies in PanSTARRS1 Data}
+\title{\textbf{something better needed} A PanSTARRS1 Star--Galaxy Model: Application in the ZTF Real-Time Pipeline}
 
 %% LaTeX will automatically break titles if they run longer than
 %% one line. However, you may use \\ to force a line break if
@@ -718,18 +718,23 @@ $\sim$9,200\% respective increases in the FoM relative to the PS1 model.
 \yutaro{check these numbers after checking ROC procedure} We additionally
 show Receiver Operating Characteristic (ROC) curves for the 3 models in
 Figure~\ref{fig:cvroc_hst}. ROC curves show how the true positive rate
-($\mathrm{TPR} = \mathrm{TP}/(\mathrm{TP} + \mathrm{FP})$, where TP is the
-total number of true positive classifications and FP is the number of false
-positives) and false positive rate ($\mathrm{FPR} = \mathrm{FP}/(\mathrm{FP}
-+ \mathrm{TN})$, where TN is the number of true negatives) vary as a
-function of classification threshold. As a reminder, stars are considered
-the positive class in this study. For the RF model we vary the
-classification threshold from 1 (star) to 0 (galaxy), while for the simple
-model we vary the classification threshold from \yutaro{max(wPSFKronDist)}
-to \yutaro{max(wPSFKronDist)}, and finally, we create an ROC curve for the
-PS1 model by varying the classification threshold from $\mathtt{iPSFMag} -
-\mathtt{iKronMag} > \yutaro{max(iPSF-iKron)}\;\mathrm{mag}$ to
-$\yutaro{min(iPSF-iKron)}\;\mathrm{mag}$.
+(TPR)\footnote{$\mathrm{TPR} = \mathrm{TP}/(\mathrm{TP} + \mathrm{FP})$,
+where TP is the total number of true positive classifications and FP is the
+number of false positives.} and false positive rate
+(FPR)\footnote{$\mathrm{FPR} = \mathrm{FP}/(\mathrm{FP} + \mathrm{TN})$,
+where TN is the number of true negatives.} vary as a function of
+classification threshold. As a reminder, stars are considered the positive
+class in this study. To construct ROC curves for the simple and PS1 models
+we vary the classification thresholds from $\mathrm{whitePSFKronDist} =
+\yutaro{max(wPSFKronDist)}$ to \yutaro{max(wPSFKronDist)} and
+$\mathtt{iPSFMag} - \mathtt{iKronMag} >
+\yutaro{max(iPSF-iKron)}\;\mathrm{mag}$ to
+$\yutaro{min(iPSF-iKron)}\;\mathrm{mag}$, respecitively.
+Figure~\ref{fig:cvroc_hst} highlights the strength of the simple model
+approach: by using a metric that essentially captures both the difference
+between the PSF and Kron-aperture measurements \textit{and} the SNR, the
+simple model produces much higher TPR at low FPR than the PS1 model, which
+eliminates any information about the SNR.
 
 Summary statistics showing the superior performance of the RF model relative
 to the simple and PS1 models are presented in Table~\ref{}. [\yutaro{We
@@ -766,38 +771,17 @@ the simple and PS1 models.
 \end{figure}
 %%%%%%%%%%%%%
 
-\NC{Figure \ref{fig:cvroc_hst} shows the CV ROC curve of each models, 
-and reveals the ML model is apparently outperformed to the other models. 
-The overall ROC curve of the simple model, the new baseline for the performance of the star and galaxy separation, 
-superiors to that of the PS1 model. 
-The higher SNR of the difference between 
-the \texttt{PSFFlux} and the \texttt{KronFlux} for each source 
-in the simple model actually makes the performance of the classifier better, 
-but the way to scoring to each object in this model, namely employing the distance from the threshold line, 
-plays the most important role for this improvement, 
-especially at the low FPR end (detail about the simple model, please see \S\ref{sec:simple_model}). 
-In the simple model, a source difficult to judge whether it is star or galaxy ({\it i.e.,} a source at the faint end) 
-has a score close to 0, 
-while the source which can be distinguished clearly from a point source on the image 
-has a large negative score (and vise versa for a point source). 
-As most stars do not have such large negative values, 
-the lower FPR and the higher TPR is obtained at a large minus threshold for the star-galaxy classification. 
-In the PS1 model, on the other hand, the classification is decided by $\mathtt{iPSFMag} - \mathtt{iKronMag}$, 
-has an (essentially) identical score $\sim$0 for all stars independently of its distinguishability. 
-The difference of the scoring method makes substantial improvement in the performance of the PS1 model 
-from that of the simple model at low FPR end. 
+% Since the ML model is trained with the 11 features
+% consisting \texttt{whitepsfKronDist} and \texttt{whitepsfKronRatio},
+% which is the fundamental information for the classification in the  simple model and the PS1 model, respectively,
+% the TPR of the ML model is higher than that of baseline models in whole FPR value.
+% The ROC AUC is 0.973, 0.937, and 0.851,
+% and the FoM is 0.715, 0.658, and 0.007,
+% for the PS1 model, the simple model, and the ML model, respectively;
+% in the other words, the TPR at the FPR$=0.5\%$ of the ML model and the simple model
+% is improved 70.8$\%$ and 65.1$\%$ from that of the PS1 model, respectively.
 
-Since the ML model is trained with the 11 features 
-consisting \texttt{whitepsfKronDist} and \texttt{whitepsfKronRatio}, 
-which is the fundamental information for the classification in the  simple model and the PS1 model, respectively, 
-the TPR of the ML model is higher than that of baseline models in whole FPR value. 
-The ROC AUC is 0.973, 0.937, and 0.851, 
-and the FoM is 0.715, 0.658, and 0.007, 
-for the PS1 model, the simple model, and the ML model, respectively; 
-in the other words, the TPR at the FPR$=0.5\%$ of the ML model and the simple model 
-is improved 70.8$\%$ and 65.1$\%$ from that of the PS1 model, respectively. 
-
-In Figure \ref{fig:cvacc_hst}, we compare the accuracy 
+\NC{In Figure \ref{fig:cvacc_hst}, we compare the accuracy 
 of the PS1 model, the simple model, and the ML model
 evaluated via the PS1-HST data set as a function of \texttt{whiteKronMag}. 
 %%% fig:cvacc_hst %%%
