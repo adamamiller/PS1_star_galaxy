@@ -780,10 +780,9 @@ the simple and PS1 models.
 % for the PS1 model, the simple model, and the ML model, respectively;
 % in the other words, the TPR at the FPR$=0.5\%$ of the ML model and the simple model
 % is improved 70.8$\%$ and 65.1$\%$ from that of the PS1 model, respectively.
+% The overall CV accuracy of the ML model, the simple model, and the PS1 model is
+% 93.3\%, 91.6\%, and 78.4\%.
 
-\NC{In Figure \ref{fig:cvacc_hst}, we compare the accuracy 
-of the PS1 model, the simple model, and the ML model
-evaluated via the PS1-HST data set as a function of \texttt{whiteKronMag}. 
 %%% fig:cvacc_hst %%%
 \begin{figure}[t]
  \centering
@@ -805,32 +804,20 @@ evaluated via the PS1-HST data set as a function of \texttt{whiteKronMag}.
   \label{fig:cvacc_hst}
 \end{figure}
 %%%%%%%%%%%%%
-In the PS1 model, prediction accuracy quickly decrease from $\mathtt{whiteKronMag} \sim $ 20 mag, 
-to the level of random predictions (accuracy $\sim$ 0.5) for sources with $\mathtt{whiteKronMag} \gtrsim $ 23 mag. 
-In the simple model, on the other hand, 
-although is starting to decrease from $\mathtt{whiteKronMag} \sim $ 20 mag gradually to the faintest end, 
-the accuracy is above 80\% even for sources fainter than $\mathtt{whiteKronMag} \sim $ 23.5 mag. 
-This is mainly because of higher SNR in ``white feature'' of the difference 
-between \texttt{Kron} flux measurement and \texttt{PSF} flux measurement for each source (see \S\ref{sec:model_features}), 
-that differs to the case of the improvement of the ROC curve mentioned above. 
-
-The performance of the ML model is the best among other baseline models in almost all brightness of a source in the dataset, 
-but one notice to the similarity of the accuracy curve of the ML model and the simple model. 
-This is because of the highest importance of the \texttt{whitepsfKronDist} 
-among all of 11 features for the classification of the ML model. 
-The overall CV accuracy of the ML model, the simple model, and the PS1 model is 
-93.3\%, 91.6\%, and 78.4\%. 
-As previously mentioned, the ML model provides superior predictions 
-especially for faint sources, which will enable to us to best identify stars in ZTF survey imaging 
-even outside the COSMOS field. 
-Figure \ref{fig:cvacc_hst} also shows a KDE of the PSD of stars and galaxies in the PS1-HST data set 
-as a function of \texttt{whiteKronMag}. 
-The KDEs indicate that most sources brighter than $\mathtt{whiteKronmag} \lesssim 19$ is star, 
-while the number of galaxies overwhelms that of stars from $\mathtt{whiteKronmag} \gtrsim 21$ to the faintest end. 
-The KDE of PDF for stars and galaxies has a peak around $\mathtt{whiteKronMag} \sim 21.5$ and $\sim 22$, 
-respectively. 
-We note that such distribution should be low-biased for the PS1 sources 
-since all of the sources are taken from imaging data sets. 
+The classification accuracy for each model as a function of
+\texttt{whiteKronMag} is shown in 0.5\,mag bins in
+Figure~\ref{fig:cvacc_hst}. The accuracies are estimated via 10-fold CV (see
+above) and the uncertainties represent the inter-68\% interval from
+\yutaro{CCC} bootstrap samples within each bin. \yutaro{Is this correct?}
+The classification thresholds for the RF, simple, and PS1 models are 0.5,
+$9.2 \times 10^{-7}$, and 0.05, respectively. Again, the RF and simple
+models provide a significant improvement over the PS1 model. The PS1 model
+provides classification accuracies $\gtrsim$90\% for sources with
+$\mathtt{whiteKronMag} \lesssim 21\,\mathrm{mag}$, but precipitously
+declines for fainter sources. The RF and simple models have similar curves
+with the RF model performing slightly better, as is to be expected given
+that the RF model uses 10 additional features beyond
+\texttt{whitePSFKronDist}.
 
 \subsection{ML Comparison with SDSS photo}
 %%% fig:roc_sdss %%%
@@ -852,7 +839,7 @@ since all of the sources are taken from imaging data sets.
   \label{fig:roc_sdss}
 \end{figure}
 %%%%%%%%%%%%%
-Next, we assess the performance of the ML model by comparing with SDSS photometric classification 
+\NC{Next, we assess the performance of the ML model by comparing with SDSS photometric classification 
 by using PS1-SDSS spectroscopic catalog. 
 Figure \ref{fig:roc_sdss} shows the ROC curve for 
 the SDSS photo, the PS1 model, the simple model, and the ML model, 
