@@ -875,27 +875,27 @@ is why these curves cross.
 % 0.290, 0.798, and 0.843, respectively, and the ROC AUC score for each model
 % is 0.987, 0.984, 0.985, and 0.987, respectively.
 
-Next, we assess the performance of the ML model by comparing with SDSS photometric classification 
-by using PS1-SDSS spectroscopic catalog. 
-Figure \ref{fig:roc_sdss} shows the ROC curve for 
-the SDSS photo, the PS1 model, the simple model, and the ML model, 
-by comparing predictions with SDSS spectroscopic classifications, 
-which are independent of the training data set; PS1-HST cross-matched catalog. 
-For sources in PS1-SDSS catalog, broadly, 
-the performance of classifications by each model is better than that for sources in PS1-HST catalog. 
-This is simply because that the distribution of sources, especially galaxies, in PS1-SDSS catalog 
-are biased toward to brighter side comparing with of PS1-HST catalog. 
-The selection bias of the SDSS spectroscopic survey 
-toward observing luminous red galaxies (LRGs; {\it e.g.,} see \citealt{Eisenstein01}) 
-results in the KDE of the PDF of galaxies having two peaks 
-at $\mathtt{whiteKronMag} \sim 17$ and $\sim 20$ 
-(see \S\ref{sec:sdss} and the left panel in Figure \ref{fig:acc_sdss}). 
-As we alluded to in \S\ref{sec:comp_hst}, 
-the distribution of stars and galaxies in the real universe (except the galactic plane) 
-should be similar to that shown in Figure \ref{fig:cvacc_hst}; 
-the peak of the distribution for stars and galaxies is around $\mathtt{whiteKronMag} \sim 22$ 
-and the number of stars and of galaxies is dominant at the bright end and the faint end, 
-respectively \citep{Chambers16}. 
+% Next, we assess the performance of the ML model by comparing with SDSS photometric classification
+% by using PS1-SDSS spectroscopic catalog.
+% Figure \ref{fig:roc_sdss} shows the ROC curve for
+% the SDSS photo, the PS1 model, the simple model, and the ML model,
+% by comparing predictions with SDSS spectroscopic classifications,
+% which are independent of the training data set; PS1-HST cross-matched catalog.
+% For sources in PS1-SDSS catalog, broadly,
+% the performance of classifications by each model is better than that for sources in PS1-HST catalog.
+% This is simply because that the distribution of sources, especially galaxies, in PS1-SDSS catalog
+% are biased toward to brighter side comparing with of PS1-HST catalog.
+% The selection bias of the SDSS spectroscopic survey
+% toward observing luminous red galaxies (LRGs; {\it e.g.,} see \citealt{Eisenstein01})
+% results in the KDE of the PDF of galaxies having two peaks
+% at $\mathtt{whiteKronMag} \sim 17$ and $\sim 20$
+% (see \S\ref{sec:sdss} and the left panel in Figure \ref{fig:acc_sdss}).
+% As we alluded to in \S\ref{sec:comp_hst},
+% the distribution of stars and galaxies in the real universe (except the galactic plane)
+% should be similar to that shown in Figure \ref{fig:cvacc_hst};
+% the peak of the distribution for stars and galaxies is around $\mathtt{whiteKronMag} \sim 22$
+% and the number of stars and of galaxies is dominant at the bright end and the faint end,
+% respectively \citep{Chambers16}.
 
 %%% fig:acc_sdss %%%
 \begin{figure*}[t]
