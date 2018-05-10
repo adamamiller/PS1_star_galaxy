@@ -786,24 +786,24 @@ the simple and PS1 models.
 %%% fig:cvacc_hst %%%
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in, 
-  bb = 0 0 576 360
-  ]{./Figures/CV_Accuracy_HST.pdf}
-  \caption{
-  Predication accuracy of the PS1 model (orange filled circles), the simple model (blue filled circles), 
-  and the ML model (black filled circles), as a function of \texttt{whiteKronMag} 
-  for PS1 sources cross-matched against the HST COSMOS catalog. 
-  Accuracies are shown in bin of width 0.5 mag, and the error bars 
-  represents the range including 68\% of CV accuracies in each bin. 
-  Additionally, a KDE of the PDF for stars and galaxies in the data set is shown in red and green, respectively. 
-  The PDF of stars and galaxies has been normalized by the ratio of the number of stars and galaxies 
-  to the full number of sources in the data set, respectively. 
-  The KDE of the PDF for all sources in the dataset is also shown in grey.
-  }
+  \includegraphics[width=3.5in]{./Figures/CV_Accuracy_HST.pdf}
+  %
+  \caption{Model accuracy as a function of \texttt{whiteKronMag} evaluated
+  on the subset of the \textit{HST} training set sources with
+  $i_\mathrm{PS1}$ detections. Accuracy curves for the PS1, simple and RF
+  models are shown in orange, blue, and black, respectively. The bin widths
+  are 0.5\,mag, and the error bars represent the range including 68\% of CV
+  accuracies in each bin. \yutaro{I think we should use bootstrap for
+  uncertainties} Additionally, a Gaussian KDE of the PDF for the entire
+  \textit{HST} training set subset, as well as the stars and galaxies in the
+  subset is shown in the shaded grey, red, and green regions, respectively.
+  The amplitude of the star and galaxy PDFs have been normalized by their
+  relative ratio compared to the full subset. }
   %
   \label{fig:cvacc_hst}
 \end{figure}
 %%%%%%%%%%%%%
+
 The classification accuracy for each model as a function of
 \texttt{whiteKronMag} is shown in 0.5\,mag bins in
 Figure~\ref{fig:cvacc_hst}. The accuracies are estimated via 10-fold CV (see
@@ -819,12 +819,12 @@ with the RF model performing slightly better, as is to be expected given
 that the RF model uses 10 additional features beyond
 \texttt{whitePSFKronDist}.
 
-\subsection{ML Comparison with SDSS photo}
+\subsection{Model Evaluation via an Independent Test Set}
+
 %%% fig:roc_sdss %%%
 \begin{figure}[t]
  \centering
   \includegraphics[width=3.35in
-%  ,bb = 0 0 576 360
   ]{./Figures/ROC_curves.pdf}
   \caption{
   ROC curves comparing the relative performance 
@@ -839,7 +839,43 @@ that the RF model uses 10 additional features beyond
   \label{fig:roc_sdss}
 \end{figure}
 %%%%%%%%%%%%%
-\NC{Next, we assess the performance of the ML model by comparing with SDSS photometric classification 
+
+While CV on the \textit{HST} training set shows that the RF models
+outperforms the alternatives, here, we test each of the previous models with
+the SDSS training set, which provides an independent set of $\sim$3.5$\times
+10^6$ sources with high-confidence labels. Additionally, the use of SDSS
+spectra allows us to compare our new models to the classifications from the
+SDSS \texttt{photo} pipeline, hereafter the SDSS model, which soundly
+outperformed the PTF RF star--galaxy models \citep{Miller17}. We create an
+ROC curve for the SDSS model by thresholding on the ratio of PSF flux to
+\texttt{cmodel} measured in the SDSS images (see \citealt{Miller17} for more
+details).
+
+To compare the 4 models, we select the subset of SDSS training set sources
+that have $i_\mathrm{PS1}$ detections (to compare with the PS1 model) and
+SDSS \texttt{photo} classifications (to compare with the SDSS model), and
+show ROC curves for each model applied to this subset of sources
+(\yutaro{NNN} total) in Figure~\ref{fig:roc_sdss}. The FoM for the PS1,
+simple, and RF models is higher as tested by SDSS spectroscopic sources
+because the SDSS training set contains brighter, higher SNR (and hence
+easier to classify) sources. As before, we find that the FoM for the RF
+model is superior to the alternatives. Interestingly, we also find that the
+ROC curves cross, and that the SDSS model provides the largest TPR for
+$\mathrm{FPR} \gtrsim 0.015$. That the RF and SDSS curves cross suggests
+that there may be regimes where the SDSS \texttt{photo} classifications are
+superior to the RF model. Below, we argue that a bias in the SDSS training
+set is amplified by a bias in the SDSS \texttt{photo} classification, which
+is why these curves cross.
+
+% Although the data set has the selection bias as mentioned above and thus the
+% distribution of stars and galaxies as a function of brightness is totally
+% different to that of the training set, the ROC curve of ML model is superior
+% to the other models in terms of the FoM and also the ROC AUC; the FoM for
+% the SDSS model, the PS1 model, the simple model, and the ML model is 0.777,
+% 0.290, 0.798, and 0.843, respectively, and the ROC AUC score for each model
+% is 0.987, 0.984, 0.985, and 0.987, respectively.
+
+Next, we assess the performance of the ML model by comparing with SDSS photometric classification 
 by using PS1-SDSS spectroscopic catalog. 
 Figure \ref{fig:roc_sdss} shows the ROC curve for 
 the SDSS photo, the PS1 model, the simple model, and the ML model, 
@@ -860,13 +896,6 @@ should be similar to that shown in Figure \ref{fig:cvacc_hst};
 the peak of the distribution for stars and galaxies is around $\mathtt{whiteKronMag} \sim 22$ 
 and the number of stars and of galaxies is dominant at the bright end and the faint end, 
 respectively \citep{Chambers16}. 
-Although the data set has the selection bias as mentioned above 
-and thus the distribution of stars and galaxies as a function of brightness is totally different to that of the training set, 
-the ROC curve of ML model is superior to the other models in terms of the FoM and also the ROC AUC; 
-the FoM for the SDSS model, the PS1 model, the simple model, and the ML model is 
-0.777, 0.290, 0.798, and 0.843, respectively, 
-and the ROC AUC score for each model is 
-0.987, 0.984, 0.985, and 0.987, respectively. 
 
 %%% fig:acc_sdss %%%
 \begin{figure*}[t]
@@ -895,7 +924,9 @@ and the ROC AUC score for each model is
   \label{fig:acc_sdss}
 \end{figure*}
 %%%%%%%%%%%%%
-In the left panel of Figure \ref{fig:roc_sdss}, we show the prediction accuracy of the SDSS photo model 
+
+
+\NC{In the left panel of Figure \ref{fig:roc_sdss}, we show the prediction accuracy of the SDSS photo model 
 and the ML model for galaxies and stars separately. 
 One can see that an unusual systematic whereby a large fraction of stars with $\mathtt{whiteKronMag} \sim 20$ 
 were erroneously classified as galaxies by both of models. 
