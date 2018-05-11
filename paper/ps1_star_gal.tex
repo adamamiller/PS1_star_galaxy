@@ -425,10 +425,10 @@ stack images.}
 \begin{figure*}[htb]
  \centering
   \includegraphics[width=7.2in
-  %,bb = 79 3 1061 333
-  ]{./Figures/ColorMagDiagramComb.pdf}
+  %,bb = 0 0 1152 360
+  ]{./Figures/ColorMagDiagram.pdf}
   \caption{
-  PS1 color-magnitude diagrams for \textit{left}: $10^6$ randomly selected sources, \textit{center}: the \textit{HST} training set, and \textit{right}: the SDSS training set. The primary panels show a two-dimensional (2D) Gaussian kernel density estimate (KDE) of the probability density function (PDF) of each subset of sources in the $r_\mathrm{PS1}$--$g_\mathrm{PS1} - r_\mathrm{PS1}$ plane. The shown contour levels extend from 0.9 to 0.1 in 0.1 intervals. To the top and right of the primary panels are marginalized 1D KDEs of the PDF for the $g_\mathrm{PS1} - r_\mathrm{PS1}$ color and $r_\mathrm{PS1}$ brightness, respectively. Kron aperture measurements from the \textit{StackObjectThin} table are used to estimate each of the PDFs. \yutaro{Is this last sentence correct? Also - I think we should use some color here to break the monotony of the black text on a white background}
+  PS1 color-magnitude diagrams for \textit{left}: $10^6$ randomly selected sources, \textit{center}: the \textit{HST} training set, and \textit{right}: the SDSS training set. The primary panels show a two-dimensional (2D) Gaussian kernel density estimate (KDE) of the probability density function (PDF) of each subset of sources in the $r_\mathrm{PS1}$--$g_\mathrm{PS1} - r_\mathrm{PS1}$ plane. The shown contour levels extend from 0.9 to 0.1 in 0.1 intervals. To the top and right of the primary panels are marginalized 1D KDEs of the PDF for the $g_\mathrm{PS1} - r_\mathrm{PS1}$ color and $r_\mathrm{PS1}$ brightness, respectively. Kron aperture measurements from the \textit{StackObjectThin} table are used to estimate each of the PDFs. \yutaro{Is this last sentence correct?: Yes. }
   }
   %
   \label{fig:cmd}
@@ -478,7 +478,11 @@ galaxies. The database features include: \texttt{PSFFlux},\footnote{For the
 \texttt{PSFFlux} feature $w_f =
 (\mathtt{PSFFlux}_f/\mathtt{PSFFluxErr}_f)^2$.} \texttt{KronFlux},
 \texttt{ApFlux},\footnote{For the \texttt{ApFlux} feature $w_f =
-(\mathtt{ApFlux}_f/\mathtt{ApFluxErr}_f)^2$.} \texttt{ExtNSigma},
+(\mathtt{ApFlux}_f/\mathtt{ApFluxErr}_f)^2$ 
+\NC{I think we used $w_f =
+(\mathtt{PSFFlux}_f/\mathtt{PSFFluxErr}_f)^2$ for \texttt{ApFlux} 
+because of the superior performance of \texttt{whitePSFApRatio}}. 
+} \texttt{ExtNSigma},
 \texttt{KronRad}, \texttt{psfChiSq}, \texttt{psfLikelihood},
 \texttt{momentYY}, \texttt{momentXY}, \texttt{momentXX}, and
 \texttt{momentRH}.\footnote{Prior to their ``white flux'' calculation the
@@ -528,7 +532,7 @@ losses from the exclusion of color information.
 \begin{figure*}[htb]
  \centering
   \includegraphics[width=5.75in
-%  , bb = 139 113 862 1163
+  %,bb = 0 0 864 1296
   ]{./Figures/whiteFeatures.pdf}
   \caption{
   The primary square panels show KDEs of the PDF for each of the ``white
@@ -541,8 +545,7 @@ losses from the exclusion of color information.
   amplitudes of the KDEs have been normalized by the relative number of stars
   and galaxies. The clear overlap between faint stars and galaxies suggests
   that a machine learning model may provide significant improvement over the
-  PS1 and simple models.
-  \yutaro{Should we add star/galaxy legend to each of these panels?}}
+  PS1 and simple models.}
   %
   \label{fig:features}
 \end{figure*}
@@ -646,7 +649,7 @@ fluxes for both the simple model and the machine learning model, as noted in
 \begin{figure}[t]
  \centering
   \includegraphics[width=3.55in
-%  ,bb = 0 0 576 432
+  %,bb = 0 0 576 432
   ]{./Figures/whitePSFKronDist.pdf}
   %
   \caption{ The distribution of $\mathtt{whitePSFKronDist}$ values for
@@ -692,8 +695,11 @@ capable of producing low-variance, low-bias predictions. We utilize the
 
 \subsubsection{Feature Selection}
 
-While the RF algorithm is relatively insensitive to correlated and/or weak/uninformative features (e.g., \citealt{Richards12a}), we nevertheless investigate if removing features from our feature set improves the model performance.\footnote{For example, we find a strong correlation between \texttt{whiteExtNSigma} and \texttt{whitepsfLikelihood}, $r \approx 0.94$, which may harm the final model classification. \yutaro{Is this the Pearson correlation coefficient? We should give an exact number here.}}
- We do this via forward and backward feature selection (\yutaro{there is a good reference for this - check my 2015 paper if you haven't read it}). Forward and backward feature selection involve the iterative addition or removal of features from the model, respectively. Like \citet{Richards12a}, we rank order the features for either addition or subtraction based on their RF-determined importance \citep{Breiman02}.
+While the RF algorithm is relatively insensitive to correlated and/or weak/uninformative features (e.g., \citealt{Richards12a}), we nevertheless investigate if removing features from our feature set improves the model performance.\footnote{For example, we find a strong correlation between \texttt{whiteExtNSigma} and \texttt{whitepsfLikelihood}, $r = 0.846448$, which may harm the final model classification. \yutaro{Is this the Pearson correlation coefficient? We should give an exact number here. : Y
+es, this value is the Pearson correlation coefficient. 
+I had forgotten removing sources with \texttt{nDetections=0} in the previous version, 
+so the value is changed slightly.}}
+ We do this via forward and backward feature selection (\yutaro{there is a good reference for this - check my 2015 paper if you haven't read it: I read it. Thank you!}). Forward and backward feature selection involve the iterative addition or removal of features from the model, respectively. Like \citet{Richards12a}, we rank order the features for either addition or subtraction based on their RF-determined importance \citep{Breiman02}.
 In either case, we find that removing features does not improve the CV FoM, and therefore include all 11 features from \S\ref{sec:model_features} the final RF model.
 
 \subsubsection{Optimizing the Model Tuning Parameters}
@@ -726,10 +732,10 @@ where TN is the number of true negatives.} vary as a function of
 classification threshold. As a reminder, stars are considered the positive
 class in this study. To construct ROC curves for the simple and PS1 models
 we vary the classification thresholds from $\mathrm{whitePSFKronDist} =
-\yutaro{max(wPSFKronDist)}$ to \yutaro{max(wPSFKronDist)} and
-$\mathtt{iPSFMag} - \mathtt{iKronMag} >
-\yutaro{max(iPSF-iKron)}\;\mathrm{mag}$ to
-$\yutaro{min(iPSF-iKron)}\;\mathrm{mag}$, respecitively.
+\yutaro{4.24524\times 10^{-3}}$ to \yutaro{$-16.23348\times10^{-3}$} and
+$\mathtt{iPSFMag} - \mathtt{iKronMag} =
+\yutaro{5.09913363}\;\mathrm{mag}$ to
+$\yutaro{-2.81103881}\;\mathrm{mag}$, respectively.
 Figure~\ref{fig:cvroc_hst} highlights the strength of the simple model
 approach: by using a metric that essentially captures both the difference
 between the PSF and Kron-aperture measurements \textit{and} the SNR, the
@@ -767,7 +773,9 @@ the simple and PS1 models.
 %%% fig:cvroc_hst %%%
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in]{./Figures/CV_ROC_HST.pdf}
+  \includegraphics[width=3.35in
+  %,bb = 0 0 504 360
+  ]{./Figures/CV_ROC_HST.pdf}
   %
   \caption{ ROC curves comparing the relative performance of the PS1,
   simple, and RF models as tested by the subset of \textit{HST} training set
@@ -798,7 +806,9 @@ the simple and PS1 models.
 %%% fig:cvacc_hst %%%
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.5in]{./Figures/CV_Accuracy_HST.pdf}
+  \includegraphics[width=3.5in
+  %,bb = 0 0 576 360
+  ]{./Figures/CV_Accuracy_HST.pdf}
   %
   \caption{Model accuracy as a function of \texttt{whiteKronMag} evaluated
   on the subset of the \textit{HST} training set sources with
@@ -837,6 +847,7 @@ that the RF model uses 10 additional features beyond
 \begin{figure}[t]
  \centering
   \includegraphics[width=3.35in
+  %,bb = 0 0 576 360
   ]{./Figures/ROC_curves.pdf}
   \caption{
   ROC curves comparing the relative performance 
@@ -855,7 +866,7 @@ that the RF model uses 10 additional features beyond
 While CV on the \textit{HST} training set shows that the RF models
 outperforms the alternatives, here, we test each of the previous models with
 the SDSS training set, which provides an independent set of $\sim$3.5$\times
-10^6$ sources with high-confidence labels. Additionally, the use of SDSS
+10^6$ (\NC{3,834,627?}) sources with high-confidence labels. Additionally, the use of SDSS
 spectra allows us to compare our new models to the classifications from the
 SDSS \texttt{photo} pipeline, hereafter the SDSS model, which soundly
 outperformed the PTF RF star--galaxy models \citep{Miller17}. We create an
@@ -867,7 +878,9 @@ To compare the 4 models, we select the subset of SDSS training set sources
 that have $i_\mathrm{PS1}$ detections (to compare with the PS1 model) and
 SDSS \texttt{photo} classifications (to compare with the SDSS model), and
 show ROC curves for each model applied to this subset of sources
-(\yutaro{NNN} total) in Figure~\ref{fig:roc_sdss}. The FoM for the PS1,
+(\NC{3,592,940} total \NC{we also excluded QSOs with $z<1$ and galaxies 
+with $z<10^{-4}$ from the SDSS training set}) 
+in Figure~\ref{fig:roc_sdss}. The FoM for the PS1,
 simple, and RF models is higher as tested by SDSS spectroscopic sources
 because the SDSS training set contains brighter, higher SNR (and hence
 easier to classify) sources. As before, we find that the FoM for the RF
@@ -913,7 +926,7 @@ is why these curves cross.
 \begin{figure*}[t]
  \centering
   \includegraphics[width=6.5in
-%  ,bb = 0 0 900 360
+  %,bb = 0 0 576 864
   ]{./Figures/SDSS_acc_mag.pdf}
   \caption{
   Prediction accuracy of the SDSS photo model and the ML model 
