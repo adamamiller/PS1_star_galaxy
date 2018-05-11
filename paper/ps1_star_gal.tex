@@ -710,7 +710,7 @@ We assess the relative performance of the RF model by comparing it to both
 the PS1 and simple models. To do so, we select the subset of sources from
 the \textit{HST} training set that have $\mathrm{det}_{i_\mathrm{PS1}} = 1$
 (the PS1 model cannot classify sources that are not detected in the
-$i_\mathrm{PS1}$ band), which results in \yutaro{NNN} sources.
+$i_\mathrm{PS1}$ band), which results in 40,098 sources.
 
 Figure~\ref{fig:cvroc_hst} shows that the RF model and simple model provide
 substantial improvements over the PS1 model, with $\sim$10,000\% and
@@ -737,20 +737,32 @@ simple model produces much higher TPR at low FPR than the PS1 model, which
 eliminates any information about the SNR.
 
 Summary statistics showing the superior performance of the RF model relative
-to the simple and PS1 models are presented in Table~\ref{}. [\yutaro{We
-should maybe include a table with the FoM+threshold, accuracy, ROC AUC for
-each of these models. What do you think?}] These statistics include the FoM,
-the integrated area under the ROC curve (ROC AUC), and the overall accuracy
-of the 3 models as evaluted on the subset of \textit{HST} training set
-sources with $i_\mathrm{PS1}$ detections. We use 10-fold CV to measure the
-summary statistics, with identical folds for each model. Strictly speaking,
-this CV procedure is only needed for the RF model, which needs to be
-re-trained for every fold, but testing the simple and PS1 models on the
-individual folds provides an estimate in the scatter of the final reported
-metrics. From Table~\ref{} it is clear that the RF model greatly outperforms
+to the simple and PS1 models are presented in Table~\ref{table:hst_cv}.
+These statistics include the FoM, the integrated area under the ROC curve
+(ROC AUC), and the overall accuracy of the 3 models as evaluted on the
+subset of \textit{HST} training set sources with $i_\mathrm{PS1}$
+detections. We use 10-fold CV to measure the summary statistics, with
+identical folds for each model. Strictly speaking, this CV procedure is only
+needed for the RF model, which needs to be re-trained for every fold, but
+testing the simple and PS1 models on the individual folds provides an
+estimate in the scatter of the final reported metrics. From
+Table~\ref{table:hst_cv} it is clear that the RF model greatly outperforms
 the simple and PS1 models.
 
 
+\begin{deluxetable}{cccc}
+    \tablecolumns{4} 
+    \tablewidth{0pt} 
+    \tablecaption{ CV Results for \textit{HST} Training Set \label{table:hst_cv}}
+    \tablehead{ 
+    \colhead{model} & \colhead{FoM} & \colhead{Accuracy} & \colhead{ROC AUC}
+    }
+    \startdata
+    RF & \textbf{0.708} $\pm$ 0.037 & \textbf{0.932} $\pm$ 0.003 & \textbf{0.973} $\pm$ 0.002 \\
+    simple & 0.657 $\pm$ 0.020 & 0.916 $\pm$ 0.003 & 0.937 $\pm$ 0.004 \\
+    PS1 & 0.007 $\pm$ 0.003 & 0.784 $\pm$ 0.006 & 0.851 $\pm$ 0.006 \\
+    \enddata
+\end{deluxetable}
 
 %%% fig:cvroc_hst %%%
 \begin{figure}[t]
@@ -902,7 +914,7 @@ is why these curves cross.
  \centering
   \includegraphics[width=6.5in
 %  ,bb = 0 0 900 360
-  ]{./Figures/Accuracy_SDSS_ML_model.pdf}
+  ]{./Figures/SDSS_acc_mag.pdf}
   \caption{
   Prediction accuracy of the SDSS photo model and the ML model 
   as a function of \texttt{whiteKronmag} for PS1 sources cross-matched against the SDSS spectroscopic catalog. 
