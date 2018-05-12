@@ -424,12 +424,19 @@ stack images.}
 
 \begin{figure*}[htb]
  \centering
-  \includegraphics[width=7.2in
-  %,bb = 0 0 1152 360
-  ]{./Figures/ColorMagDiagram.pdf}
-  \caption{
-  PS1 color-magnitude diagrams for \textit{left}: $10^6$ randomly selected sources, \textit{center}: the \textit{HST} training set, and \textit{right}: the SDSS training set. The primary panels show a two-dimensional (2D) Gaussian kernel density estimate (KDE) of the probability density function (PDF) of each subset of sources in the $r_\mathrm{PS1}$--$g_\mathrm{PS1} - r_\mathrm{PS1}$ plane. The shown contour levels extend from 0.9 to 0.1 in 0.1 intervals. To the top and right of the primary panels are marginalized 1D KDEs of the PDF for the $g_\mathrm{PS1} - r_\mathrm{PS1}$ color and $r_\mathrm{PS1}$ brightness, respectively. Kron aperture measurements from the \textit{StackObjectThin} table are used to estimate each of the PDFs. \yutaro{Is this last sentence correct?: Yes. }
-  }
+  \includegraphics[width=7.2in]{./Figures/ColorMagDiagram.pdf}
+  %
+  \caption{ PS1 color-magnitude diagrams for \textit{left}: $10^6$ randomly
+  selected sources, \textit{center}: the \textit{HST} training set, and
+  \textit{right}: the SDSS training set. The primary panels show a
+  two-dimensional (2D) Gaussian kernel density estimate (KDE) of the
+  probability density function (PDF) of each subset of sources in the
+  $r_\mathrm{PS1}$--$g_\mathrm{PS1} - r_\mathrm{PS1}$ plane. The shown
+  contour levels extend from 0.9 to 0.1 in 0.1 intervals. To the top and
+  right of the primary panels are marginalized 1D KDEs of the PDF for the
+  $g_\mathrm{PS1} - r_\mathrm{PS1}$ color and $r_\mathrm{PS1}$ brightness,
+  respectively. Kron aperture measurements from the \textit{StackObjectThin}
+  table are used to estimate each of the PDFs. }
   %
   \label{fig:cmd}
 \end{figure*}
@@ -695,12 +702,19 @@ capable of producing low-variance, low-bias predictions. We utilize the
 
 \subsubsection{Feature Selection}
 
-While the RF algorithm is relatively insensitive to correlated and/or weak/uninformative features (e.g., \citealt{Richards12a}), we nevertheless investigate if removing features from our feature set improves the model performance.\footnote{For example, we find a strong correlation between \texttt{whiteExtNSigma} and \texttt{whitepsfLikelihood}, $r = 0.846448$, which may harm the final model classification. \yutaro{Is this the Pearson correlation coefficient? We should give an exact number here. : Y
-es, this value is the Pearson correlation coefficient. 
-I had forgotten removing sources with \texttt{nDetections=0} in the previous version, 
-so the value is changed slightly.}}
- We do this via forward and backward feature selection (\yutaro{there is a good reference for this - check my 2015 paper if you haven't read it: I read it. Thank you!}). Forward and backward feature selection involve the iterative addition or removal of features from the model, respectively. Like \citet{Richards12a}, we rank order the features for either addition or subtraction based on their RF-determined importance \citep{Breiman02}.
-In either case, we find that removing features does not improve the CV FoM, and therefore include all 11 features from \S\ref{sec:model_features} the final RF model.
+While the RF algorithm is relatively insensitive to correlated and/or
+weak/uninformative features (e.g., \citealt{Richards12a}), we nevertheless
+investigate if removing features from our feature set improves the model
+performance.\footnote{For example, we find a strong correlation between
+\texttt{whiteExtNSigma} and \texttt{whitepsfLikelihood} (Pearson correlation
+coefficient $r = 0.85$), which can potentially lead to overfitting.} We do
+this via forward and backward feature selection \citep{Guyon03}. Forward and
+backward feature selection involve the iterative addition or removal of
+features from the model, respectively. Like \citet{Richards12a}, we rank
+order the features for either addition or subtraction based on their
+RF-determined importance \citep{Breiman02}. In either case, we find that
+removing features does not improve the CV FoM, and therefore include all 11
+features from \S\ref{sec:model_features} the final RF model.
 
 \subsubsection{Optimizing the Model Tuning Parameters}
 
@@ -720,27 +734,24 @@ $i_\mathrm{PS1}$ band), which results in 40,098 sources.
 
 Figure~\ref{fig:cvroc_hst} shows that the RF model and simple model provide
 substantial improvements over the PS1 model, with $\sim$10,000\% and
-$\sim$9,200\% respective increases in the FoM relative to the PS1 model.
-\yutaro{check these numbers after checking ROC procedure} We additionally
-show Receiver Operating Characteristic (ROC) curves for the 3 models in
-Figure~\ref{fig:cvroc_hst}. ROC curves show how the true positive rate
-(TPR)\footnote{$\mathrm{TPR} = \mathrm{TP}/(\mathrm{TP} + \mathrm{FP})$,
-where TP is the total number of true positive classifications and FP is the
-number of false positives.} and false positive rate
+$\sim$9,200\% respective increases in the FoM relative to the PS1 model. We
+additionally show Receiver Operating Characteristic (ROC) curves for the 3
+models in Figure~\ref{fig:cvroc_hst}. ROC curves show how the true positive
+rate (TPR)\footnote{$\mathrm{TPR} = \mathrm{TP}/(\mathrm{TP} +
+\mathrm{FP})$, where TP is the total number of true positive classifications
+and FP is the number of false positives.} and false positive rate
 (FPR)\footnote{$\mathrm{FPR} = \mathrm{FP}/(\mathrm{FP} + \mathrm{TN})$,
 where TN is the number of true negatives.} vary as a function of
 classification threshold. As a reminder, stars are considered the positive
 class in this study. To construct ROC curves for the simple and PS1 models
 we vary the classification thresholds from $\mathrm{whitePSFKronDist} =
-\yutaro{4.24524\times 10^{-3}}$ to \yutaro{$-16.23348\times10^{-3}$} and
-$\mathtt{iPSFMag} - \mathtt{iKronMag} =
-\yutaro{5.09913363}\;\mathrm{mag}$ to
-$\yutaro{-2.81103881}\;\mathrm{mag}$, respectively.
-Figure~\ref{fig:cvroc_hst} highlights the strength of the simple model
-approach: by using a metric that essentially captures both the difference
-between the PSF and Kron-aperture measurements \textit{and} the SNR, the
-simple model produces much higher TPR at low FPR than the PS1 model, which
-eliminates any information about the SNR.
+4.24\times 10^{-3}$ to $-16.23\times10^{-3}$ and $\mathtt{iPSFMag} -
+\mathtt{iKronMag} = 5.10\;\mathrm{mag}$ to $-2.81\;\mathrm{mag}$,
+respectively. Figure~\ref{fig:cvroc_hst} highlights the strength of the
+simple model approach: by using a metric that essentially captures both the
+difference between the PSF and Kron-aperture measurements \textit{and} the
+SNR, the simple model produces much higher TPR at low FPR than the PS1
+model, which eliminates any information about the SNR.
 
 Summary statistics showing the superior performance of the RF model relative
 to the simple and PS1 models are presented in Table~\ref{table:hst_cv}.
@@ -865,22 +876,27 @@ that the RF model uses 10 additional features beyond
 
 While CV on the \textit{HST} training set shows that the RF models
 outperforms the alternatives, here, we test each of the previous models with
-the SDSS training set, which provides an independent set of $\sim$3.5$\times
-10^6$ (\NC{3,834,627?}) sources with high-confidence labels. Additionally, the use of SDSS
-spectra allows us to compare our new models to the classifications from the
-SDSS \texttt{photo} pipeline, hereafter the SDSS model, which soundly
-outperformed the PTF RF star--galaxy models \citep{Miller17}. We create an
-ROC curve for the SDSS model by thresholding on the ratio of PSF flux to
-\texttt{cmodel} measured in the SDSS images (see \citealt{Miller17} for more
-details).
+the SDSS training set, which provides an independent set of $\sim$3.8$\times
+10^6$ (\yutaro{In Sec 2.2 we say 3,822,297, but here you've added 3,834,627.
+Do you know which of these is correct?}) sources with high-confidence
+labels. Additionally, the use of SDSS spectra allows us to compare our new
+models to the classifications from the SDSS \texttt{photo} pipeline,
+hereafter the SDSS model, which soundly outperformed the PTF RF star--galaxy
+models \citep{Miller17}. We create an ROC curve for the SDSS model by
+thresholding on the ratio of PSF flux to \texttt{cmodel} measured in the
+SDSS images (see \citealt{Miller17} for more details).
 
-To compare the 4 models, we select the subset of SDSS training set sources
-that have $i_\mathrm{PS1}$ detections (to compare with the PS1 model) and
-SDSS \texttt{photo} classifications (to compare with the SDSS model), and
-show ROC curves for each model applied to this subset of sources
-(\NC{3,592,940} total \NC{we also excluded QSOs with $z<1$ and galaxies 
-with $z<10^{-4}$ from the SDSS training set}) 
-in Figure~\ref{fig:roc_sdss}. The FoM for the PS1,
+To compare the 4 models, we evaluate the performance of each model on the
+subset of SDSS training set sources that have $i_\mathrm{PS1}$ detections
+(to compare with the PS1 model) and SDSS \texttt{photo} classifications (to
+compare with the SDSS model). We further exclude QSOs with $z < 1$ (QSOs are
+typically considered point sources but low-$z$ QSOs can have resolved host
+galaxies; see \citealt{Miller17}, and galaxies with $z < 10^{-4}$, which are
+likely spurious classifications. In total, this subsample (hereafter the
+SDSS test set) includes 3,592,940 sources from the SDSS training set.
+
+ROC curves for RF, simple, PS1, and SDSS models, as measured by the SDSS
+test set, are shown in Figure~\ref{fig:roc_sdss}. The FoM for the PS1,
 simple, and RF models is higher as tested by SDSS spectroscopic sources
 because the SDSS training set contains brighter, higher SNR (and hence
 easier to classify) sources. As before, we find that the FoM for the RF
@@ -891,6 +907,8 @@ that there may be regimes where the SDSS \texttt{photo} classifications are
 superior to the RF model. Below, we argue that a bias in the SDSS training
 set is amplified by a bias in the SDSS \texttt{photo} classification, which
 is why these curves cross.
+
+\yutaro{I think we should put together a similar table to Table 1 for the SDSS stuff}
 
 % Although the data set has the selection bias as mentioned above and thus the
 % distribution of stars and galaxies as a function of brightness is totally
@@ -925,31 +943,44 @@ is why these curves cross.
 %%% fig:acc_sdss %%%
 \begin{figure*}[t]
  \centering
-  \includegraphics[width=6.5in
-  %,bb = 0 0 576 864
-  ]{./Figures/SDSS_acc_mag.pdf}
-  \caption{
-  Prediction accuracy of the SDSS photo model and the ML model 
-  as a function of \texttt{whiteKronmag} for PS1 sources cross-matched against the SDSS spectroscopic catalog. 
-  In the left panel, the green filled square and the green filled triangle 
-  show the prediction accuracy of the SDSS photo model for galaxies and stars, respectively, 
-  and the black filled square and the black filled triangle show that of the ML model for galaxies and stars, respectively. 
-  Accuracies are calculated in each 0.5 mag bin. 
-  The KDE of the normalized PDF of stars and galaxies 
-  in the PS1-SDSS cross-matched catalog is also shown in red and green, respectively (same manner as Fig. \ref{fig:cvacc_hst}). 
-  In the right panel, the overall accuracy of the SDSS photo model and the ML model 
-  as a function of \texttt{whiteKronMag} is shown by filled green circle and filled black circle, respectively. 
-  The accuracy in each bin is calculated for stars and galaxies picked up 
-  from PS1-SDSS cross-matched catalog 
-  so that the ratio the number of stars and galaxies in each bin is 
-  same with that in the PS1-HST cross-matched catalog. 
-  The KDE of PDF of stars and galaxies in PS1-HST cross-matched catalog is shown in red and green, respectively. 
-  } 
+  \includegraphics[width=6in]{./Figures/SDSS_acc_mag.pdf}
+  %
+  \caption{ Prediction accuracy of the SDSS photo model and the ML model as
+  a function of \texttt{whiteKronmag} for PS1 sources cross-matched against
+  the SDSS spectroscopic catalog. In the left panel, the green filled square
+  and the green filled triangle show the prediction accuracy of the SDSS
+  photo model for galaxies and stars, respectively, and the black filled
+  square and the black filled triangle show that of the ML model for
+  galaxies and stars, respectively. Accuracies are calculated in each 0.5
+  mag bin. The KDE of the normalized PDF of stars and galaxies in the
+  PS1-SDSS cross-matched catalog is also shown in red and green,
+  respectively (same manner as Fig. \ref{fig:cvacc_hst}). In the right
+  panel, the overall accuracy of the SDSS photo model and the ML model as a
+  function of \texttt{whiteKronMag} is shown by filled green circle and
+  filled black circle, respectively. The accuracy in each bin is calculated
+  for stars and galaxies picked up from PS1-SDSS cross-matched catalog so
+  that the ratio the number of stars and galaxies in each bin is same with
+  that in the PS1-HST cross-matched catalog. The KDE of PDF of stars and
+  galaxies in PS1-HST cross-matched catalog is shown in red and green,
+  respectively. }
   %
   \label{fig:acc_sdss}
 \end{figure*}
 %%%%%%%%%%%%%
 
+The classification accuracy for each of the 4 models, as evaluated on the
+SDSS test set, is shown in the top panel of Figure~\ref{fig:roc_sdss}. The
+PS1 model does a poor job of classifying sources in the SDSS test set. The
+RF, simple, and SDSS models all provide near-perfect ($\ge 97.5$\% accuracy)
+down to \texttt{whiteKronMag} $\approx 20\,\mathrm{mag}$. For sources with
+$\mathtt{whiteKronMag} > 21\,\mathrm{mag}$, the SDSS model provides far more
+accurate classifications than the RF and simple models. In this faint
+regime, the SDSS test set is dominated by stars, as shown by the PDFs in the
+same panel of Figure~\ref{fig:roc_sdss}. This is counter to what is observed
+in nature (at high galactic latitudes), as galaxy number counts exceed those
+of stars starting for $r \gtrsim 20\,\mathrm{mag}$, with the number of
+galaxies (e.g., \citealt{Yasuda01}). Thus, the SDSS test set is biased,
+because the faintest sources they have observed are distant QSOs. \todo{fix this last sentence}
 
 \NC{In the left panel of Figure \ref{fig:roc_sdss}, we show the prediction accuracy of the SDSS photo model 
 and the ML model for galaxies and stars separately. 
