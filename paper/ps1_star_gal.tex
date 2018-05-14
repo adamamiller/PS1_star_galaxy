@@ -980,8 +980,9 @@ Figure~\ref{fig:roc_sdss}). This is counter to what is observed in nature
 (at high galactic latitudes), as galaxy number counts exceed those of stars
 around $r \gtrsim 20\,\mathrm{mag}$ (e.g., \citealt{Yasuda01,Shanks15}).
 This bias in the SDSS test is due to the SDSS targeting proclivity for
-luminous red galaxies at $z \approx 0.5$ (e.g., \citealt{Eisenstein01}) and
-faint $z \approx 2.7$ QSOs (e.g., \citealt{Ross12}).
+luminous red galaxies (LRGs) at $z \approx 0.5$ (e.g.,
+\citealt{Eisenstein01}) and faint $z \approx 2.7$ QSOs (e.g.,
+\citealt{Ross12}).
 
 In addition to this bias in the SDSS test set, the SDSS (and PS1) model are
 biased towards classifying faint galaxies as stars. This is due to the hard
@@ -1011,34 +1012,36 @@ faint end, explain why the accuracy curves for the SDSS (and PS1) model
 outperform the RF (and simple) model (and also why their ROC curves cross in
 Figure~\ref{fig:roc_sdss}).
 
+The bottom panel of Figure~\ref{fig:acc_sdss} shows that after correcting
+for the number counts bias in the SDSS test set, the RF and simple models
+greatly outperform the SDSS and PS1 models. We correct for the number count
+bias via bootstrap resampling, whereby we select a subset of stars and
+galaxies from the SDSS test set to match the ratio of stars to galaxies in
+the \textit{HST} training set. The \textit{HST} training set, which is
+selected photometrically, should serve as a far better approximation for the
+relative number counts of stars and galaxies for high-Galactic latitude
+fields than the SDSS test set. The bootstrap occurs in bins of width
+0.5\,mag from \texttt{whiteKronmag} = 15\,mag to 23.5\,mag, and we select
+100 bootstrap samples within each bin. In each bin the size of the bootstrap
+sample is set by the underrepresented class within the SDSS test set. For
+example, if the \textit{HST} training set has a star--galaxy number ratio of
+0.6 and in the same bin the SDSS test set has 1000 stars and 4000 galaxies,
+then 1000 stars and 1667 galaxies will be selected in each bootstrap sample.
+Similarly, for a star--galaxy number ratio of 0.25 in a bin with 800 stars
+and 1000 galaxies, then 250 stars and 1000 galaxies will be selected.
 
-\NC{In the left panel of Figure \ref{fig:roc_sdss}, we show the prediction accuracy of the SDSS photo model 
-and the ML model for galaxies and stars separately. 
-One can see that an unusual systematic whereby a large fraction of stars with $\mathtt{whiteKronMag} \sim 20$ 
-were erroneously classified as galaxies by both of models. 
-The reason of it is discussed by \cite{Miller17}; 
-red stars blended with fainter sources would be classified to be galaxies. 
-Interestingly, for the SDSS photo model, the accuracy for galaxies is rapidly decreasing from \texttt{whiteKronMag}, 
-while that for stars stays above $\sim 0.9$. 
-It means the SDSS photo model is optimized to separate stars and galaxies in the SDSS spectroscopic catalog, 
-namely, the model classifies most of faint sources as stars 
-since the number of stars overwhelms that of galaxies from $\sim 21$ mag to the faint end in this catalog. 
-
-For evaluating the performance of the SDSS photo model and the ML model 
-for the star/galaxy population similar to the real universe, 
-we calculate the prediction accuracy of each model in a different way; 
-we pick up sources from PS1-SDSS catalog 
-so that the ratio of the number of stars and to the number of galaxies 
-is same as that in PS1-HST catalog, and then calculate the prediction accuracy of each model in each 0.5 mag bin. 
-The result is shown in the right panel of Figure \ref{fig:acc_sdss}. 
-The prediction accuracies shows that the performance of each model is similar 
-down to $\mathtt{whiteKronMag} \sim20.5$, 
-while the performance of the SDSS photo model quickly degrades for fainter sources. 
-This is to be expected based on the poor performance for faint galaxies of the SDSS photo model; 
-the PS1-HST catalog (and also the real universe) contains much larger number of faint galaxies than faint stars. 
-The final ML model, which is optimized to classify stars and galaxies following this population, 
-will provide the most accurate classification for sources in high-latitude sky. 
-} 
+Correcting for the number counts bias in the SDSS test set reveals some
+interesting trends: as was the case prior to correction, the RF, simple, and
+SDSS models perform similarly well for bright (\texttt{whiteKronMag}
+$\lesssim 20\,\mathrm{mag}$) sources. However, for fainter sources the RF
+and simple models significantly outperform the SDSS model. The bottom panel
+of Figure~\ref{fig:acc_sdss} also shows a kink at \texttt{whiteKronMag}
+$\approx 19.75\,\mathrm{mag}$. As first explained in \citet{Miller17}, this
+kink is due to blended, faint red stars that were targeted as candidate
+LRGs. Thus, spectra show these sources to be stellar, while they appear
+blended in imaging data. Finally, the bias correction shows that the PS1
+model does not perform well in any brightness regime when compared to the
+other models considered here.
 
 % \section{Discussion}
 
