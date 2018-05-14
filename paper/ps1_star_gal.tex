@@ -941,28 +941,38 @@ is why these curves cross.
 % respectively \citep{Chambers16}.
 
 %%% fig:acc_sdss %%%
-\begin{figure*}[t]
+\begin{figure*}[htb]
  \centering
-  \includegraphics[width=5.5in]{./Figures/SDSS_acc_mag.pdf}
+  \includegraphics[width=5.2in]{./Figures/SDSS_acc_mag.pdf}
   %
-  \caption{ Prediction accuracy of the SDSS photo model and the ML model as
-  a function of \texttt{whiteKronmag} for PS1 sources cross-matched against
-  the SDSS spectroscopic catalog. In the left panel, the green filled square
-  and the green filled triangle show the prediction accuracy of the SDSS
-  photo model for galaxies and stars, respectively, and the black filled
-  square and the black filled triangle show that of the ML model for
-  galaxies and stars, respectively. Accuracies are calculated in each 0.5
-  mag bin. The KDE of the normalized PDF of stars and galaxies in the
-  PS1-SDSS cross-matched catalog is also shown in red and green,
-  respectively (same manner as Fig. \ref{fig:cvacc_hst}). In the right
-  panel, the overall accuracy of the SDSS photo model and the ML model as a
-  function of \texttt{whiteKronMag} is shown by filled green circle and
-  filled black circle, respectively. The accuracy in each bin is calculated
-  for stars and galaxies picked up from PS1-SDSS cross-matched catalog so
-  that the ratio the number of stars and galaxies in each bin is same with
-  that in the PS1-HST cross-matched catalog. The KDE of PDF of stars and
-  galaxies in PS1-HST cross-matched catalog is shown in red and green,
-  respectively. }
+  \caption{ Model accuracy for the RF, simple, SDSS, and PS1 models as a
+  function of \texttt{whiteKronMag} evaluated on the SDSS test set. Accuracy
+  curves for the RF, simple, SDSS, and PS1 models are shown in purple,
+  green, slate grey, and orange, respectively. The bin widths are 0.5\,mag,
+  and the error bars represent the central 68\% interval from bootstrap
+  resampling.
+  %
+  \textit{Top}: Model accuracy curves for the SDSS test set. This panel also
+  shows a Gaussian KDE of the PDF for the SDSS test set, as well as the
+  stars and galaxies in the SDSS test set in the shaded grey, red, and green
+  regions, respectively. The amplitude of the star and galaxy PDFs have been
+  normalized by their relative ratio compared to the full subset.
+  %
+  \textit{Middle}: Accuracy curves for individual stars and galaxies,
+  equivalent to the TPR and TNR, respectively, in the SDSS test set as
+  classified by the RF and SDSS models (the simple and PS1 models are not
+  shown for clarity). The same PDFs as the top panel are shown. The SDSS
+  model classifies faint stars correctly, but has poor performance on faint
+  galaxies, while the opposite is true for the RF model. 
+  %
+  \textit{Bottom}: The accuracy curves for all 4 models following the
+  bootstrap procedure (described in the text) to correct for the SDSS test
+  set bias whereby stars outnumber galaxies at $\mathtt{whiteKronMag}
+  \gtrsim 20.5\,\mathrm{mag}$. The PDFs shown in this panel are derived from
+  KDEs of the \textit{HST} training set (as in Figure~\ref{fig:cvacc_hst}).
+  After correcting for the SDSS test set number count bias, the RF and
+  simple models produce more accurate classifications of faint sources than
+  the SDSS and PS1 models.}
   %
   \label{fig:acc_sdss}
 \end{figure*}
@@ -1042,6 +1052,7 @@ LRGs. Thus, spectra show these sources to be stellar, while they appear
 blended in imaging data. Finally, the bias correction shows that the PS1
 model does not perform well in any brightness regime when compared to the
 other models considered here.
+\todo{conclude that RF model is clearly best option for classifying PS1 objects}
 
 % \section{Discussion}
 
