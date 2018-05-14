@@ -943,7 +943,7 @@ is why these curves cross.
 %%% fig:acc_sdss %%%
 \begin{figure*}[t]
  \centering
-  \includegraphics[width=6in]{./Figures/SDSS_acc_mag.pdf}
+  \includegraphics[width=5.5in]{./Figures/SDSS_acc_mag.pdf}
   %
   \caption{ Prediction accuracy of the SDSS photo model and the ML model as
   a function of \texttt{whiteKronmag} for PS1 sources cross-matched against
@@ -975,12 +975,42 @@ RF, simple, and SDSS models all provide near-perfect ($\ge 97.5$\% accuracy)
 down to \texttt{whiteKronMag} $\approx 20\,\mathrm{mag}$. For sources with
 $\mathtt{whiteKronMag} > 21\,\mathrm{mag}$, the SDSS model provides far more
 accurate classifications than the RF and simple models. In this faint
-regime, the SDSS test set is dominated by stars, as shown by the PDFs in the
-same panel of Figure~\ref{fig:roc_sdss}. This is counter to what is observed
-in nature (at high galactic latitudes), as galaxy number counts exceed those
-of stars starting for $r \gtrsim 20\,\mathrm{mag}$, with the number of
-galaxies (e.g., \citealt{Yasuda01}). Thus, the SDSS test set is biased,
-because the faintest sources they have observed are distant QSOs. \todo{fix this last sentence}
+regime, the SDSS test set is dominated by stars (top panel,
+Figure~\ref{fig:roc_sdss}). This is counter to what is observed in nature
+(at high galactic latitudes), as galaxy number counts exceed those of stars
+around $r \gtrsim 20\,\mathrm{mag}$ (e.g., \citealt{Yasuda01,Shanks15}).
+This bias in the SDSS test is due to the SDSS targeting proclivity for
+luminous red galaxies at $z \approx 0.5$ (e.g., \citealt{Eisenstein01}) and
+faint $z \approx 2.7$ QSOs (e.g., \citealt{Ross12}).
+
+In addition to this bias in the SDSS test set, the SDSS (and PS1) model are
+biased towards classifying faint galaxies as stars. This is due to the hard
+cut on a single value of the PSF to \texttt{cModel} (or \texttt{Kron} for
+PS1) flux ratio. The reason for this can easily be seen in the top left
+panel of Figure~\ref{fig:features}, where a classification cut at
+$\mathtt{whitePSFKronRatio} = 0.875$ (equivalent to the SDSS cut) correctly
+identifies nearly all of the stars, but does a particularly bad job with the
+faintest galaxies. At low SNR the large scatter in flux ratio measurements
+results in many galaxy misclassifications.
+
+We show further evidence for this classification bias in the middle panel of
+Figure~\ref{fig:acc_sdss}, which shows the accuracy with which individual
+galaxies and stars in the SDSS test set are classified by the RF and SDSS
+models\footnote{This is equivalent to showing the true negative rate (TNR =
+TN/[TN + FP]) and TPR, respectively.} (curves for the simple and PS1 models
+show similar trends as the RF and SDSS models, respectively, but are omitted
+for clarity). For faint ($\mathtt{whitePSFKronRatio} > 21\,\mathrm{mag}$)
+sources, the SDSS model performs well on stars ($\mathrm{TPR} \gtrsim 0.9$)
+and poorly on galaxies ($\mathrm{TNR} \approx 0.5$). The opposite is true
+for the RF model, with $\mathrm{TNR} \gtrsim 0.8$ and a TPR that declines to
+$\sim$0.2 for the faintest SDSS test set sources. Thus, for faint sources
+the RF model is slightly biased towards galaxy classifications, however,
+this bias is in line with what is observed in nature. These classification
+biases, taken together with the SDSS test set bias towards stars at the
+faint end, explain why the accuracy curves for the SDSS (and PS1) model
+outperform the RF (and simple) model (and also why their ROC curves cross in
+Figure~\ref{fig:roc_sdss}).
+
 
 \NC{In the left panel of Figure \ref{fig:roc_sdss}, we show the prediction accuracy of the SDSS photo model 
 and the ML model for galaxies and stars separately. 
