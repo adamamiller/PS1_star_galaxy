@@ -750,7 +750,7 @@ SNR, the simple model produces much higher TPR at low FPR than the PS1
 model, which eliminates any information about the SNR.
 
 Summary statistics showing the superior performance of the RF model relative
-to the simple and PS1 models are presented in Table~\ref{table:hst_cv}.
+to the simple and PS1 models are presented in Table~\ref{tbl:hst_cv}.
 These statistics include the FoM, the integrated area under the ROC curve
 (ROC AUC), and the overall accuracy of the 3 models as evaluted on the
 subset of \textit{HST} training set sources with $i_\mathrm{PS1}$
@@ -759,14 +759,14 @@ identical folds for each model. Strictly speaking, this CV procedure is only
 needed for the RF model, which needs to be re-trained for every fold, but
 testing the simple and PS1 models on the individual folds provides an
 estimate in the scatter of the final reported metrics. From
-Table~\ref{table:hst_cv} it is clear that the RF model greatly outperforms
+Table~\ref{tbl:hst_cv} it is clear that the RF model greatly outperforms
 the simple and PS1 models.
 
 
 \begin{deluxetable}{cccc}
     \tablecolumns{4} 
     \tablewidth{0pt} 
-    \tablecaption{ CV Results for \textit{HST} Training Set \label{table:hst_cv}}
+    \tablecaption{ CV Results for \textit{HST} Training Set \label{tbl:hst_cv}}
     \tablehead{ 
     \colhead{model} & \colhead{FoM} & \colhead{Accuracy} & \colhead{ROC AUC}
     }
@@ -1038,10 +1038,11 @@ a star--galaxy number ratio of 0.25 in a bin with 800 stars and 1000
 galaxies, then 250 stars and 1000 galaxies will be selected.
 
 Correcting for the number counts bias in the SDSS test set reveals some
-interesting trends: as was the case prior to correction all 4 models perform similarly well for bright (\texttt{whiteKronMag}
-$\lesssim 20\,\mathrm{mag}$) sources. However, for fainter sources the RF
-and simple models significantly outperform the SDSS and PS1 models. The bottom panel
-of Figure~\ref{fig:acc_sdss} also shows a kink at \texttt{whiteKronMag}
+interesting trends: as was the case prior to correction all 4 models perform
+similarly well for bright (\texttt{whiteKronMag} $\lesssim
+20\,\mathrm{mag}$) sources. However, for fainter sources the RF and simple
+models significantly outperform the SDSS and PS1 models. The bottom panel of
+Figure~\ref{fig:acc_sdss} also shows a kink at \texttt{whiteKronMag}
 $\approx 19.75\,\mathrm{mag}$. As first explained in \citet{Miller17}, this
 kink is due to blended, faint red stars that were targeted as candidate
 LRGs. Thus, spectra show these sources to be stellar, while they appear
@@ -1056,35 +1057,59 @@ accuracy.
 
 \section{The PS1 Catalog Deployed: Integration in ZTF}
 
-\todo{provide a description for how the catalog is used by ZTF in real-time ops}
+While the PS1 RF model has been developed to build a general catalog
+separating stars and galaxies, it has been specifically deployed in the
+Zwicky Transient Facility\footnote{\url{http://www.ztf.caltech.edu/}} (ZTF;
+\citealt{Bellm:18:ZTF, Dekany:18:ZTF}) real-time pipeline
+\citep{Masci:18:ZTF}. Briefly, ZTF is the ongoing next generation Palomar
+time-domain survey, which succeeds PTF \citep{Rau09, Law09} and the
+intermediate Palomar Transient Facility (iPTF; \citealt{Kulkarni13}). ZTF,
+with its 47\,deg$^2$ field of view, can scan at a rate $\sim$15$\times$
+faster than PTF/iPTF ($>3{,}750\,\deg^2\,\mathrm{hr}^{-1}$) to a depth of
+$R_\mathrm{ZTF} \approx 20.4$\,mag ($5\sigma$). ZTF will observe the entire
+sky with $\mathrm{Dec.} > -30^\circ$ $\sim$300 times per year, with publicly
+distributed alerts on any newly observed variability released in near real
+time \citep{Patterson:18:ZTF}.
 
-The Zwicky Transient Facility (ZTF; 
-\citealt{Kulkarni12, Bellm14, Smith14, Dekany16, Bellm17})\footnote{\url{http://www.ztf.caltech.edu/}} 
-was started and had the first light at Palomar Observatory in 2017, 
-as the next generation Palomar time-domain survey 
-subsequent to the Palomar Transient Facility (PTF; \citealt{Rau09, Law09}) 
-and the intermediate Palomar Transient Facility (iPTF; \citealt{Kulkarni13}). 
-A dedicated survey of the variable sky by ZTF is ongoing with the new camera 
-utilizing the entire focal plane on 47 deg$^2$ of the Palomar 48-inch Samuel Oschin Schmidt telescope. 
-ZTF is scanning more than 3,750 deg$^2$ an hour to depth $R < 20.4$ mag ($5\sigma$ detection), 
-and will produce a photometric variability catalog with nearly 300 observations each year. 
-A primary motivation for ZTF is the search for fast transients 
-including ``kilonovae'' 
-associated with gravitational waves, 
-the result of binary neutron star mergers 
-(GW170817; {\it e.g.,} \citealt{Abbott17, Cowperthwaite17, Lipunov17, Kasliwal17, Utsumi17, Tanaka17}). 
+An initial, and pressing, question for filtering the ZTF alert stream, is:
+does the newly identified variable have a Galactic or extragalactic origin?
+Hence the need for a star--galaxy model, and in particular, one that is
+deeper than typical ZTF observations (to identify faint stars flaring above
+the ZTF detection limit). While ZTF will address many science objectives
+(e.g., \citealt{Graham:18:ZTF}), a primary motivation is the search for
+kilonovae (KNe), which are fast transients resulting from the merger of
+binary neutron stars. If the proximity and sky location of a KN is
+favorable, these events can be detected via gravitational waves (e.g.,
+GW\,170817, see \citealt{Abbott17} and references therein). The detection of
+KNe, and other fast transients, is plagued by significant foreground
+contamination in the form of stellar flares and/or orbital modulation (e.g.,
+\citealt{Kulkarni06, Berger12, Kasliwal16}). Our PS1 RF model enables the
+systematic removal of faint stars from extragalactic candidate lists, and
+our adopted FoM removes the vast majority of stars while ensuring that
+nearly every galaxy ($\sim$99.5\%) is searched for candidate KNe.
 
-ZTF surveys the sky at a rate that is $\sim15$ times faster than PTF/iPTF. 
-The increase in the amount of astronomical data with a rapidly accelerating pace 
-results in the necessity of automated classification and filtering by machines to investigate objects 
-that we are potentially interested in. 
-To identify fast-transient candidates, including gravitational wave (GW) counterparts especially, 
-astronomers have contended with significant foreground contamination in the form of stellar flares 
-and/or orbital modulation ({\it e.g.,} \citealt{Kulkarni06, Berger12, Kasliwal16}). 
-The systematic removal of faint stars from extragalactic candidate lists 
-enables us to follow-up such exotic sources efficiently under the limitation of time, instrumental, and human resources. 
-The follow-up efficiency will be required more strongly from the beginning of the third observing run of LIGO/VIRGO 
-collaborating with KAGRA in 2019. 
+All newly discovered candidates from the ZTF stream are associated with the
+3 nearest PS1 counterparts within 30\arcsec in the real-time alert packets
+\citep{Masci:18:ZTF}. Counterparts are selected from sources in the PS1
+\textit{MeanObject} table with $\mathit{nDetections} \ge 3$. Thus, to create
+the ZTF-PS1 star--galaxy catalog we selected sources from the
+\textit{StackObjectAttributes} table with $\mathit{nDetections} \ge 3$, and
+merged these classifications with the subset of PS1 \textit{MeanObject}
+sources in the ZTF database. Ultimately, non-unique sources (i.e., if a
+single \textit{ObjID} corresponds to multiple rows with
+\textit{primaryDetection} = 1) are excluded from the classification catalog.
+
+In total, there are \todo{NNN} sources with classifications in the ZTF
+database. A histogram showing the distribution of the final classifications
+is shown in Figure~\ref{fig:ztf_hist}. The thresholds appropriate for
+identifying point-source counterparts to the ZTF candidates are reported in
+Table~\ref{tbl:fpr}. Tuning the star--galaxy classification thresholds to
+optimize follow-up of newly discovered transients is a critical early step
+in the filtering of ZTF candidates (e.g., \citealt{Kasliwal:18:ZTF}).
+\yutaro{are the numbers in this table for nDet $>$ 2 sources only? Also - I
+see $N_{total} = 47k$, but for ZTF specifically we want to report results
+for nDet $>$ 2 sources, since there are no nDet = 1 or 2 in the ZTF
+database.}
 
 
 \section{Conclusions}
