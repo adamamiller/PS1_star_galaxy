@@ -443,7 +443,7 @@ stack images.}
 
 The SDSS spectroscopic catalog classifies everything it observes as either a
 star, galaxy, or quasi-stellar object (QSO). Using a $1\arcsec$ cross-match
-radius, we find 3,822,297 sources with SDSS optical spectra have PS1
+radius, we find 3,834,627 sources with SDSS optical spectra have PS1
 counterparts (hereafter, the SDSS training set). Thus, with an orders of
 magnitude larger training set, and spectroscopic classifications that should
 be pristine and superior to mophological clsasifications, one might expect
@@ -792,11 +792,10 @@ the simple and PS1 models.
   simple, and RF models as tested by the subset of \textit{HST} training set
   sources with $i_\mathrm{PS1}$ detections. The thick, solid orange, blue,
   and black lines show the ROC curves for the PS1, simple, and RF models,
-  respectively. The light, shaded regions bounding these lines show the
-  10-fold CV scatter about the mean model. The inset on the right shows a
-  zoom in around FPR = 0.005, shown as a vertical line, corresponding to the
-  FoM (the PS1 model is not shown in the inset, because it has very low
-  FoM). }
+  respectively. The light, thin lines show the ROC curves for the individual
+  CV folds. The inset on the right shows a zoom in around FPR = 0.005, shown
+  as a dotted vertical line, corresponding to the FoM (the PS1 model is not
+  shown in the inset, because it has very low FoM). }
   %
   \label{fig:cvroc_hst}
 \end{figure}
@@ -825,13 +824,13 @@ the simple and PS1 models.
   on the subset of the \textit{HST} training set sources with
   $i_\mathrm{PS1}$ detections. Accuracy curves for the PS1, simple and RF
   models are shown in orange, blue, and black, respectively. The bin widths
-  are 0.5\,mag, and the error bars represent the range including 68\% of CV
-  accuracies in each bin. \yutaro{I think we should use bootstrap for
-  uncertainties} Additionally, a Gaussian KDE of the PDF for the entire
-  \textit{HST} training set subset, as well as the stars and galaxies in the
-  subset is shown in the shaded grey, red, and green regions, respectively.
-  The amplitude of the star and galaxy PDFs have been normalized by their
-  relative ratio compared to the full subset. }
+  are 0.5\,mag, and the error bars represent the central 68\% interval from
+  bootstrap resampling. \yutaro{how many bootstrap samples did you use, and
+  is it 68\% or 90\% that your're showing?} Additionally, a Gaussian KDE of
+  the PDF for the entire \textit{HST} training set subset, as well as the
+  stars and galaxies in the subset is shown in the shaded grey, red, and
+  green regions, respectively. The amplitude of the star and galaxy PDFs
+  have been normalized by their relative ratio compared to the full subset. }
   %
   \label{fig:cvacc_hst}
 \end{figure}
@@ -857,18 +856,16 @@ that the RF model uses 10 additional features beyond
 %%% fig:roc_sdss %%%
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in
-  %,bb = 0 0 576 360
-  ]{./Figures/ROC_curves.pdf}
-  \caption{
-  ROC curves comparing the relative performance 
-  of the SDSS photo model (green solid line), the PS1 model (orange solid line), 
-  the simple model (blue solid line), and the Ml model (black solid line) 
-  for PS1 sources cross-matched against the SDSS spectroscopic catalog. 
-  The SDSS photometric classifier is shown as a red star on the ROC curve of the SDSS photo model, 
-  due to the binary nature of the SDSS photometric classification. 
-  The inset panel shows ROC curves around the FPR = 0.005 (grey solid line). 
-  }
+  \includegraphics[width=3.35in]{./Figures/ROC_curves.pdf}
+  %
+  \caption{ ROC curves comparing the relative performance of the SDSS
+  (orange dot-dashed line), PS1 (slate grey dashed line), simple (green
+  dotted line), and RF (solid purple) models as tested by the SDSS test set.
+  The inset on the right shows a zoom in around FPR = 0.005, shown as a
+  vertical line, corresponding to the FoM. The red star shows the FPR and
+  TPR if adopting the SDSS \textit{photo} classification cut (rather than
+  using the method developed in \citealt{Miller17}). The RF model delivers
+  the highest FoM.}
   %
   \label{fig:roc_sdss}
 \end{figure}
@@ -877,8 +874,7 @@ that the RF model uses 10 additional features beyond
 While CV on the \textit{HST} training set shows that the RF models
 outperforms the alternatives, here, we test each of the previous models with
 the SDSS training set, which provides an independent set of $\sim$3.8$\times
-10^6$ (\yutaro{In Sec 2.2 we say 3,822,297, but here you've added 3,834,627.
-Do you know which of these is correct?}) sources with high-confidence
+10^6$ sources with high-confidence
 labels. Additionally, the use of SDSS spectra allows us to compare our new
 models to the classifications from the SDSS \texttt{photo} pipeline,
 hereafter the SDSS model, which soundly outperformed the PTF RF star--galaxy
@@ -889,11 +885,13 @@ SDSS images (see \citealt{Miller17} for more details).
 To compare the 4 models, we evaluate the performance of each model on the
 subset of SDSS training set sources that have $i_\mathrm{PS1}$ detections
 (to compare with the PS1 model) and SDSS \texttt{photo} classifications (to
-compare with the SDSS model). We further exclude QSOs with $z < 1$ (QSOs are
-typically considered point sources but low-$z$ QSOs can have resolved host
-galaxies; see \citealt{Miller17}, and galaxies with $z < 10^{-4}$, which are
-likely spurious classifications. In total, this subsample (hereafter the
-SDSS test set) includes 3,592,940 sources from the SDSS training set.
+compare with the SDSS model). We further exclude QSOs with $z < 1$ (=
+133,856 sources; QSOs are typically considered point sources but low-$z$
+QSOs can have resolved host galaxies; see \citealt{Miller17}, and galaxies
+with $z < 10^{-4}$ (= 13261 sources; such low $z$ is only expected in the
+local group meaning most of these classifications are likely spurious). In
+total, this subsample (hereafter the SDSS test set) includes 3,592,940
+sources from the SDSS training set.
 
 ROC curves for RF, simple, PS1, and SDSS models, as measured by the SDSS
 test set, are shown in Figure~\ref{fig:roc_sdss}. The FoM for the PS1,
@@ -943,7 +941,7 @@ is why these curves cross.
 %%% fig:acc_sdss %%%
 \begin{figure*}[htb]
  \centering
-  \includegraphics[width=5.2in]{./Figures/SDSS_acc_mag.pdf}
+  \includegraphics[width=6.2in]{./Figures/SDSS_acc_mag.pdf}
   %
   \caption{ Model accuracy for the RF, simple, SDSS, and PS1 models as a
   function of \texttt{whiteKronMag} evaluated on the SDSS test set. Accuracy
@@ -961,9 +959,10 @@ is why these curves cross.
   \textit{Middle}: Accuracy curves for individual stars and galaxies,
   equivalent to the TPR and TNR, respectively, in the SDSS test set as
   classified by the RF and SDSS models (the simple and PS1 models are not
-  shown for clarity). The same PDFs as the top panel are shown. The SDSS
-  model classifies faint stars correctly, but has poor performance on faint
-  galaxies, while the opposite is true for the RF model. 
+  shown for clarity). Note -- all 3 panels have the same bin centers, though
+  here the markers are slightly offset for clarity. The SDSS model
+  classifies faint stars correctly, but has poor performance on faint
+  galaxies, while the opposite is true for the RF model.
   %
   \textit{Bottom}: The accuracy curves for all 4 models following the
   bootstrap procedure (described in the text) to correct for the SDSS test
@@ -972,7 +971,7 @@ is why these curves cross.
   KDEs of the \textit{HST} training set (as in Figure~\ref{fig:cvacc_hst}).
   After correcting for the SDSS test set number count bias, the RF and
   simple models produce more accurate classifications of faint sources than
-  the SDSS and PS1 models.}
+  the SDSS and PS1 models.} \todo{fix alpha for bottom KDE}
   %
   \label{fig:acc_sdss}
 \end{figure*}
@@ -1049,10 +1048,12 @@ of Figure~\ref{fig:acc_sdss} also shows a kink at \texttt{whiteKronMag}
 $\approx 19.75\,\mathrm{mag}$. As first explained in \citet{Miller17}, this
 kink is due to blended, faint red stars that were targeted as candidate
 LRGs. Thus, spectra show these sources to be stellar, while they appear
-blended in imaging data. Finally, the bias correction shows that the PS1
+blended in imaging data. The bias correction further shows that the PS1
 model does not perform well in any brightness regime when compared to the
-other models considered here.
-\todo{conclude that RF model is clearly best option for classifying PS1 objects}
+other models considered here. Finally, we conclude that for source
+distributions similar to what is observed in nature, the RF model
+outperforms the alternatives discussed here in both the FoM and the overall
+accuracy.
 
 % \section{Discussion}
 
