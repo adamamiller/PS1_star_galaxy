@@ -424,7 +424,9 @@ stack images.}
 
 \begin{figure*}[htb]
  \centering
-  \includegraphics[width=7.2in]{./Figures/ColorMagDiagram.pdf}
+  \includegraphics[width=7.2in
+%  ,bb = 0 0 1152 360
+  ]{./Figures/ColorMagDiagram.pdf}
   %
   \caption{ PS1 color-magnitude diagrams for \textit{left}: $10^6$ randomly
   selected sources, \textit{center}: the \textit{HST} training set, and
@@ -539,7 +541,7 @@ losses from the exclusion of color information.
 \begin{figure*}[htb]
  \centering
   \includegraphics[width=5.75in
-  %,bb = 0 0 864 1296
+%  ,bb = 0 0 864 1296
   ]{./Figures/whiteFeatures.pdf}
   \caption{
   The primary square panels show KDEs of the PDF for each of the ``white
@@ -655,8 +657,8 @@ fluxes for both the simple model and the machine learning model, as noted in
 
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.55in
-  %,bb = 0 0 576 432
+  \includegraphics[width=3.35in
+%  ,bb = 0 0 576 432
   ]{./Figures/whitePSFKronDist.pdf}
   %
   \caption{ The distribution of $\mathtt{whitePSFKronDist}$ values for
@@ -775,9 +777,9 @@ the simple and PS1 models.
     \colhead{model} & \colhead{FoM} & \colhead{Accuracy} & \colhead{ROC AUC}
     }
     \startdata
-    RF & \textbf{0.708} $\pm$ 0.037 & \textbf{0.932} $\pm$ 0.003 & \textbf{0.973} $\pm$ 0.002 \\
+    RF & {\bf 0.707} $\pm$ 0.036 & {\bf 0.932} $\pm$ 0.003 & {\bf 0.973} $\pm$ 0.002 \\
     simple & 0.657 $\pm$ 0.020 & 0.916 $\pm$ 0.003 & 0.937 $\pm$ 0.004 \\
-    PS1 & 0.007 $\pm$ 0.003 & 0.784 $\pm$ 0.006 & 0.851 $\pm$ 0.006 \\
+    PS1 & 0.007 $\pm$ 0.003 & 0.810 $\pm$ 0.006 & 0.851 $\pm$ 0.006 \\
     \enddata
 \end{deluxetable}
 
@@ -785,7 +787,7 @@ the simple and PS1 models.
 \begin{figure}[t]
  \centering
   \includegraphics[width=3.35in
-  %,bb = 0 0 504 360
+%  ,bb = 0 0 504 360
   ]{./Figures/CV_ROC_HST.pdf}
   %
   \caption{ ROC curves comparing the relative performance of the PS1,
@@ -816,8 +818,8 @@ the simple and PS1 models.
 %%% fig:cvacc_hst %%%
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.5in
-  %,bb = 0 0 576 360
+  \includegraphics[width=3.35in
+%  ,bb = 0 0 504 360
   ]{./Figures/CV_Accuracy_HST.pdf}
   %
   \caption{Model accuracy as a function of \texttt{whiteKronMag} evaluated
@@ -856,7 +858,9 @@ that the RF model uses 10 additional features beyond
 %%% fig:roc_sdss %%%
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in]{./Figures/ROC_curves.pdf}
+  \includegraphics[width=3.35in
+%  ,bb = 0 0 504 360
+  ]{./Figures/ROC_curves.pdf}
   %
   \caption{ ROC curves comparing the relative performance of the SDSS
   (orange dot-dashed line), PS1 (slate grey dashed line), simple (green
@@ -941,7 +945,9 @@ is why these curves cross.
 %%% fig:acc_sdss %%%
 \begin{figure*}[htb]
  \centering
-  \includegraphics[width=6.2in]{./Figures/SDSS_acc_mag.pdf}
+  \includegraphics[width=6.2in
+%  ,bb = 0 0 720 864
+  ]{./Figures/SDSS_acc_mag.pdf}
   %
   \caption{ Model accuracy for the RF, simple, SDSS, and PS1 models as a
   function of \texttt{whiteKronMag} evaluated on the SDSS test set. Accuracy
