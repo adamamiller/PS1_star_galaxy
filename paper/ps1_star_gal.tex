@@ -23,7 +23,7 @@
 %%
 %%
 %% using aastex version 6.1
-\documentclass[twocolumn]{aastex62}
+\documentclass[twocolumn, dvipdfmx]{aastex62}
 
 %% The default is a single spaced, 10 point font, single spaced article.
 %% There are 5 other style options available via an optional argument. They
@@ -848,7 +848,7 @@ that the RF model uses 10 additional features beyond
 %%% fig:roc_sdss %%%
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in]{./Figures/ROC_curves.pdf}
+  \includegraphics[width=3.35in]{./Figures/ROC_curves_log.pdf}
   %
   \caption{ ROC curves comparing the relative performance of the SDSS
   (orange dot-dashed line), PS1 (slate grey dashed line), simple (green
@@ -1057,6 +1057,29 @@ accuracy.
 
 \section{The PS1 Catalog Deployed: Integration in ZTF}
 
+%%%%%%%%
+\begin{table*}[htb]
+\begin{center}
+\caption{The true positive ratio and the threshold 
+corresponding to the false positive ratio = 0.005, 0.01, 0.02, 0.05, and 0.1. }
+\label{tbl:fpr}
+\begin{tabular}{lcc|lccccc}
+\hline\hline
+                 Source               & Num. & Acc. & FPR & 0.005 & 0.01 & 0.02 & 0.05 & 0.1 \\ \hline
+\multirow{2}{*}{All sources} & \multirow{2}{*}{47,093} & \multirow{2}{*}{93.1\%} & 
+                                              TPR  & $0.697 \pm 0.008$ &  $0.742 \pm 0.005$ & $0.786 \pm 0.003$ & $0.852 \pm 0.003$ & $0.899 \pm 0.003$  \\
+\multicolumn{1}{l}{}                             & & & Threshold & $0.76 \pm 0.05$ &  $0.65 \pm 0.04$ & $0.53 \pm 0.02$ & $0.36 \pm 0.01$ & $0.24 \pm 0.01$  \\ \hline
+\multirow{2}{*}{$\mathtt{rKornMag} < 21$} & \multirow{2}{*}{13,766} & \multirow{2}{*}{97.8\%} & 
+                                              TPR  & $0.861 \pm 0.062$ &  $0.953 \pm 0.024$ & $0.986 \pm 0.002$ & $0.993 \pm 0.001$ & $0.996 \pm 0.001$ \\
+                                                & & & Threshold & $0.82 \pm 0.17$ &  $0.70 \pm 0.18$ & $0.40 \pm 0.10$ & $0.16 \pm 0.06$ & $0.07 \pm 0.03$   \\ \hline
+\multirow{2}{*}{$\mathtt{rKornMag} < 20$}  & \multirow{2}{*}{6,992}& \multirow{2}{*}{98.8\%} & 
+                                              TPR  & $0.841 \pm 0.075$ &  $0.958 \pm 0.028$ & $0.997 \pm 0.001$ & $0.998 \pm 0.001$ & $0.999 \pm 0.001$  \\
+                                                 & &  & Threshold & $0.90 \pm 0.18$ &  $0.81 \pm 0.24$ & $0.77 \pm 0.26$ & $0.13 \pm 0.08$ & $0.06 \pm 0.04$ \\ \hline
+\end{tabular}
+\end{center}
+\end{table*}
+%%%%%%%%
+
 While the PS1 RF model has been developed to build a general catalog
 separating stars and galaxies, it has been specifically deployed in the
 Zwicky Transient Facility\footnote{\url{http://www.ztf.caltech.edu/}} (ZTF;
@@ -1112,34 +1135,65 @@ for nDet $>$ 2 sources, since there are no nDet = 1 or 2 in the ZTF
 database.}
 
 
-\section{Conclusions}
+\section{Summary and Conclusions}
+\NC{
+We have presented the development of a large and deep catalog 
+of stars and galaxies utilizing PS1 data. 
+The machine learning methodology utilizing the RF algorithm is employed 
+for the construction of the final star/galaxy separation model in this work. 
+We adopted morphological classifications of {\it HST} COSMOS sources 
+crossmatched with PS1 sources as labels 
+to construct the training set for the RF model 
+with considering its exceptionally accurate star/galaxy classification down to $\sim 25$mag 
+along with the similarity of the characteristics of sources in the {\it HST} and the PS1 dataset. 
+For avoiding the potential biases in the final classification 
+due to the biased its targeting algorithms, 
+the SDSS spectroscopic sources crossmatched with PS1 sources was retained 
+as independent test set for assessing the performance of separation models. 
 
-%%%%%%%%
-\begin{table*}
-\begin{center}
-\caption{The true positive ratio and the threshold 
-corresponding to the false positive ratio = 0.005, 0.01, 0.02, 0.05, and 0.1. }
-\label{tbl:fpr}
-\begin{tabular}{lcc|lccccc}
-\hline\hline
-                 Source               & Num. & Acc. & FPR & 0.005 & 0.01 & 0.02 & 0.05 & 0.1 \\ \hline
-\multirow{2}{*}{All sources} & \multirow{2}{*}{47,093} & \multirow{2}{*}{93.1\%} & 
-                                              TPR  & $0.697 \pm 0.008$ &  $0.742 \pm 0.005$ & $0.786 \pm 0.003$ & $0.852 \pm 0.003$ & $0.899 \pm 0.003$  \\
-\multicolumn{1}{l}{}                             & & & Threshold & $0.76 \pm 0.05$ &  $0.65 \pm 0.04$ & $0.53 \pm 0.02$ & $0.36 \pm 0.01$ & $0.24 \pm 0.01$  \\ \hline
-\multirow{2}{*}{$\mathtt{rKornMag} < 21$} & \multirow{2}{*}{13,766} & \multirow{2}{*}{97.8\%} & 
-                                              TPR  & $0.861 \pm 0.062$ &  $0.953 \pm 0.024$ & $0.986 \pm 0.002$ & $0.993 \pm 0.001$ & $0.996 \pm 0.001$ \\
-                                                & & & Threshold & $0.82 \pm 0.17$ &  $0.70 \pm 0.18$ & $0.40 \pm 0.10$ & $0.16 \pm 0.06$ & $0.07 \pm 0.03$   \\ \hline
-\multirow{2}{*}{$\mathtt{rKornMag} < 20$}  & \multirow{2}{*}{6,992}& \multirow{2}{*}{98.8\%} & 
-                                              TPR  & $0.841 \pm 0.075$ &  $0.958 \pm 0.028$ & $0.997 \pm 0.001$ & $0.998 \pm 0.001$ & $0.999 \pm 0.001$  \\
-                                                 & &  & Threshold & $0.90 \pm 0.18$ &  $0.81 \pm 0.24$ & $0.77 \pm 0.26$ & $0.13 \pm 0.08$ & $0.06 \pm 0.04$ \\ \hline
-\end{tabular}
-\end{center}
-\end{table*}
-%%%%%%%%
+We introduce ``white flux'' features, which correspond to a weighted mean of the 
+relevant features across all five filters $grizy_{\mathrm {PS1}}$ in which a source is detected, 
+enable the RF model not only to provide classifications for every source detected by PS1 
+but also to minimize the bias in the training set attributed to reddening. 
+Especially, we defined a new ``white flux'' feature \texttt{whitePSFKronDist}, 
+the orthogonal distance from a line 
+($\mathtt{whitePSFFlux} = 0.91375 \times \mathtt{whiteKronFlux}$) 
+in the $\mathtt{whitePSFFlux} - \mathtt{whiteKronFlux}$ plane for each PS1 source, 
+for constructing a straightforward separation model, the simple model, 
+as a baseline to assess the performance of the RF model. 
+Ultimately, we utilized 11 ``white flux'' features for constructing the final RF model, 
+and the model tuning parameters were optimized via CV on the {\it HST} training set.
 
-The performance of the ML model is summarized in Table \ref{tbl:fpr}
+CV results for {\it HST} dataset showed that the simple model, 
+including information about both the difference between the 
+PSF and Kron-aperture measurements and the SNR, 
+provides much higher TPR at low FPR (FoM $= 0.657$) than the PS1 model (FoM $= 0.007$) 
+which utilizes only the former information. 
+The performance of the RF model in terms of the FoM, the ROC AUC, and the overall accuracy 
+significantly outperforms the simple model (FoM $=0.707$). 
+
+On the other hand, the classification accuracy, as evaluated on the SDSS test set, 
+shows that the PS1 model and the SDSS model is superior to both of the simple model and the RF model 
+for sources with $\mathtt{whiteKronMag}\gtrsim21$mag, 
+and it results in the larger TPR for FPR $\gtrsim 0.015$ in the SDSS model than the RF model. 
+We clarified that the bias in the SDSS training set along with the methodology of the classification 
+for the SDSS model makes this reversal of classification performance; 
+faint sources in the SDSS training set is dominated by faint QSOs and the hard cut on a single value 
+of the PSF to \texttt{cModel} (or \texttt{Kron} for the PS1 model) tend to classify faint sources as stars. 
+We confirmed that the classification accuracy of the RF model outperforms alternative models 
+for the sources in the SDSS test selected to math the ratio of stars to galaxies in the {\it HST} training set, 
+which should exhibits better approximation of the star--galaxy number ratio at high-Galactic latitudes 
+for the real universe. 
+
+\begin{itemize}
+  \item{INTEGRATION IN ZTF}
+\end{itemize}
+}
+
+
 
 \acknowledgements
+Many thanks for person who helped us. 
 
 \begin{itemize}
     \item Brian Bue (possibly also Umaa, check emails)
