@@ -23,7 +23,7 @@
 %%
 %%
 %% using aastex version 6.1
-\documentclass[twocolumn, dvipdfmx]{aastex62}
+\documentclass[twocolumn]{aastex62}
 
 %% The default is a single spaced, 10 point font, single spaced article.
 %% There are 5 other style options available via an optional argument. They
@@ -964,8 +964,7 @@ is why these curves cross.
   KDEs of the \textit{HST} training set (as in Figure~\ref{fig:cvacc_hst}).
   After correcting for the SDSS test set number count bias, the RF and
   simple models produce more accurate classifications of faint sources than
-  the SDSS and PS1 models. \todo{fix alpha for bottom KDE, add legend for
-  KDEs}}
+  the SDSS and PS1 models.}
   %
   \label{fig:acc_sdss}
 \end{figure*}
@@ -1122,7 +1121,19 @@ sources in the ZTF database. Ultimately, non-unique sources (i.e., if a
 single \textit{ObjID} corresponds to multiple rows with
 \textit{primaryDetection} = 1) are excluded from the classification catalog.
 
-In total, there are \todo{NNN} sources with classifications in the ZTF
+%%% fig:acc_sdss %%%
+\begin{figure}[htb]
+ \centering
+  \includegraphics[width=3.35in]{./Figures/ZTF_PS1_cat_hist.pdf}
+  %
+  \caption{ Histrograms showing classifications in the ZTF-PS1 star--galaxy
+  catalog. }
+  %
+  \label{fig:ztf_hist}
+\end{figure}
+%%%%%%%%%%%%%
+
+In total, there are 1,484,281,394 sources with classifications in the ZTF
 database. A histogram showing the distribution of the final classifications
 is shown in Figure~\ref{fig:ztf_hist}. The thresholds appropriate for
 identifying point-source counterparts to the ZTF candidates are reported in
@@ -1209,10 +1220,11 @@ Y.T. is funded by JSPS KAKENHI Grant Numbers JP16J05742.
 \software{\texttt{astropy} \citep{Astropy-Collaboration13}, 
           \texttt{scipy} \citep{Jones01}, 
           \texttt{matplotlib} \citep{Hunter07},
-          \texttt{pandas} \citep{McKinney10}}
+          \texttt{pandas} \citep{McKinney10},
+          \texttt{scikit-learn} \citep{Pedregosa12}}
 
 
-\appendix
+% \appendix
 
 
 \bibliographystyle{aasjournal}
