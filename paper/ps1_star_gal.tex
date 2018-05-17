@@ -1169,69 +1169,45 @@ on PS1 data. We classify these stars using a machine-learning framework
 built on a RF model. The RF model is trained using 47,093 PS1 sources with
 \textit{HST} COSMOS morphological classifications.
 
-To construct the RF model, we introduced ``white flux'' features, corresponding to a weighted mean of the 
-relevant features across all five filters $grizy_{\mathrm {PS1}}$ in which a source is detected.
+To construct the RF model, we introduced ``white flux'' features, which
+correspond to a weighted mean of the relevant features over the
+$grizy_{\mathrm {PS1}}$ filters in which a source is detected. The ``white
+flux'' features allow us to classify all PS1 sources, irrespective of the
+filters in which the source was detected or the line-of-sight reddenning. One of these newly created features, \texttt{whitePSFKronDist}, is useful on its own for separating stars and galaxies. Unlike a hard cut on the PSF and Kron flux ratio, as is employed by the SDSS and PS1 models, \texttt{whitePSFKronDist} retains knowledge of the SNR and therefore can provide higher confidence classifications. From \texttt{whitePSFKronDist} we created the simple model, which does a good job of separating stars and galaxies. Ultimately, the 11 ``white flux'' features, used in combination with the RF algorithm, provide the best classification of PS1 sources. 
 
-For constructing the RF model, 
-we introduced ``white flux'' features, corresponding to a weighted mean of the 
-relevant features across all five filters $grizy_{\mathrm {PS1}}$ in which a source is detected.
+CV on the \textit{HST} training set shows that the RF (FoM$ = 0.71$) and
+simple (FoM$ = 0.657$) models greatly outperform the PS1 (FoM$ = 0.007$)
+model. For faint sources ($\mathtt{whiteKronMag} > 20$\,mag) the PS1 model
+misclassifies many galaxies as stars, while both the simple and RF models
+provide overall classification accuracies $\gtrsim 85$\% as faint as
+$\mathtt{whiteKronMag} = 23$\,mag.
 
-Our final model, which utilizes the RF algorithm
+We find that when evaluated with the SDSS test set, the SDSS and PS1 models
+provide mode accurate classifications than the RF and simple models,
+especially for faint ($\mathtt{whiteKronMag} \gtrsim 21$\,mag) sources. This
+reversal, relative to the \textit{HST} training set results, can be
+attributed to a bias in the SDSS test set and the SDSS classification model.
+In the SDSS test set point sources outnumber galaxies at the faint end,
+which is counter to what is observed (at high galactic latitudes).
+Furthermore, the SDSS and PS1 models, which utilize a hard cut on flux
+ratios, are likely to classify low SNR sources as stars. Together, these
+effects amplify the perceived performance of the SDSS and PS1 models. Using
+a bootstrap resampling procedure, we correct for the relative number counts
+bias in the SDSS test set, and find that the RF and simple models outperform
+the SDSS and PS1 models, both in terms of FoM and overall accuracy. Thus, of
+the 4 models considered in this study the RF model is superior to all others.
 
-\NC{
-We have presented the development of a large and deep catalog 
-of stars and galaxies utilizing PS1 data. 
-The machine learning methodology with the RF algorithm is utilized 
-for the construction of the final star--galaxy separation model in this work. 
-The RF model is trained using 47,093 PS1 sources with 
-{\it HST} COSMOS morphological classifications. 
-3,834,627 PS1 sources with SDSS spectral classifications are retained 
-as an independent test set for assessing the performance of separation models 
-by considering its biases towards to LRGs and faint QSOs. 
+We have deployed the RF model in support of the ZTF real-time pipeline,
+resulting in the classification of $\sim$1.5$\times 10^{9}$ sources. The
+catalog is dominated by stars in the vicinity of the Galactic plane, though
+we find that there are more galaxies than stars at high galactic latitudes,
+as is expected at the depth of PS1. ZTF is currently producing public alerts
+for newly discovered variability, and the ZTF-PS1 catalog is essential for
+removing the numerous foreground stellar flares, false positives in the
+search for KNe and other fast transients, from the extragalactic alert
+stream.
 
-For constructing the RF model, 
-we introduced ``white flux'' features, corresponding to a weighted mean of the 
-relevant features across all five filters $grizy_{\mathrm {PS1}}$ in which a source is detected. 
-The training with these features enables the model to provide classifications for every source detected by PS1 
-with low reddening bias attributed to local dust columns in the training set. 
-Especially, we developed a new relevant star--galaxy separating feature, \texttt{whitePSFKronDist}, 
-defined by the orthogonal distance from a line 
-($\mathtt{whitePSFFlux} = 0.91375 \times \mathtt{whiteKronFlux}$) 
-in the $\mathtt{whitePSFFlux} - \mathtt{whiteKronFlux}$ plane. 
-By utilising this, we constructed a straightforward separation model, the simple model, 
-as a baseline model for assessing the performance of the RF model. 
-Ultimately, we utilized 11 ``white flux'' features for constructing the RF model, 
-and the model tuning parameters were optimized via CV on the {\it HST} training set.
-
-CV results for {\it HST} test set with $\mathrm{det}_{i_{\mathrm{PS1}}} = 1$ (consisting of 40,098 sources in total) 
-shows that the simple model provides much higher TPR (FoM $= 0.657$) than the PS1 model (FoM $= 0.007$), 
-owing to the SNR information in \texttt{whitePSFKronDist} besides the difference of PSF and Kron-aperture measurements. 
-The CV performance of the RF model significantly outperforms both of the simple model and the PS1 model 
-in terms of the FoM ($=0.707$), the ROC AUC ($=0.973$), and the overall accuracy ($=0.932$). 
-Especially for faint sources with $\mathtt{whiteKronMag} > 20$ mag, 
-the separation accuracy of the PS1 model drops quickly to $<0.5$, 
-while that of the simple model and the RF model exceeds $\sim 0.85$ 
-even at $\mathtt{whiteKronMag} = 23$ mag. 
-
-On the other hand, the classification accuracy as evaluated on the SDSS test set 
-shows that the SDSS model is superior to both of the simple model and the RF model 
-for sources with $\mathtt{whiteKronMag}\gtrsim21$mag. 
-We clarified that this reversal of the performance is attributed to the bias in the SDSS test set 
-along with the classification methodology of the SDSS model; 
-faint sources in the SDSS training set is dominated by QSOs (point sources) and the hard cut on a single value 
-of the PSF to \texttt{cModel} tend to classify faint sources as stars. 
-We confirmed that the classification accuracy of the RF model outperforms alternative models 
-for the sources in the SDSS test set selected to math the ratio of stars to galaxies in the {\it HST} training set, 
-and concluded that the RF model provides the most accurate star--galaxy classifications 
-among the other models we considered in this work for source distributions that is observed in the real nature. 
-
-The RF model has been deployed in the ZTF real-time pipeline, 
-and classifications for PS1 sources with $\mathtt{nDetections} \geq 3$ (1,484,281,394 sources in total) 
-is already stored in the ZTF database. 
-Alerts on newly discovered ZTF transients including KNe, possibly associated with gravitational waves, 
-will be released publicly in near real time. 
-}
-
+\todo{Text about future efforts to improve these classifications/Big picture of this effort?}
 
 
 \acknowledgements
