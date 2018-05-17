@@ -848,7 +848,7 @@ that the RF model uses 10 additional features beyond
 %%% fig:roc_sdss %%%
 \begin{figure}[t]
  \centering
-  \includegraphics[width=3.35in]{./Figures/ROC_curves_log.pdf}
+  \includegraphics[width=3.35in]{./Figures/ROC_curves_log_inset2.pdf}
   %
   \caption{ ROC curves comparing the relative performance of the SDSS
   (orange dot-dashed line), PS1 (slate grey dashed line), simple (green
@@ -1064,16 +1064,16 @@ corresponding to the false positive ratio = 0.005, 0.01, 0.02, 0.05, and 0.1. }
 \label{tbl:fpr}
 \begin{tabular}{lcc|lccccc}
 \hline\hline
-                 Source               & Num. & Acc. & FPR & 0.005 & 0.01 & 0.02 & 0.05 & 0.1 \\ \hline
-\multirow{2}{*}{All sources} & \multirow{2}{*}{47,093} & \multirow{2}{*}{93.1\%} & 
-                                              TPR  & $0.697 \pm 0.008$ &  $0.742 \pm 0.005$ & $0.786 \pm 0.003$ & $0.852 \pm 0.003$ & $0.899 \pm 0.003$  \\
-\multicolumn{1}{l}{}                             & & & Threshold & $0.76 \pm 0.05$ &  $0.65 \pm 0.04$ & $0.53 \pm 0.02$ & $0.36 \pm 0.01$ & $0.24 \pm 0.01$  \\ \hline
-\multirow{2}{*}{$\mathtt{rKornMag} < 21$} & \multirow{2}{*}{13,766} & \multirow{2}{*}{97.8\%} & 
-                                              TPR  & $0.861 \pm 0.062$ &  $0.953 \pm 0.024$ & $0.986 \pm 0.002$ & $0.993 \pm 0.001$ & $0.996 \pm 0.001$ \\
-                                                & & & Threshold & $0.82 \pm 0.17$ &  $0.70 \pm 0.18$ & $0.40 \pm 0.10$ & $0.16 \pm 0.06$ & $0.07 \pm 0.03$   \\ \hline
-\multirow{2}{*}{$\mathtt{rKornMag} < 20$}  & \multirow{2}{*}{6,992}& \multirow{2}{*}{98.8\%} & 
-                                              TPR  & $0.841 \pm 0.075$ &  $0.958 \pm 0.028$ & $0.997 \pm 0.001$ & $0.998 \pm 0.001$ & $0.999 \pm 0.001$  \\
-                                                 & &  & Threshold & $0.90 \pm 0.18$ &  $0.81 \pm 0.24$ & $0.77 \pm 0.26$ & $0.13 \pm 0.08$ & $0.06 \pm 0.04$ \\ \hline
+                 Source               & $N$ & Accuracy & FPR & 0.005 & 0.01 & 0.02 & 0.05 & 0.1 \\ \hline
+\multirow{2}{*}{All sources} & \multirow{2}{*}{35,007} & \multirow{2}{*}{$93.9\pm0.1$\%} & 
+                                              TPR  & $0.733 \pm 0.011$ &  $0.793 \pm 0.007$ & $0.844 \pm 0.005$ & $0.906 \pm 0.004$ & $0.946 \pm 0.002$  \\
+\multicolumn{1}{l}{}                 & & & Threshold & $0.830 \pm 0.015$ &  $0.721 \pm 0.012$ & $0.597 \pm 0.009$ & $0.393 \pm 0.007$ & $0.224 \pm 0.004$  \\ \hline
+\multirow{2}{*}{$\mathtt{rKornMag} < 21$} & \multirow{2}{*}{13,570} & \multirow{2}{*}{$98.0\pm0.1$\%} & 
+                                              TPR  & $0.771 \pm 0.069$ &  $0.963 \pm 0.006$ & $0.979 \pm 0.002$ & $0.990 \pm 0.001$ & $0.995 \pm 0.001$ \\
+                                                & & & Threshold & $0.975 \pm 0.043$ &  $0.658 \pm 0.055$ & $0.414 \pm 0.025$ & $0.170 \pm 0.012$ & $0.069 \pm 0.004$   \\ \hline
+\multirow{2}{*}{$\mathtt{rKornMag} < 20$}  & \multirow{2}{*}{6,956}& \multirow{2}{*}{$99.0\pm0.1$\%} & 
+                                              TPR  & $0.621 \pm 0.164$ &  $0.951 \pm 0.056$ & $0.994 \pm 0.001$ & $0.997 \pm 0.001$ & $0.998 \pm 0.001$  \\
+                                                 & &  & Threshold & $0.995 \pm 0.019$ &  $0.930 \pm 0.172$ & $0.331 \pm 0.053$ & $0.133 \pm 0.021$ & $0.049 \pm 0.004$ \\ \hline
 \end{tabular}
 \end{center}
 \end{table*}
@@ -1150,55 +1150,55 @@ database.}
 \NC{
 We have presented the development of a large and deep catalog 
 of stars and galaxies utilizing PS1 data. 
-The machine learning methodology utilizing the RF algorithm is employed 
-for the construction of the final star/galaxy separation model in this work. 
-We adopted morphological classifications of {\it HST} COSMOS sources 
-crossmatched with PS1 sources as labels 
-to construct the training set for the RF model 
-with considering its exceptionally accurate star/galaxy classification down to $\sim 25$mag 
-along with the similarity of the characteristics of sources in the {\it HST} and the PS1 dataset. 
-For avoiding the potential biases in the final classification 
-due to the biased its targeting algorithms, 
-the SDSS spectroscopic sources crossmatched with PS1 sources was retained 
-as independent test set for assessing the performance of separation models. 
+The machine learning methodology with the RF algorithm is utilized 
+for the construction of the final star--galaxy separation model in this work. 
+The RF model is trained using 47,093 PS1 sources with 
+{\it HST} COSMOS morphological classifications. 
+3,834,627 PS1 sources with SDSS spectral classifications are retained 
+as an independent test set for assessing the performance of separation models 
+by considering its biases towards to LRGs and faint QSOs. 
 
-We introduce ``white flux'' features, which correspond to a weighted mean of the 
-relevant features across all five filters $grizy_{\mathrm {PS1}}$ in which a source is detected, 
-enable the RF model not only to provide classifications for every source detected by PS1 
-but also to minimize the bias in the training set attributed to reddening. 
-Especially, we defined a new ``white flux'' feature \texttt{whitePSFKronDist}, 
-the orthogonal distance from a line 
+For constructing the RF model, 
+we introduced ``white flux'' features, corresponding to a weighted mean of the 
+relevant features across all five filters $grizy_{\mathrm {PS1}}$ in which a source is detected. 
+The training with these features enables the model to provide classifications for every source detected by PS1 
+with low reddening bias attributed to local dust columns in the training set. 
+Especially, we developed a new relevant star--galaxy separating feature, \texttt{whitePSFKronDist}, 
+defined by the orthogonal distance from a line 
 ($\mathtt{whitePSFFlux} = 0.91375 \times \mathtt{whiteKronFlux}$) 
-in the $\mathtt{whitePSFFlux} - \mathtt{whiteKronFlux}$ plane for each PS1 source, 
-for constructing a straightforward separation model, the simple model, 
-as a baseline to assess the performance of the RF model. 
-Ultimately, we utilized 11 ``white flux'' features for constructing the final RF model, 
+in the $\mathtt{whitePSFFlux} - \mathtt{whiteKronFlux}$ plane. 
+By utilising this, we constructed a straightforward separation model, the simple model, 
+as a baseline model for assessing the performance of the RF model. 
+Ultimately, we utilized 11 ``white flux'' features for constructing the RF model, 
 and the model tuning parameters were optimized via CV on the {\it HST} training set.
 
-CV results for {\it HST} dataset showed that the simple model, 
-including information about both the difference between the 
-PSF and Kron-aperture measurements and the SNR, 
-provides much higher TPR at low FPR (FoM $= 0.657$) than the PS1 model (FoM $= 0.007$) 
-which utilizes only the former information. 
-The performance of the RF model in terms of the FoM, the ROC AUC, and the overall accuracy 
-significantly outperforms the simple model (FoM $=0.707$). 
+CV results for {\it HST} test set with $\mathrm{det}_{i_{\mathrm{PS1}}} = 1$ (consisting of 40,098 sources in total) 
+shows that the simple model provides much higher TPR (FoM $= 0.657$) than the PS1 model (FoM $= 0.007$), 
+owing to the SNR information in \texttt{whitePSFKronDist} besides the difference of PSF and Kron-aperture measurements. 
+The CV performance of the RF model significantly outperforms both of the simple model and the PS1 model 
+in terms of the FoM ($=0.707$), the ROC AUC ($=0.973$), and the overall accuracy ($=0.932$). 
+Especially for faint sources with $\mathtt{whiteKronMag} > 20$ mag, 
+the separation accuracy of the PS1 model drops quickly to $<0.5$, 
+while that of the simple model and the RF model exceeds $\sim 0.85$ 
+even at $\mathtt{whiteKronMag} = 23$ mag. 
 
-On the other hand, the classification accuracy, as evaluated on the SDSS test set, 
-shows that the PS1 model and the SDSS model is superior to both of the simple model and the RF model 
-for sources with $\mathtt{whiteKronMag}\gtrsim21$mag, 
-and it results in the larger TPR for FPR $\gtrsim 0.015$ in the SDSS model than the RF model. 
-We clarified that the bias in the SDSS training set along with the methodology of the classification 
-for the SDSS model makes this reversal of classification performance; 
-faint sources in the SDSS training set is dominated by faint QSOs and the hard cut on a single value 
-of the PSF to \texttt{cModel} (or \texttt{Kron} for the PS1 model) tend to classify faint sources as stars. 
+On the other hand, the classification accuracy as evaluated on the SDSS test set 
+shows that the SDSS model is superior to both of the simple model and the RF model 
+for sources with $\mathtt{whiteKronMag}\gtrsim21$mag. 
+We clarified that this reversal of the performance is attributed to the bias in the SDSS test set 
+along with the classification methodology of the SDSS model; 
+faint sources in the SDSS training set is dominated by QSOs (point sources) and the hard cut on a single value 
+of the PSF to \texttt{cModel} tend to classify faint sources as stars. 
 We confirmed that the classification accuracy of the RF model outperforms alternative models 
-for the sources in the SDSS test selected to math the ratio of stars to galaxies in the {\it HST} training set, 
-which should exhibits better approximation of the star--galaxy number ratio at high-Galactic latitudes 
-for the real universe. 
+for the sources in the SDSS test set selected to math the ratio of stars to galaxies in the {\it HST} training set, 
+and concluded that the RF model provides the most accurate star--galaxy classifications 
+among the other models we considered in this work for source distributions that is observed in the real nature. 
 
-\begin{itemize}
-  \item{INTEGRATION IN ZTF}
-\end{itemize}
+The RF model has been deployed in the ZTF real-time pipeline, 
+and classifications for PS1 sources with $\mathtt{nDetections} \geq 3$ (1,484,281,394 sources in total) 
+is already stored in the ZTF database. 
+Alerts on newly discovered ZTF transients including KNe, possibly associated with gravitational waves, 
+will be released publicly in near real time. 
 }
 
 
