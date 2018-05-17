@@ -152,7 +152,7 @@
 
 \begin{document}
 
-\title{\textbf{something better needed} A PanSTARRS1 Star--Galaxy Model: Application in the ZTF Real-Time Pipeline}
+\title{\textbf{something better needed} A PanSTARRS1 Star--Galaxy Separation Model: Application in the ZTF Real-Time Pipeline}
 
 %% LaTeX will automatically break titles if they run longer than
 %% one line. However, you may use \\ to force a line break if
@@ -226,6 +226,8 @@
 %% Mark off the abstract in the ``abstract'' environment. 
 \begin{abstract}
 
+\yutaro{Do you have any ideas for the title of this paper?}
+
 We did a decent job of separating stars and galaxies.
 
 \end{abstract}
@@ -252,59 +254,55 @@ We did a decent job of separating stars and galaxies.
 
 \section{Introduction}\label{sec:intro}
 
-\yutaro{I've restructured the intro, I think we should pitch the paper as PS1
-catalog used by ZTF, rather than ZTF project. That way other people will
-hopefully use the catalog even if they do not use ZTF.}
-
 The proliferation of wide-field optical detectors has led to a plethora of
-imaging catalogs in the past two decades. \yutaro{I think we should add some
-general text here about the importance of separating stars and galaxies here
-- do you want to take the first effort for that?}
-\NC{
-Separating point sources (mostly stars) from extended sources (galaxies), 
-especially in faint samples, 
-is one of the most challenging and important steps in the 
-extraction of sensitive astronomical information 
-from such imaging catalogs, 
-and boosts the progress in our understanding for the universe. 
-The characteristic of dark matter can be investigated 
-by tracing the structure in the Milky Way halo ({\it e.g.}, \citealt{Belokurov06}), 
-measuring galaxy-galaxy correlation functions ({\it e.g.}, \citealt{Ross11, Ho15})
-including dwarf galaxies that can be searched by stellar overdensities \citep{Belokurov07}, 
-and detecting the weak lensing signal from cosmic shear \citep{Soumagnac15}. 
-The number count density of galaxies as a function of luminosity (luminosity function) 
-can be used for the assessment of the geometry of the universe \citep{Yasuda01} 
-and the theory of galaxy formation ({\it e.g.}, \citealt{Loveday12, Moorman15}). 
-}
+imaging catalogs in the past two decades. Separating unresolved point sources (i.e., stars and quasi-stellar objects
+[QSOs]) from photometrically extended sources (i.e., galaxies) is one of the
+most challenging and important steps in the extraction of astronomical
+information from these imaging catalogs. For faint sources especially,
+performing this task well boosts our progress in understanding the Universe.
+The high fidelity separation of stars and galaxies allows us to investigate
+the nature of dark matter by: (i) tracing structure in the Milky Way halo
+(e.g., \citealt{Belokurov06}), (ii) measuring galaxy-galaxy correlation
+functions (e.g., \citealt{Ross11, Ho15}), and (iii) detecting the weak
+lensing signal from cosmic shear \citep{Soumagnac15}. Complete, and pure,
+catalogs of galaxies can be used to assess the the geometry of the Universe
+\citep{Yasuda01} and the theory of galaxy formation (e.g.,
+\citealt{Loveday12, Moorman15}). Finally, for time-domain surveys,
+star--galaxy catalogs enable an immediate classification for all newly
+discovered variable phenomena as being either Galatic or extragalactic in
+origin (e.g., \citealt{Berger12,Miller17}).
 
 Given the many applications for a catalog that separates point sources from
-galaxies, we turn our attention to the wide-field Pan-STARRS1 (PS1) survey
-\citep{Chambers16}, whose 3$\pi$ survey provides a felicitous data set.
+galaxies, we turn our attention to the Pan-STARRS1 (PS1) 3$\pi$ survey
+\citep{Chambers16}, whose $\sim$3$\times 10^{9}$ source catalog provides a
+felicitous data set.
 
-The 1.8\,m PS1 telescope is equipped with a wide-field ($\sim$7\,deg$^2$) 1.4
-gigapixel camera and is located at Haleakala Observatory in Hawaii
+The 1.8\,m PS1 telescope is equipped with a wide-field ($\sim$7\,deg$^2$)
+1.4 gigapixel camera and is located at Haleakala Observatory in Hawaii
 \citep{Hodapp04}. PS1 primarily uses five broadband filters,
 $g_{\mathrm{P1}}$, $r_{\mathrm{P1}}$, $i_{\mathrm{P1}}$, $z_{\mathrm{P1}}$,
 and $y_{\mathrm{P1}}$ (hereafter $grizy_{\mathrm{P1}}$). The PS1 3$\pi$
-survey scanned the entire visible sky ($\mathrm{Dec.}>-30^\circ$) 60 times in
-the five filters over a four-year time span \citep{Chambers16}. This repeated
-imaging was used to create deep stacks \citep{Magnier16b}, with a typical
-5$\sigma$ depth of $\sim$23.2\,mag with a median seeing of $1.19\arcsec$ in
-the $r$-band \citep{Tonry12, Schlafly12, Chambers16}. The first PS1 data
-release (DR1) provides flux and pixel-based shape measurements for $>$3
-billion sources \citep{Flewelling16}.
+survey scanned the entire visible sky ($\delta > -30^\circ$) $\sim$60 times
+in the five filters over a 4\,yr time span \citep{Chambers16}. This
+repeated imaging was used to create deep stacks \citep{Magnier16b}, with a
+typical 5$\sigma$ depth of $\sim$23.2\,mag and a median seeing of
+$1.19\arcsec$ in the $r$-band \citep{Tonry12, Schlafly12, Chambers16}. The
+first PS1 data release (DR1) provides flux and pixel-based shape
+measurements for $>$3 billion sources \citep{Flewelling16}.
 
-Our aim is to develop a large, deep catalog of stars (point sources) and
-galaxies using PS1 data. The catalog is to be general purpose, however, our
-immediate goal is to support the real-time search for transients in the
-Zwicky Transient Facility (ZTF; \citealt{Bellm18}). Previously, a similar
-catalog was developed using Palomar Transient Factory (PTF) data
-\citep{Miller17}. 
+Our aim is to develop a large, deep catalog of stars and galaxies using PS1
+data.\footnote{Throughout this paper, we interchangably use the term star to
+mean unresolved point source, which includes both stars and QSOs.} The
+catalog is general purpose and can serve many different science goals,
+however, our immediate goal is to support the real-time search for
+transients in the Zwicky Transient Facility (ZTF; \citealt{Bellm:18:ZTF}).
+Previously, a similar catalog was developed using Palomar Transient Factory
+(PTF) data \citep{Miller17}.
 
 The PTF star--galaxy catalog was developed using \texttt{SExtractor}
 \citep{bertin96} flux and shape measurements made on deep stacks of PTF
-imaging. Stars and galaxies were separated using a machine learning
-methodology utilizing the random forest (RF) algorithm \citep{Breiman01}.
+images. Stars and galaxies were separated using a machine learning
+methodology built on the random forest (RF) algorithm \citep{Breiman01}.
 Briefly, supervised machine learning methods build a non-parametric mapping
 between \textit{features}, measured properties, and \textit{labels}, the
 target classification, via a training set. The training set contains sources
@@ -315,33 +313,32 @@ unknown.
 
 The PTF point-source catalog was constructed to support the real-time search
 for electromagetic counterparts to gravitational wave events. Given that
-these events are expected to be very rare (\todo{citation}), the figure of
-merit (FoM) for the PTF model was defined as the true positive rate
-(corresponding to the fraction of stars that are correctly classified) at a
-fixed false positive rate (fraction of galaxies that are misclassified) equal
-to 0.005 \citep{Miller17}. While the PTF point-source catalog includes
-$\sim$1.7$\times 10^8$ objects, it is expected that a full
-$\sim$8$\times10^7$ point sources are excluded as false negatives
-\citep{Miller17}.
+these events are expected to be very rare (e.g., \citealt{Scolnic18}), the
+figure of merit (FoM) for the PTF model was defined as the true positive
+rate (corresponding to the fraction of stars that are correctly classified)
+at a fixed false positive rate (fraction of galaxies that are misclassified)
+equal to 0.005 \citep{Miller17}. This FoM is designed to reject as many
+stars as possible, while still ensuring that nearly every extragalactic
+transient ($\sim$99.5\%) remains in the candidate stream. While the PTF
+point-source catalog includes $\sim$1.7$\times 10^8$ objects, the PS1
+database includes an order of magnitude more sources.
 
 A star--galaxy separation model built on PS1 data will produce dramatic
 improvements over the PTF catalog. PS1 observations are deeper, feature
 better seeing, and include 5 filters (the PTF catalog was built with
 observations in a single filter, $R_\mathrm{PTF}$). Additionally, one of the
 12 CCDs in the PTF camera did not work \citep{Law09}, meaning $\sim$8\% of
-the sky above $\mathrm{Dec.} = 30^\circ$ has no classifications in the PTF
-catalog.
+the $\delta > -30^\circ$ sky has no PTF classifications.
 
 Here, we construct a new star--galaxy separation model using PS1 DR1 data in
 conjunction with a new machine learning methodology. The model is trained
 using \textit{Hubble Space Telescope} observations, which should provide an
 improvement over the Sloan Digital Sky Survey (SDSS; \citealt{York00})
 spectroscopic training set used in \citet{Miller17}. As in \citet{Miller17},
-we use the RF algorithm to separate point sources and extended sources. Our
+we use the RF algorithm to separate point sources and extended sources and we optimize our model to maximize the same FoM. Our
 new PS1 model outperforms alternatives and has already been incorporated into
 the ZTF real-time pipeline.
 
-\todo{Need to add something about optimizing the same FoM as the first Miller paper}
 
 %%%
 \if0
@@ -485,11 +482,8 @@ galaxies. The database features include: \texttt{PSFFlux},\footnote{For the
 \texttt{PSFFlux} feature $w_f =
 (\mathtt{PSFFlux}_f/\mathtt{PSFFluxErr}_f)^2$.} \texttt{KronFlux},
 \texttt{ApFlux},\footnote{For the \texttt{ApFlux} feature $w_f =
-(\mathtt{ApFlux}_f/\mathtt{ApFluxErr}_f)^2$ 
-\NC{I think we used $w_f =
-(\mathtt{PSFFlux}_f/\mathtt{PSFFluxErr}_f)^2$ for \texttt{ApFlux} 
-because of the superior performance of \texttt{whitePSFApRatio}}. 
-} \texttt{ExtNSigma},
+(\mathtt{PSFFlux}_f/\mathtt{PSFFluxErr}_f)^2$.}. 
+\texttt{ExtNSigma},
 \texttt{KronRad}, \texttt{psfChiSq}, \texttt{psfLikelihood},
 \texttt{momentYY}, \texttt{momentXY}, \texttt{momentXX}, and
 \texttt{momentRH}.\footnote{Prior to their ``white flux'' calculation the
@@ -714,9 +708,17 @@ features from \S\ref{sec:model_features} the final RF model.
 
 \subsubsection{Optimizing the Model Tuning Parameters}
 
-As noted in \S\ref{sec:simple_model}, we optimize the RF model tuning parameters via an outter and inner 10-fold CV procedure. We perform a grid search over $N_{\mathrm{tree}}$, $m_{\mathrm{try}}$ and \texttt{nodesize}, and find that the FoM of \textit{HST} training is maximized with $N_{\mathrm{tree}} = 400$, $m_{\mathrm{try}} = 4$, and $\mathtt{nodesize} = 2$. The final model FoM is not strongly sensitive to the choice of these parameters: changing any of the optimal parameters by a factor of $\sim$2 does not decrease the optimal CV FoM, 0.71, by more than the scatter measured from the individual folds, 0.02. Finally, while a detailed comparison is presented in \S\ref{sec:comp_hst}, we note that the RF model significantly outperforms the simple model based on the CV FoM.
-
-\todo{check why FoM does not match Table 1}
+As noted in \S\ref{sec:simple_model}, we optimize the RF model tuning
+parameters via an outter and inner 10-fold CV procedure. We perform a grid
+search over $N_{\mathrm{tree}}$, $m_{\mathrm{try}}$ and \texttt{nodesize},
+and find that the FoM of \textit{HST} training is maximized with
+$N_{\mathrm{tree}} = 400$, $m_{\mathrm{try}} = 4$, and $\mathtt{nodesize} =
+2$. The final model FoM is not strongly sensitive to the choice of these
+parameters: changing any of the optimal parameters by a factor of $\sim$2
+does not decrease the optimal CV FoM, 0.71, by more than the scatter
+measured from the individual folds, 0.02. Finally, while a detailed
+comparison is presented in \S\ref{sec:comp_hst}, we note that the RF model
+significantly outperforms the simple model based on the CV FoM.
 
 \section{Classification Performance}
 
@@ -857,9 +859,7 @@ that the RF model uses 10 additional features beyond
   vertical line, corresponding to the FoM. The red star shows the FPR and
   TPR if adopting the SDSS \textit{photo} classification cut (rather than
   using the method developed in \citealt{Miller17}). The RF model delivers
-  the highest FoM. \yutaro{At the moment the large panel and zoom-in show
-  virtually the same thing. If the large panel shows the full ROC curve,
-  like Fig 4, does that look bad?}}
+  the highest FoM.}
   %
   \label{fig:roc_sdss}
 \end{figure}
@@ -1059,8 +1059,7 @@ accuracy.
 %%%%%%%%
 \begin{table*}[htb]
 \begin{center}
-\caption{The true positive ratio and the threshold 
-corresponding to the false positive ratio = 0.005, 0.01, 0.02, 0.05, and 0.1. }
+\caption{RF model classification threshold and TPR at various fixed FPR values.}
 \label{tbl:fpr}
 \begin{tabular}{lcc|lccccc}
 \hline\hline
@@ -1220,7 +1219,8 @@ Many thanks for person who helped us.
 
 AAM is funded by the Large Synoptic Survey Telescope Corporation in support of
 the Data Science Fellowship Program. 
-Y.T. is funded by JSPS KAKENHI Grant Numbers JP16J05742. 
+Y.T. is funded by JSPS KAKENHI Grant Numbers JP16J05742.
+\yutaro{Do you need to acknowledge GROWTH} 
 
 \facility{PS1}
 
