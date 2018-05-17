@@ -1138,18 +1138,46 @@ database. A histogram showing the distribution of the final classifications
 is shown in Figure~\ref{fig:ztf_hist}. The thresholds appropriate for
 identifying point-source counterparts to the ZTF candidates are reported in
 Table~\ref{tbl:fpr} (note that these thresholds apply to
-$\mathtt{nDetections} \ge 3$ sources). Of the $\sim$1.5$\times 10^{9}$ sources in the ZTF-PS1 catalog, 734,476,355 ($\sim$50\%) are classified as stars using the FoM optimized 
+$\mathtt{nDetections} \ge 3$ sources). Of the $\sim$1.5$\times 10^{9}$
+sources in the ZTF-PS1 catalog, 734,476,355 ($\sim$50\%) are classified as
+stars using the FoM-optimized classification threshold of 0.83.
 
-Figure~\ref{fig:ztf_hist}
-
-
-Tuning the star--galaxy
-classification thresholds to optimize follow-up of newly discovered
-transients is a critical early step in the filtering of ZTF candidates
-(e.g., \citealt{Kasliwal:18:ZTF}).
+Figure~\ref{fig:ztf_hist} additionally shows that most of the stars in the
+catalog are located in the Galactic plane, most of the (high-confidence)
+galaxies are outside the plane, and (unsurprisingly) that classification is
+more challenging in regions of high stellar density. At high galactic
+latitudes ($|b| > 50^{\circ}$), where the distribution of sources is similar
+to the \textit{HST} training set, sources are well-segregated (RF score
+$\approx$0 or 1), with very few ambiguous classifications ($0.2 \lesssim
+\mathrm{RF\;score} \lesssim 0.8$). The Galactic plane region ($|b| <
+15^{\circ}$) dominates the ambiguous classifications in the ZTF-PS1 catalog.
+We attribute this to a lack of reliable training data in
+high-stellar-density regions, and significantly more blending, which results
+in point sources appearing extended. Thus, identifying stellar sources in
+the plane likely requires a lower threshold than the FoM-optimized
+classification value. The final tuning of the star--galaxy classification
+thresholds is a critical early step in the filtering of ZTF candidates
+(e.g., \citealt{Kasliwal:18:ZTF}), which is necessary to optimize follow-up of newly
+discovered transients.
 
 
 \section{Summary and Conclusions}
+
+We have presented the development of a large ($\sim$1.5$\times 10^{9}$),
+deep ($m \lesssim 23.5\,\mathrm{mag}$) catalog of stars and galaxies based
+on PS1 data. We classify these stars using a machine-learning framework
+built on a RF model. The RF model is trained using 47,093 PS1 sources with
+\textit{HST} COSMOS morphological classifications.
+
+To construct the RF model, we introduced ``white flux'' features, corresponding to a weighted mean of the 
+relevant features across all five filters $grizy_{\mathrm {PS1}}$ in which a source is detected.
+
+For constructing the RF model, 
+we introduced ``white flux'' features, corresponding to a weighted mean of the 
+relevant features across all five filters $grizy_{\mathrm {PS1}}$ in which a source is detected.
+
+Our final model, which utilizes the RF algorithm
+
 \NC{
 We have presented the development of a large and deep catalog 
 of stars and galaxies utilizing PS1 data. 
