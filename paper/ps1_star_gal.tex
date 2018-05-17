@@ -1068,10 +1068,10 @@ corresponding to the false positive ratio = 0.005, 0.01, 0.02, 0.05, and 0.1. }
 \multirow{2}{*}{All sources} & \multirow{2}{*}{35,007} & \multirow{2}{*}{$93.9\pm0.1$\%} & 
                                               TPR  & $0.733 \pm 0.011$ &  $0.793 \pm 0.007$ & $0.844 \pm 0.005$ & $0.906 \pm 0.004$ & $0.946 \pm 0.002$  \\
 \multicolumn{1}{l}{}                 & & & Threshold & $0.830 \pm 0.015$ &  $0.721 \pm 0.012$ & $0.597 \pm 0.009$ & $0.393 \pm 0.007$ & $0.224 \pm 0.004$  \\ \hline
-\multirow{2}{*}{$\mathtt{rKornMag} < 21$} & \multirow{2}{*}{13,570} & \multirow{2}{*}{$98.0\pm0.1$\%} & 
+\multirow{2}{*}{$\mathtt{rKronMag} < 21$} & \multirow{2}{*}{13,570} & \multirow{2}{*}{$98.0\pm0.1$\%} & 
                                               TPR  & $0.771 \pm 0.069$ &  $0.963 \pm 0.006$ & $0.979 \pm 0.002$ & $0.990 \pm 0.001$ & $0.995 \pm 0.001$ \\
                                                 & & & Threshold & $0.975 \pm 0.043$ &  $0.658 \pm 0.055$ & $0.414 \pm 0.025$ & $0.170 \pm 0.012$ & $0.069 \pm 0.004$   \\ \hline
-\multirow{2}{*}{$\mathtt{rKornMag} < 20$}  & \multirow{2}{*}{6,956}& \multirow{2}{*}{$99.0\pm0.1$\%} & 
+\multirow{2}{*}{$\mathtt{rKronMag} < 20$}  & \multirow{2}{*}{6,956}& \multirow{2}{*}{$99.0\pm0.1$\%} & 
                                               TPR  & $0.621 \pm 0.164$ &  $0.951 \pm 0.056$ & $0.994 \pm 0.001$ & $0.997 \pm 0.001$ & $0.998 \pm 0.001$  \\
                                                  & &  & Threshold & $0.995 \pm 0.019$ &  $0.930 \pm 0.172$ & $0.331 \pm 0.053$ & $0.133 \pm 0.021$ & $0.049 \pm 0.004$ \\ \hline
 \end{tabular}
@@ -1079,19 +1079,19 @@ corresponding to the false positive ratio = 0.005, 0.01, 0.02, 0.05, and 0.1. }
 \end{table*}
 %%%%%%%%
 
-While the PS1 RF model has been developed to build a general catalog
-separating stars and galaxies, it has been specifically deployed in the
-Zwicky Transient Facility\footnote{\url{http://www.ztf.caltech.edu/}} (ZTF;
+While we have developed a general model to separate stars and galaxies, the
+resulting RF classifications has been specifically deployed in the Zwicky
+Transient Facility\footnote{\url{http://www.ztf.caltech.edu/}} (ZTF;
 \citealt{Bellm:18:ZTF, Dekany:18:ZTF}) real-time pipeline
-\citep{Masci:18:ZTF}. Briefly, ZTF is the ongoing next generation Palomar
+\citep{Masci:18:ZTF}. Briefly, ZTF is the next-generation Palomar
 time-domain survey, which succeeds PTF \citep{Rau09, Law09} and the
 intermediate Palomar Transient Facility (iPTF; \citealt{Kulkarni13}). ZTF,
 with its 47\,deg$^2$ field of view, can scan at a rate $\sim$15$\times$
 faster than PTF/iPTF ($>3{,}750\,\deg^2\,\mathrm{hr}^{-1}$) to a depth of
 $R_\mathrm{ZTF} \approx 20.4$\,mag ($5\sigma$). ZTF will observe the entire
-sky with $\mathrm{Dec.} > -30^\circ$ $\sim$300 times per year, with publicly
-distributed alerts on any newly observed variability released in near real
-time \citep{Patterson:18:ZTF}.
+sky with $\delta > -30^{\circ}$ $\sim$300 times per year, with publicly
+distributed alerts on newly observed positional or flux variability released
+in near real time \citep{Patterson:18:ZTF}.
 
 An initial, and pressing, question for filtering the ZTF alert stream, is:
 does the newly identified variable have a Galactic or extragalactic origin?
@@ -1099,27 +1099,27 @@ Hence the need for a star--galaxy model, and in particular, one that is
 deeper than typical ZTF observations (to identify faint stars flaring above
 the ZTF detection limit). While ZTF will address many science objectives
 (e.g., \citealt{Graham:18:ZTF}), a primary motivation is the search for
-kilonovae (KNe), which are fast transients resulting from the merger of
-binary neutron stars. If the proximity and sky location of a KN is
-favorable, these events can be detected via gravitational waves (e.g.,
-GW\,170817, see \citealt{Abbott17} and references therein). The detection of
-KNe, and other fast transients, is plagued by significant foreground
-contamination in the form of stellar flares and/or orbital modulation (e.g.,
-\citealt{Kulkarni06, Berger12, Kasliwal16}). Our PS1 RF model enables the
-systematic removal of faint stars from extragalactic candidate lists, and
-our adopted FoM removes the vast majority of stars while ensuring that
-nearly every galaxy ($\sim$99.5\%) is searched for candidate KNe.
+kilonovae (KNe), the result of merging binary neutron stars, and other fast
+transients. If the proximity and sky location of a KN is favorable, these
+events can be detected via gravitational waves (e.g., GW\,170817, see
+\citealt{Abbott17} and references therein). The search for KNe is plagued by
+significant foreground contamination in the form of stellar flares and/or
+orbital modulation (e.g., \citealt{Kulkarni06, Berger12, Kasliwal16}). Our
+PS1 RF model enables the systematic removal of faint stars from
+extragalactic candidate lists, and our adopted FoM removes the vast majority
+of stars while ensuring that nearly every galaxy ($\sim$99.5\%) is searched
+for candidate KNe.
 
-All newly discovered candidates from the ZTF stream are associated with the
-3 nearest PS1 counterparts within 30\arcsec in the real-time alert packets
-\citep{Masci:18:ZTF}. Counterparts are selected from sources in the PS1
-\textit{MeanObject} table with $\mathit{nDetections} \ge 3$. Thus, to create
-the ZTF-PS1 star--galaxy catalog we selected sources from the
-\textit{StackObjectAttributes} table with $\mathit{nDetections} \ge 3$, and
-merged these classifications with the subset of PS1 \textit{MeanObject}
-sources in the ZTF database. Ultimately, non-unique sources (i.e., if a
-single \textit{ObjID} corresponds to multiple rows with
-\textit{primaryDetection} = 1) are excluded from the classification catalog.
+Newly discovered ZTF candidates are associated with the 3 nearest PS1
+counterparts within 30\arcsec\ in the real-time alert packets
+\citep{Masci:18:ZTF}. Counterparts are selected from ZTF calibration
+sources, which includes all PS1 \textit{MeanObject} table sources with
+$\mathtt{nDetections} \ge 3$. Thus, to create the ZTF-PS1 star--galaxy
+catalog we selected sources from the \textit{StackObjectAttributes} table
+with $\mathtt{nDetections} \ge 3$, and merged these classifications with the
+ZTF calibration sources. Ultimately, non-unique sources (i.e., if a single
+\texttt{objID} corresponds to multiple rows with \texttt{primaryDetection} =
+1) are excluded from the classification catalog.
 
 %%% fig:acc_sdss %%%
 \begin{figure}[htb]
@@ -1137,13 +1137,16 @@ In total, there are 1,484,281,394 sources with classifications in the ZTF
 database. A histogram showing the distribution of the final classifications
 is shown in Figure~\ref{fig:ztf_hist}. The thresholds appropriate for
 identifying point-source counterparts to the ZTF candidates are reported in
-Table~\ref{tbl:fpr}. Tuning the star--galaxy classification thresholds to
-optimize follow-up of newly discovered transients is a critical early step
-in the filtering of ZTF candidates (e.g., \citealt{Kasliwal:18:ZTF}).
-\yutaro{are the numbers in this table for nDet $>$ 2 sources only? Also - I
-see $N_{total} = 47k$, but for ZTF specifically we want to report results
-for nDet $>$ 2 sources, since there are no nDet = 1 or 2 in the ZTF
-database.}
+Table~\ref{tbl:fpr} (note that these thresholds apply to
+$\mathtt{nDetections} \ge 3$ sources). Of the $\sim$1.5$\times 10^{9}$ sources in the ZTF-PS1 catalog, 734,476,355 ($\sim$50\%) are classified as stars using the FoM optimized 
+
+Figure~\ref{fig:ztf_hist}
+
+
+Tuning the star--galaxy
+classification thresholds to optimize follow-up of newly discovered
+transients is a critical early step in the filtering of ZTF candidates
+(e.g., \citealt{Kasliwal:18:ZTF}).
 
 
 \section{Summary and Conclusions}
