@@ -227,6 +227,36 @@
 %% Mark off the abstract in the ``abstract'' environment. 
 \begin{abstract}
 
+In the era of large photometric surveys, the importance of automated and
+accurate classification of astrophysical sources is rapidly increasing.
+Specifically, the separation of stars and galaxies in astronomical imaging is
+a critical initial step for a wide array of studies, ranging from Galactic
+science to large scale structure and cosmology. Here, we present our method
+to construct a large, deep catalog of stars and galaxies utilizing
+Pan-STARRS1 (PS1) 3$\pi$ survey data, which consists of $\sim$3$\times10^9$
+celestial sources with $\lesssim 23.5$ mag. We develop a supervised
+machine-learning methodology, using the random forest (RF) algorithm, to
+construct the PS1 star--galaxy separation model. We train the model using
+$\sim$5$\times10^4$ PS1 sources with \textit{HST} COSMOS morphological
+classifications, and assessed its performance with $\sim$4$\times10^6$ PS1
+sources with Sloan Digital Sky Survey (SDSS) spectra. We construct 11 ``white
+flux'' features, which combine PS1 flux and shape measurements across all 5
+PS1 filters, to increase the signal-to-noise ratio relative to any individual
+filter and remove potential biases due to the line-of-sight reddenning in the
+training set. We compare the performance of the RF model to 3 alternative
+models, including the SDSS and PS1 photometric classification models, and
+find that the RF model performs best. By number the PS1 catalog is dominated
+by faint sources ($m \gtrsim 21$\,mag), and in this regime the RF model
+significantly outperforms the SDSS and PS1 models. For time-domain surveys,
+star--galaxy separation is critical for identifying the Galactic or
+extragalactic origin of new transients. We have classified
+$\sim$1.5$\times10^9$ sources using the RF model, and these results are used
+within the Zwicky Transient Facility real-time pipeline to automatically
+reject stellar sources from the extragalactic alert stream.
+
+
+
+
 \NC{
  In the era of time domain astrophysics implemented by large photometric survey projects, 
  the importance of the automated and accurate classification of astrophysical sources 
@@ -1110,7 +1140,7 @@ Transient Facility\footnote{\url{http://www.ztf.caltech.edu/}} (ZTF;
 \citealt{Bellm:18:ZTF, Dekany:18:ZTF}) real-time pipeline
 \citep{Masci:18:ZTF}. Briefly, ZTF is the next-generation Palomar
 time-domain survey, which succeeds PTF \citep{Rau09, Law09} and the
-intermediate Palomar Transient Facility (iPTF; \citealt{Kulkarni13}). ZTF,
+intermediate Palomar Transient Factory (iPTF; \citealt{Kulkarni13}). ZTF,
 with its 47\,deg$^2$ field of view, can scan at a rate $\sim$15$\times$
 faster than PTF/iPTF ($>3{,}750\,\deg^2\,\mathrm{hr}^{-1}$) to a depth of
 $R_\mathrm{ZTF} \approx 20.4$\,mag ($5\sigma$). ZTF will observe the entire
@@ -1248,7 +1278,7 @@ the Data Science Fellowship Program.
 Y.T. is funded by JSPS KAKENHI Grant Numbers JP16J05742.
 \yutaro{Do you need to acknowledge GROWTH} 
 
-\facility{PS1}
+\facility{PS1, Sloan}
 
 \software{\texttt{astropy} \citep{Astropy-Collaboration13}, 
           \texttt{scipy} \citep{Jones01}, 
