@@ -152,7 +152,8 @@
 
 \begin{document}
 
-\title{\textbf{something better needed} A PanSTARRS1 Star--Galaxy Separation Model: Application in the ZTF Real-Time Pipeline}
+\title{\textbf{something better needed} A PanSTARRS1 Star--Galaxy Separation Model: Application in the ZTF Real-Time Pipeline
+\yutaro{Do you have any ideas for the title of this paper?}}
 
 %% LaTeX will automatically break titles if they run longer than
 %% one line. However, you may use \\ to force a line break if
@@ -226,10 +227,34 @@
 %% Mark off the abstract in the ``abstract'' environment. 
 \begin{abstract}
 
-\yutaro{Do you have any ideas for the title of this paper?}
-
-We did a decent job of separating stars and galaxies.
-
+\NC{
+ In the era of time domain astrophysics implemented by large photometric survey projects, 
+ the importance of the automated and accurate classification of astrophysical sources 
+ is growing increasingly. 
+ Specifically, separating stars and galaxies is the most important steps for many 
+ astronomical researches, from Galactic to cosmology. 
+ Here, we present a method for constructing a large and deep catalog of stars and galaxies utilizing 
+ Pan-STARRS1 (PS1) 3$\pi$ survey imaging catalog, 
+ consists $\sim 3\times10^9$ celestial sources with $\lesssim 23.5$ mag. 
+ We adopt a supervised machine-learning methodology along with the random forest (RF) algorithm 
+ for the construction of the star--galaxy separation model. 
+ The RF model is trained using $\sim 5\times10^4$ PS1 sources 
+ with {\it HST} COSMOS morphological classifications ({\it HST} training set), 
+ and assessed its performance through $\sim 4\times10^6$ PS1 sources with 
+ Sloan Digital Sky Survey spectra (SDSS test set). 
+ For training the RF model and ultimately mapping between classifications in each source, 
+ 11 ``white flux'' features are newly developed to classify all PS1 sources without any imputation, 
+ the use of a dummy variable, or the concern about the bias of the line-of-sight reddenning in the training set. 
+ By the comparison with three simple star--galaxy separation models 
+ including that in the SDSS \texttt{photo} pipeline (SDSS model), 
+ we confirmed that the RF model provides the most plausible predictions for new sources, 
+ by utilizing both of the cross-validated HST training set and the SDSS test set. 
+ Especially for faint sources with $\gtrsim 21$ mag, 
+ the accuracy is improved $\gtrsim 20$\% from the SDSS model. 
+ The RF model have been deployed in the ZTF real-time pipeline to automatically, 
+ resulting in the classification of $\sim 1.5\times10^9$ sources, 
+ to automatically reject stellar sources from the extragalactic alert stream. 
+}
 \end{abstract}
 
 %% Keywords should appear after the \end{abstract} command. 
@@ -795,21 +820,7 @@ the simple and PS1 models.
   %
   \label{fig:cvroc_hst}
 \end{figure}
-%%%%%%%%%%%%%
 
-% Since the ML model is trained with the 11 features
-% consisting \texttt{whitepsfKronDist} and \texttt{whitepsfKronRatio},
-% which is the fundamental information for the classification in the  simple model and the PS1 model, respectively,
-% the TPR of the ML model is higher than that of baseline models in whole FPR value.
-% The ROC AUC is 0.973, 0.937, and 0.851,
-% and the FoM is 0.715, 0.658, and 0.007,
-% for the PS1 model, the simple model, and the ML model, respectively;
-% in the other words, the TPR at the FPR$=0.5\%$ of the ML model and the simple model
-% is improved 70.8$\%$ and 65.1$\%$ from that of the PS1 model, respectively.
-% The overall CV accuracy of the ML model, the simple model, and the PS1 model is
-% 93.3\%, 91.6\%, and 78.4\%.
-
-%%% fig:cvacc_hst %%%
 \begin{figure}[t]
  \centering
   \includegraphics[width=3.35in]{./Figures/CV_Accuracy_HST.pdf}
@@ -818,9 +829,8 @@ the simple and PS1 models.
   on the subset of the \textit{HST} training set sources with
   $i_\mathrm{PS1}$ detections. Accuracy curves for the PS1, simple and RF
   models are shown in orange, blue, and black, respectively. The bin widths
-  are 0.5\,mag, and the error bars represent the central 68\% interval from
-  bootstrap resampling. \yutaro{how many bootstrap samples did you use, and
-  is it 68\% or 90\% that your're showing?} Additionally, a Gaussian KDE of
+  are 0.5\,mag, and the error bars represent the 68\% interval from
+  bootstrap resampling. Additionally, a Gaussian KDE of
   the PDF for the entire \textit{HST} training set subset, as well as the
   stars and galaxies in the subset is shown in the shaded grey, red, and
   green regions, respectively. The amplitude of the star and galaxy PDFs
@@ -834,7 +844,7 @@ The classification accuracy for each model as a function of
 \texttt{whiteKronMag} is shown in 0.5\,mag bins in
 Figure~\ref{fig:cvacc_hst}. The accuracies are estimated via 10-fold CV (see
 above) and the uncertainties represent the inter-68\% interval from
-\yutaro{CCC} bootstrap samples within each bin. \yutaro{Is this correct?}
+100 bootstrap samples within each bin. 
 The classification thresholds for the RF, simple, and PS1 models are 0.5,
 $9.2 \times 10^{-7}$, and 0.05, respectively. Again, the RF and simple
 models provide a significant improvement over the PS1 model. The PS1 model
@@ -847,6 +857,22 @@ that the RF model uses 10 additional features beyond
 
 \subsection{Model Evaluation via an Independent Test Set}
 
+\begin{deluxetable}{cccc}
+    \tablecolumns{4} 
+    \tablewidth{0pt} 
+    \tablecaption{Classification performance for SDSS Test Set \label{tbl:sdss_per}
+    \aam{Should we show uncertainties for them?}}
+    \tablehead{ 
+    \colhead{model} & \colhead{FoM} & \colhead{Accuracy} & \colhead{ROC AUC}
+    }
+    \startdata
+    RF & 0.843 & 0.963  & 0.987  \\
+    simple & 0.798  & 0.956 & 0.985 \\
+    PS1 & 0.290 & 0.900 & 0.984 \\
+    SDSS & 0.777 & 0.971 & 0.987 \\
+    \enddata
+\end{deluxetable}
+
 %%% fig:roc_sdss %%%
 \begin{figure}[t]
  \centering
@@ -854,13 +880,14 @@ that the RF model uses 10 additional features beyond
   %
   \caption{ ROC curves comparing the relative performance of the SDSS
   (orange dot-dashed line), PS1 (slate grey dashed line), simple (green
-  dotted line), and RF (solid purple) models as tested by the SDSS test set.
-  The inset on the right shows a zoom in around FPR = 0.005, shown as a
-  vertical line, corresponding to the FoM. The red star shows the FPR and
-  TPR if adopting the SDSS \textit{photo} classification cut (rather than
-  using the method developed in \citealt{Miller17}). The RF model delivers
-  the highest FoM. \yutaro{we should maybe add a star for the PS1 model as
-  well}}
+  dotted line), and RF (solid purple) models as tested by the SDSS test set. 
+  \NC{The vertical dotted-line shows $\mathrm{FPR} = 0.005$, 
+  corresponding to the FoM. 
+  The inset in the right shows a zoom in around the cross of ROC curves described in the text. }
+  The black and the red star shows the FPR and
+  TPR if adopting the PS1 model and SDSS \textit{photo} classification cut (rather than
+  using the method developed in \citealt{Miller17}), respectively. The RF model delivers
+  the highest FoM.}
   %
   \label{fig:roc_sdss}
 \end{figure}
@@ -900,8 +927,6 @@ that there may be regimes where the SDSS \texttt{photo} classifications are
 superior to the RF model. Below, we argue that a bias in the SDSS training
 set is amplified by a bias in the SDSS \texttt{photo} classification, which
 is why these curves cross.
-
-\yutaro{I think we should put together a similar table to Table 1 for the SDSS stuff}
 
 % Although the data set has the selection bias as mentioned above and thus the
 % distribution of stars and galaxies as a function of brightness is totally
