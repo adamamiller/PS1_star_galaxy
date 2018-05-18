@@ -202,15 +202,17 @@
 %% automatically put the author and affiliation information from the manuscript
 %% and save the corresponding author the trouble of entering it by hand.
 
-\correspondingauthor{A.~A.~Miller}
-\email{amiller@northestern.edu}
+\correspondingauthor{Yutaro Tachibana}
+\email{tachibana@hp.phys.titech.ac.jp}
 
-% \author[0000-0001-9515-478X]{A.~A.~Miller}
-% \affil{Center for Interdisciplinary Exploration and Research in Astrophysics (CIERA) and Department of Physics and Astronomy, Northwestern University, 2145 Sheridan Road, Evanston, IL 60208, USA}
-% \affil{The Adler Planetarium, Chicago, IL 60605, USA}
 
-\author{Concerned ZTF Scientists}
-\affil{Zwicky Transient Facility}
+\author{Yutaro Tachibana}
+\affil{Physics Department, Tokyo Institute of Technology, Tokyo, Japan}
+
+\author[0000-0001-9515-478X]{A.~A.~Miller}
+\affil{Center for Interdisciplinary Exploration and Research in Astrophysics (CIERA) and Department of Physics and Astronomy, Northwestern University, 2145 Sheridan Road, Evanston, IL 60208, USA}
+\affil{The Adler Planetarium, Chicago, IL 60605, USA}
+
 
 %% Note that the \and command from previous versions of AASTeX is now
 %% depreciated in this version as it is no longer necessary. AASTeX 
@@ -228,63 +230,30 @@
 \begin{abstract}
 
 In the era of large photometric surveys, the importance of automated and
-accurate classification of astrophysical sources is rapidly increasing.
-Specifically, the separation of stars and galaxies in astronomical imaging is
-a critical initial step for a wide array of studies, ranging from Galactic
-science to large scale structure and cosmology. Here, we present our method
-to construct a large, deep catalog of stars and galaxies utilizing
-Pan-STARRS1 (PS1) 3$\pi$ survey data, which consists of $\sim$3$\times10^9$
-celestial sources with $\lesssim 23.5$ mag. We develop a supervised
-machine-learning methodology, using the random forest (RF) algorithm, to
-construct the PS1 star--galaxy separation model. We train the model using
-$\sim$5$\times10^4$ PS1 sources with \textit{HST} COSMOS morphological
-classifications, and assessed its performance with $\sim$4$\times10^6$ PS1
-sources with Sloan Digital Sky Survey (SDSS) spectra. We construct 11 ``white
-flux'' features, which combine PS1 flux and shape measurements across all 5
-PS1 filters, to increase the signal-to-noise ratio relative to any individual
-filter and remove potential biases due to the line-of-sight reddenning in the
-training set. We compare the performance of the RF model to 3 alternative
-models, including the SDSS and PS1 photometric classification models, and
-find that the RF model performs best. By number the PS1 catalog is dominated
-by faint sources ($m \gtrsim 21$\,mag), and in this regime the RF model
-significantly outperforms the SDSS and PS1 models. For time-domain surveys,
-star--galaxy separation is critical for identifying the Galactic or
-extragalactic origin of new transients. We have classified
+accurate classification is rapidly increasing. Specifically, the separation
+of stars and galaxies in astronomical imaging is a critical initial step for
+a wide array of studies, ranging from Galactic science to large scale
+structure and cosmology. Here, we present our method to construct a large,
+deep catalog of stars and galaxies utilizing Pan-STARRS1 (PS1) 3$\pi$ survey
+data, which consists of $\sim$3$\times10^9$ sources with
+$m\lesssim23.5$\,mag. We develop a supervised machine-learning methodology,
+using the random forest (RF) algorithm, to construct the PS1 star--galaxy
+separation model. We train the model using $\sim$5$\times10^4$ PS1 sources
+with \textit{HST} COSMOS morphological classifications and assess its
+performance using $\sim$4$\times10^6$ sources with Sloan Digital Sky Survey
+(SDSS) spectra. We construct 11 ``white flux'' features, which combine PS1
+flux and shape measurements across 5 filters, to increase the signal-to-noise
+ratio relative to any individual filter. The RF model is compared to 3
+alternative models, including the SDSS and PS1 photometric classification
+models, and we find that the RF model performs best. By number the PS1
+catalog is dominated by faint sources ($m\gtrsim21$\,mag), and in this regime
+the RF model significantly outperforms the SDSS and PS1 models. For
+time-domain surveys, star--galaxy separation is crucial for identifying the
+Galactic or extragalactic origin of new transients. We have classified
 $\sim$1.5$\times10^9$ sources using the RF model, and these results are used
 within the Zwicky Transient Facility real-time pipeline to automatically
 reject stellar sources from the extragalactic alert stream.
 
-
-
-
-\NC{
- In the era of time domain astrophysics implemented by large photometric survey projects, 
- the importance of the automated and accurate classification of astrophysical sources 
- is growing increasingly. 
- Specifically, separating stars and galaxies is the most important steps for many 
- astronomical researches, from Galactic to cosmology. 
- Here, we present a method for constructing a large and deep catalog of stars and galaxies utilizing 
- Pan-STARRS1 (PS1) 3$\pi$ survey imaging catalog, 
- consists $\sim 3\times10^9$ celestial sources with $\lesssim 23.5$ mag. 
- We adopt a supervised machine-learning methodology along with the random forest (RF) algorithm 
- for the construction of the star--galaxy separation model. 
- The RF model is trained using $\sim 5\times10^4$ PS1 sources 
- with {\it HST} COSMOS morphological classifications ({\it HST} training set), 
- and assessed its performance through $\sim 4\times10^6$ PS1 sources with 
- Sloan Digital Sky Survey spectra (SDSS test set). 
- For training the RF model and ultimately mapping between classifications in each source, 
- 11 ``white flux'' features are newly developed to classify all PS1 sources without any imputation, 
- the use of a dummy variable, or the concern about the bias of the line-of-sight reddenning in the training set. 
- By the comparison with three simple star--galaxy separation models 
- including that in the SDSS \texttt{photo} pipeline (SDSS model), 
- we confirmed that the RF model provides the most plausible predictions for new sources, 
- by utilizing both of the cross-validated HST training set and the SDSS test set. 
- Especially for faint sources with $\gtrsim 21$ mag, 
- the accuracy is improved $\gtrsim 20$\% from the SDSS model. 
- The RF model have been deployed in the ZTF real-time pipeline to automatically, 
- resulting in the classification of $\sim 1.5\times10^9$ sources, 
- to automatically reject stellar sources from the extragalactic alert stream. 
-}
 \end{abstract}
 
 %% Keywords should appear after the \end{abstract} command. 
@@ -1266,17 +1235,20 @@ stream.
 
 
 \acknowledgements
-Many thanks for person who helped us. 
 
-\begin{itemize}
-    \item Brian Bue (possibly also Umaa, check emails)
-    \item PS1 casjobs (Bernie in particular)
-\end{itemize}
+This work would not have been possible without the public release of the PS1
+and SDSS data. We are particularly grateful to the MAST PS1 team for
+answering several inquiries regarding the PS1 data, and especially B.~Shiao,
+who helped us navigate the PS1 database. We thank M.~Graham and A.~Mahabal
+for early conversations regarding the training of the RF model, and B.~Bue
+for a discussion about cross validation strategies.
 
-AAM is funded by the Large Synoptic Survey Telescope Corporation in support of
-the Data Science Fellowship Program. 
-Y.T. is funded by JSPS KAKENHI Grant Numbers JP16J05742.
-\yutaro{Do you need to acknowledge GROWTH} 
+Y.T.\ is funded by JSPS KAKENHI Grant Numbers JP16J05742. Y.T.\ studied as a
+GROWTH intern at Caltech during the summer and fall of 2017. GROWTH is funded
+by the National Science Foundation under Grant No 1545949. A.A.M.\ is funded
+by the Large Synoptic Survey Telescope Corporation in support of the Data
+Science Fellowship Program.
+
 
 \facility{PS1, Sloan}
 
