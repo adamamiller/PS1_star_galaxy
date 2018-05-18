@@ -152,8 +152,9 @@
 
 \begin{document}
 
-\title{\textbf{something better needed} A PanSTARRS1 Star--Galaxy Separation Model: Application in the ZTF Real-Time Pipeline
-\yutaro{Do you have any ideas for the title of this paper?}}
+\title{A PanSTARRS1 Star--Galaxy Separation Model: \\
+       Application in the ZTF Real-Time Pipeline
+       }
 
 %% LaTeX will automatically break titles if they run longer than
 %% one line. However, you may use \\ to force a line break if
@@ -208,6 +209,7 @@
 
 \author{Yutaro Tachibana}
 \affil{Physics Department, Tokyo Institute of Technology, Tokyo, Japan}
+\affil{Department of Physics, Math, and Astronomy, California Institute of Technology, Pasadena, CA, 91125}
 
 \author[0000-0001-9515-478X]{A.~A.~Miller}
 \affil{Center for Interdisciplinary Exploration and Research in Astrophysics (CIERA) and Department of Physics and Astronomy, Northwestern University, 2145 Sheridan Road, Evanston, IL 60208, USA}
@@ -801,6 +803,7 @@ the simple and PS1 models.
     simple & 0.657 $\pm$ 0.020 & 0.916 $\pm$ 0.003 & 0.937 $\pm$ 0.004 \\
     PS1 & 0.007 $\pm$ 0.003 & 0.810 $\pm$ 0.006 & 0.851 $\pm$ 0.006 \\
     \enddata
+    \tablecomments{Uncertainties represent the sample standard deviation for the 10 individual folds used in CV.}
 \end{deluxetable}
 
 %%% fig:cvroc_hst %%%
@@ -859,17 +862,18 @@ that the RF model uses 10 additional features beyond
 \begin{deluxetable}{cccc}
     \tablecolumns{4} 
     \tablewidth{0pt} 
-    \tablecaption{Classification performance for SDSS Test Set \label{tbl:sdss_per}
-    \aam{Should we show uncertainties for them?}}
+    \tablecaption{SDSS Test Set Metrics\label{tbl:sdss_per}}
     \tablehead{ 
-    \colhead{model} & \colhead{FoM} & \colhead{Accuracy} & \colhead{ROC AUC}
+    \colhead{model} & \colhead{FoM} & \colhead{Accuracy\tablenotemark{a}} & \colhead{ROC AUC}
     }
     \startdata
-    RF & 0.843 & 0.963  & 0.987  \\
+    RF & \textbf{0.843} & 0.963  & \textbf{0.987}  \\
     simple & 0.798  & 0.956 & 0.985 \\
     PS1 & 0.290 & 0.900 & 0.984 \\
-    SDSS & 0.777 & 0.971 & 0.987 \\
+    SDSS & 0.777 & \textbf{0.971} & \textbf{0.987} \\
     \enddata
+    \tablecomments{Uncertainties are not reported because the SDSS test set is independent of the training methods for these 4 models. \yutaro{I'm wondering if we should create 100 bootstrap samples of the SDSS test set and report the stats for that?}} 
+    \tablenotetext{a}{Classification accuracies are evaluated using classification cuts of $0.5$, $9.2 \times 10^{-7}$, $0.05$, and $0.145$ for the RF, simple, PS1, and SDSS models, respectively.}
 \end{deluxetable}
 
 %%% fig:roc_sdss %%%
@@ -877,16 +881,14 @@ that the RF model uses 10 additional features beyond
  \centering
   \includegraphics[width=3.35in]{./Figures/ROC_curves_log_inset2.pdf}
   %
-  \caption{ ROC curves comparing the relative performance of the SDSS
-  (orange dot-dashed line), PS1 (slate grey dashed line), simple (green
-  dotted line), and RF (solid purple) models as tested by the SDSS test set. 
-  \NC{The vertical dotted-line shows $\mathrm{FPR} = 0.005$, 
-  corresponding to the FoM. 
-  The inset in the right shows a zoom in around the cross of ROC curves described in the text. }
-  The black and the red star shows the FPR and
-  TPR if adopting the PS1 model and SDSS \textit{photo} classification cut (rather than
-  using the method developed in \citealt{Miller17}), respectively. The RF model delivers
-  the highest FoM.}
+  \caption{ ROC curves comparing the relative performance of the SDSS (orange
+  dot-dashed line), PS1 (slate grey dashed line), simple (green dotted line),
+  and RF (solid purple) models as tested by the SDSS test set. The vertical
+  dotted line shows $\mathrm{FPR} = 0.005$, corresponding to the FoM. The
+  inset shows a zoom in around the region where the ROC curves cross (see
+  text for further details). The black and the red stars show the FPR and TPR
+  if adopting the PS1 model and SDSS \textit{photo} classification cuts,
+  respectively. The RF model delivers the highest FoM.}
   %
   \label{fig:roc_sdss}
 \end{figure}
@@ -1082,25 +1084,29 @@ accuracy.
 \section{The PS1 Catalog Deployed: Integration in ZTF}
 
 %%%%%%%%
-\begin{table*}[htb]
-\begin{center}
-\caption{RF model classification threshold and TPR at various fixed FPR values.}
-\label{tbl:fpr}
-\begin{tabular}{lcc|lccccc}
-\hline\hline
-                 Source               & $N$ & Accuracy & FPR & 0.005 & 0.01 & 0.02 & 0.05 & 0.1 \\ \hline
-\multirow{2}{*}{All sources} & \multirow{2}{*}{35,007} & \multirow{2}{*}{$93.9\pm0.1$\%} & 
-                                              TPR  & $0.733 \pm 0.011$ &  $0.793 \pm 0.007$ & $0.844 \pm 0.005$ & $0.906 \pm 0.004$ & $0.946 \pm 0.002$  \\
-\multicolumn{1}{l}{}                 & & & Threshold & $0.830 \pm 0.015$ &  $0.721 \pm 0.012$ & $0.597 \pm 0.009$ & $0.393 \pm 0.007$ & $0.224 \pm 0.004$  \\ \hline
-\multirow{2}{*}{$\mathtt{rKronMag} < 21$} & \multirow{2}{*}{13,570} & \multirow{2}{*}{$98.0\pm0.1$\%} & 
+\begin{deluxetable*}{lcc|lccccc}
+    \tablecolumns{9} 
+    \tablewidth{0pt} 
+    \tablecaption{Classification thresholds for the ZTF-PS1 Catalog.
+\label{tbl:fpr}}
+    \tablehead{ 
+    \colhead{Selection criteria} & \colhead{$N$\tablenotemark{a}} & \colhead{Accuracy\tablenotemark{a}} & \colhead{FPR} & \colhead{0.005} & \colhead{0.01} & \colhead{0.02} & \colhead{0.05} & \colhead{0.1}
+    }
+    \startdata
+\multirow{2}{*}{All sources} & \multirow{2}{*}{35,007} & \multirow{2}{*}{$93.9\pm0.1$\%} &                     TPR  & $0.733 \pm 0.011$ &  $0.793 \pm 0.007$ & $0.844 \pm 0.005$ & $0.906 \pm 0.004$ & $0.946 \pm 0.002$ \\
+\multicolumn{1}{l}{}                 & & & Threshold & $0.830 \pm 0.015$ &  $0.721 \pm 0.012$ & $0.597 \pm 0.009$ & $0.393 \pm 0.007$ & $0.224 \pm 0.004$
+\\ \hline
+\multirow{2}{*}{$\mathtt{rKronMag} < 21$} & \multirow{2}{*}{13,570} & \multirow{2}{*}{$98.0\pm0.1$\%} &
                                               TPR  & $0.771 \pm 0.069$ &  $0.963 \pm 0.006$ & $0.979 \pm 0.002$ & $0.990 \pm 0.001$ & $0.995 \pm 0.001$ \\
                                                 & & & Threshold & $0.975 \pm 0.043$ &  $0.658 \pm 0.055$ & $0.414 \pm 0.025$ & $0.170 \pm 0.012$ & $0.069 \pm 0.004$   \\ \hline
-\multirow{2}{*}{$\mathtt{rKronMag} < 20$}  & \multirow{2}{*}{6,956}& \multirow{2}{*}{$99.0\pm0.1$\%} & 
+\multirow{2}{*}{$\mathtt{rKronMag} < 20$}  & \multirow{2}{*}{6,956}& \multirow{2}{*}{$99.0\pm0.1$\%} &
                                               TPR  & $0.621 \pm 0.164$ &  $0.951 \pm 0.056$ & $0.994 \pm 0.001$ & $0.997 \pm 0.001$ & $0.998 \pm 0.001$  \\
-                                                 & &  & Threshold & $0.995 \pm 0.019$ &  $0.930 \pm 0.172$ & $0.331 \pm 0.053$ & $0.133 \pm 0.021$ & $0.049 \pm 0.004$ \\ \hline
-\end{tabular}
-\end{center}
-\end{table*}
+                                                 & &  & Threshold & $0.995 \pm 0.019$ &  $0.930 \pm 0.172$ & $0.331 \pm 0.053$ & $0.133 \pm 0.021$ & $0.049 \pm 0.004$
+    \enddata
+    \tablecomments{10-fold CV is performed on the entire \textit{HST} training set, but the metrics reported here include only sources that satisfy the selection criteria defined by the first column and $\mathtt{nDetections} \ge 3$.} 
+    \tablenotetext{a}{Number of \textit{HST} test set sources within the selected subset.}
+    \tablenotetext{b}{Classification accuracies are reported relative to a $\mathrm{RF \; score} = 0.5$ classification threshold.}
+\end{deluxetable*}
 %%%%%%%%
 
 While we have developed a general model to separate stars and galaxies, the
@@ -1244,11 +1250,11 @@ for early conversations regarding the training of the RF model, and B.~Bue
 for a discussion about cross validation strategies.
 
 Y.T.\ is funded by JSPS KAKENHI Grant Numbers JP16J05742. Y.T.\ studied as a
-GROWTH intern at Caltech during the summer and fall of 2017. GROWTH is funded
-by the National Science Foundation under Grant No 1545949. A.A.M.\ is funded
-by the Large Synoptic Survey Telescope Corporation in support of the Data
-Science Fellowship Program.
-
+Global Relay of Observatories Watching Transients Happen (GROWTH) intern at
+Caltech during the summer and fall of 2017. GROWTH is funded by the National
+Science Foundation under Partnerships for International Research and
+Education Grant No 1545949. A.A.M.\ is funded by the Large Synoptic Survey
+Telescope Corporation in support of the Data Science Fellowship Program.
 
 \facility{PS1, Sloan}
 
