@@ -23,7 +23,7 @@
 %%
 %%
 %% using aastex version 6.1
-\documentclass[twocolumn]{aastex62}
+\documentclass[twocolumn, dvipdfmx]{aastex62}
 
 %% The default is a single spaced, 10 point font, single spaced article.
 %% There are 5 other style options available via an optional argument. They
@@ -207,8 +207,9 @@
 \email{tachibana@hp.phys.titech.ac.jp}
 
 
-\author{Yutaro Tachibana}
-\affil{Physics Department, Tokyo Institute of Technology, Tokyo, Japan}
+\author[0000-0001-6584-6945]{Yutaro Tachibana}
+\affil{Department of Physics, Tokyo Institute of Technology, 2-12-1 Ookayama, Meguro-ku, Tokyo 152-8551,
+Japan}
 \affil{Department of Physics, Math, and Astronomy, California Institute of Technology, Pasadena, CA, 91125}
 
 \author[0000-0001-9515-478X]{A.~A.~Miller}
@@ -1090,7 +1091,7 @@ accuracy.
     \tablecaption{Classification thresholds for the ZTF-PS1 Catalog.
 \label{tbl:fpr}}
     \tablehead{ 
-    \colhead{Selection criteria} & \colhead{$N$\tablenotemark{a}} & \colhead{Accuracy\tablenotemark{a}} & \colhead{FPR} & \colhead{0.005} & \colhead{0.01} & \colhead{0.02} & \colhead{0.05} & \colhead{0.1}
+    \colhead{Selection criteria} & \colhead{$N$\tablenotemark{a}} & \colhead{Accuracy\tablenotemark{b}} & \colhead{FPR} & \colhead{0.005} & \colhead{0.01} & \colhead{0.02} & \colhead{0.05} & \colhead{0.1}
     }
     \startdata
 \multirow{2}{*}{All sources} & \multirow{2}{*}{35,007} & \multirow{2}{*}{$93.9\pm0.1$\%} &                     TPR  & $0.733 \pm 0.011$ &  $0.793 \pm 0.007$ & $0.844 \pm 0.005$ & $0.906 \pm 0.004$ & $0.946 \pm 0.002$ \\
