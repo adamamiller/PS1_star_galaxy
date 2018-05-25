@@ -23,7 +23,7 @@
 %%
 %%
 %% using aastex version 6.1
-\documentclass[twocolumn, dvipdfmx]{aastex62}
+\documentclass[twocolumn]{aastex62}
 
 %% The default is a single spaced, 10 point font, single spaced article.
 %% There are 5 other style options available via an optional argument. They
@@ -1083,6 +1083,7 @@ accuracy.
 % \section{Discussion}
 
 \section{The PS1 Catalog Deployed: Integration in ZTF}
+\label{sec:ztf}
 
 %%%%%%%%
 \begin{deluxetable*}{lcc|lccccc}
@@ -1207,7 +1208,15 @@ To construct the RF model, we introduced ``white flux'' features, which
 correspond to a weighted mean of the relevant features over the
 $grizy_{\mathrm {PS1}}$ filters in which a source is detected. The ``white
 flux'' features allow us to classify all PS1 sources, irrespective of the
-filters in which the source was detected or the line-of-sight reddenning. One of these newly created features, \texttt{whitePSFKronDist}, is useful on its own for separating stars and galaxies. Unlike a hard cut on the PSF and Kron flux ratio, as is employed by the SDSS and PS1 models, \texttt{whitePSFKronDist} retains knowledge of the SNR and therefore can provide higher confidence classifications. From \texttt{whitePSFKronDist} we created the simple model, which does a good job of separating stars and galaxies. Ultimately, the 11 ``white flux'' features, used in combination with the RF algorithm, provide the best classification of PS1 sources. 
+filters in which the source was detected or the line-of-sight reddenning.
+One of these newly created features, \texttt{whitePSFKronDist}, is useful on
+its own for separating stars and galaxies. Unlike a hard cut on the PSF and
+Kron flux ratio, as is employed by the SDSS and PS1 models,
+\texttt{whitePSFKronDist} retains knowledge of the SNR and therefore can
+provide higher confidence classifications. From \texttt{whitePSFKronDist} we
+created the simple model, which does a good job of separating stars and
+galaxies. Ultimately, the 11 ``white flux'' features, used in combination
+with the RF algorithm, provide the best classification of PS1 sources.
 
 CV on the \textit{HST} training set shows that the RF (FoM$ = 0.71$) and
 simple (FoM$ = 0.657$) models greatly outperform the PS1 (FoM$ = 0.007$)
@@ -1241,8 +1250,30 @@ removing the numerous foreground stellar flares, false positives in the
 search for KNe and other fast transients, from the extragalactic alert
 stream.
 
-\todo{Text about future efforts to improve these classifications/Big picture of this effort?}
-
+Moving forward, the release of parallax and proper motion measurements for
+$> 10^{9}$ compact sources observed by the \textit{Gaia} satellite
+\citep{GaiaDR2} will significantly increase the fidelity of the PS1
+star--galaxy catalog. The \textit{HST} training set has very few bright
+sources and no sources at low Galactic latitudes, leading to less confident
+classifications in these regions (see Figure~\ref{fig:ztf_hist}). As a
+space-based observatory, \textit{Gaia} will resolve many stellar blends in
+the Galactic plane and identify millions of stars brighter than 16\,mag.
+Many of the ambiguous classifications in the ZTF-PS1 catalog (see
+\S\ref{sec:ztf}) will be directly identified as stars due to their high
+proper motions and parallaxes. The addition of \textit{Gaia} will also
+present new challenges, however, as the spacecraft does not downlink
+measurements for extended sources. Thus, while \textit{Gaia} would allow us
+to increase the size of our training set by many orders of magnitude, it
+would also introduce a significant clsas imbalance. Correcting for the lack
+of galaxies would require new approaches beyond those described here. It
+should also be noted that \textit{Gaia} alone is not sufficient for our
+purposes, as it only detects sources with $G \lesssim 21$\,mag, which does
+not include the faint, flaring stars that we expect to be the primary false
+positive in the search for fast transients. Nevertheless, our ability to now
+merge several $\sim$all-sky surveys provides unprecedented power in the
+classification astronomical sources. This power is particularly important
+for improving the scientific output and follow-up efficiency of time-domain
+surveys.
 
 \acknowledgements
 
