@@ -23,7 +23,7 @@
 %%
 %%
 %% using aastex version 6.1
-\documentclass[twocolumn, dvipdfmx]{aastex62}
+\documentclass[twocolumn]{aastex62}
 
 %% The default is a single spaced, 10 point font, single spaced article.
 %% There are 5 other style options available via an optional argument. They
@@ -868,10 +868,10 @@ that the RF model uses 10 additional features beyond
     \colhead{model} & \colhead{FoM} & \colhead{Accuracy\tablenotemark{a}} & \colhead{ROC AUC}
     }
     \startdata
-    RF & \textbf{0.843} $\pm$ 0.001 & 0.96254 $\pm$ 0.00010 & \textbf{0.98713} $\pm$ 0.00007 \\
-    simple & 0.798 $\pm$ 0.002  & 0.95568 $\pm$ 0.00011 & 0.98503 $\pm$ 0.00008 \\
-    PS1 & 0.290 $\pm$ 0.004 & 0.96117 $\pm$ 0.00009 & 0.98411 $\pm$ 0.00007 \\
-    SDSS & 0.777 $\pm$ 0.003 & \textbf{0.97129} $\pm$ 0.00009 & 0.98660 $\pm$ 0.00008 \\
+    RF & \textbf{0.843} $\pm$ 0.001 & 0.9625 $\pm$ 0.0001 & \textbf{0.98713} $\pm$ 0.00007 \\
+    simple & 0.798 $\pm$ 0.002  & 0.9557 $\pm$ 0.0001 & 0.98503 $\pm$ 0.00008 \\
+    PS1 & 0.290 $\pm$ 0.004 & 0.9612 $\pm$ 0.0001 & 0.98411 $\pm$ 0.00007 \\
+    SDSS & 0.777 $\pm$ 0.003 & \textbf{0.9713} $\pm$ 0.0001 & 0.98660 $\pm$ 0.00008 \\
     \enddata
     \tablecomments{Uncertainties represent the sample standard deviation for the 100 bootstrap resampling.} 
     \tablenotetext{a}{Classification accuracies are evaluated using classification cuts of $0.5$, $9.2 \times 10^{-7}$, $0.05$, and $0.145$ for the RF, simple, PS1, and SDSS models, respectively.}
