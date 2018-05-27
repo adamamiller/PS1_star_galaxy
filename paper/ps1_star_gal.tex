@@ -286,7 +286,10 @@ imaging catalogs in the past two decades. Separating unresolved point sources (i
 [QSOs]) from photometrically extended sources (i.e., galaxies) is one of the
 most challenging and important steps in the extraction of astronomical
 information from these imaging catalogs. For faint sources especially,
-performing this task well boosts our progress in understanding the Universe.
+performing this task well boosts our progress in understanding the Universe 
+\NC{
+(e.g., \citealt{Sevilla18}).
+}
 The high fidelity separation of stars and galaxies allows us to investigate
 the nature of dark matter by: (i) tracing structure in the Milky Way halo
 (e.g., \citealt{Belokurov06}), (ii) measuring galaxy-galaxy correlation
@@ -552,7 +555,10 @@ catalog is being developed precisely to answer this question. Furthermore,
 the pencil beam sample from the \textit{HST} training set traces a narrow
 range of dust columns, so the application of a model including color
 information without reddening corrections would lead to biased
-classifications, particularly in regions of high reddening (e.g., the
+classifications 
+\NC{
+\citep{Sevilla18},}
+ particularly in regions of high reddening (e.g., the
 Galactic plane). We conclude that the benefits of the ``white flux''
 features, which eliminate the need for reddening corrections, outweigh any
 losses from the exclusion of color information.
@@ -868,12 +874,12 @@ that the RF model uses 10 additional features beyond
     \colhead{model} & \colhead{FoM} & \colhead{Accuracy\tablenotemark{a}} & \colhead{ROC AUC}
     }
     \startdata
-    RF & \textbf{0.843} & 0.963  & \textbf{0.987}  \\
-    simple & 0.798  & 0.956 & 0.985 \\
-    PS1 & 0.290 & 0.900 & 0.984 \\
-    SDSS & 0.777 & \textbf{0.971} & \textbf{0.987} \\
+    RF & \textbf{0.843} $\pm$ 0.001 & 0.9625 $\pm$ 0.0001 & \textbf{0.98713} $\pm$ 0.00007 \\
+    simple & 0.798 $\pm$ 0.002  & 0.9557 $\pm$ 0.0001 & 0.98503 $\pm$ 0.00008 \\
+    PS1 & 0.290 $\pm$ 0.004 & 0.9612 $\pm$ 0.0001 & 0.98411 $\pm$ 0.00007 \\
+    SDSS & 0.777 $\pm$ 0.003 & \textbf{0.9713} $\pm$ 0.0001 & 0.98660 $\pm$ 0.00008 \\
     \enddata
-    \tablecomments{Uncertainties are not reported because the SDSS test set is independent of the training methods for these 4 models. \yutaro{I'm wondering if we should create 100 bootstrap samples of the SDSS test set and report the stats for that?}} 
+    \tablecomments{Uncertainties represent the sample standard deviation for the 100 bootstrap resampling.} 
     \tablenotetext{a}{Classification accuracies are evaluated using classification cuts of $0.5$, $9.2 \times 10^{-7}$, $0.05$, and $0.145$ for the RF, simple, PS1, and SDSS models, respectively.}
 \end{deluxetable}
 
@@ -1226,7 +1232,7 @@ provide overall classification accuracies $\gtrsim 85$\% as faint as
 $\mathtt{whiteKronMag} = 23$\,mag.
 
 We find that when evaluated with the SDSS test set, the SDSS and PS1 models
-provide mode accurate classifications than the RF and simple models,
+provide more accurate classifications than the RF and simple models,
 especially for faint ($\mathtt{whiteKronMag} \gtrsim 21$\,mag) sources. This
 reversal, relative to the \textit{HST} training set results, can be
 attributed to a bias in the SDSS test set and the SDSS classification model.
@@ -1264,14 +1270,22 @@ proper motions and parallaxes. The addition of \textit{Gaia} will also
 present new challenges, however, as the spacecraft does not downlink
 measurements for extended sources. Thus, while \textit{Gaia} would allow us
 to increase the size of our training set by many orders of magnitude, it
-would also introduce a significant clsas imbalance. Correcting for the lack
+would also introduce a significant class imbalance. Correcting for the lack
 of galaxies would require new approaches beyond those described here. It
 should also be noted that \textit{Gaia} alone is not sufficient for our
 purposes, as it only detects sources with $G \lesssim 21$\,mag, which does
 not include the faint, flaring stars that we expect to be the primary false
 positive in the search for fast transients. Nevertheless, our ability to now
 merge several $\sim$all-sky surveys provides unprecedented power in the
-classification astronomical sources. This power is particularly important
+classification astronomical sources. 
+\NC{
+In addition to the reinforcement of the amount of relevant information for each source, 
+the assessment and the use of a machine-learned classifier 
+with an alternative ensemble learning algorithm 
+(e.g., adaptive boosting algorithm; \citealt{Freund97}) 
+would be meaningful to ensure and to strengthen the power of the star--galaxy separation \citep{Sevilla18}. 
+}
+This power is particularly important
 for improving the scientific output and follow-up efficiency of time-domain
 surveys.
 
