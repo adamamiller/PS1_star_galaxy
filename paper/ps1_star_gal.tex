@@ -1226,7 +1226,7 @@ provide overall classification accuracies $\gtrsim 85$\% as faint as
 $\mathtt{whiteKronMag} = 23$\,mag.
 
 We find that when evaluated with the SDSS test set, the SDSS and PS1 models
-provide mode accurate classifications than the RF and simple models,
+provide more accurate classifications than the RF and simple models,
 especially for faint ($\mathtt{whiteKronMag} \gtrsim 21$\,mag) sources. This
 reversal, relative to the \textit{HST} training set results, can be
 attributed to a bias in the SDSS test set and the SDSS classification model.
@@ -1264,14 +1264,21 @@ proper motions and parallaxes. The addition of \textit{Gaia} will also
 present new challenges, however, as the spacecraft does not downlink
 measurements for extended sources. Thus, while \textit{Gaia} would allow us
 to increase the size of our training set by many orders of magnitude, it
-would also introduce a significant clsas imbalance. Correcting for the lack
+would also introduce a significant class imbalance. Correcting for the lack
 of galaxies would require new approaches beyond those described here. It
 should also be noted that \textit{Gaia} alone is not sufficient for our
 purposes, as it only detects sources with $G \lesssim 21$\,mag, which does
 not include the faint, flaring stars that we expect to be the primary false
 positive in the search for fast transients. Nevertheless, our ability to now
 merge several $\sim$all-sky surveys provides unprecedented power in the
-classification astronomical sources. This power is particularly important
+classification astronomical sources. 
+\NC{
+Combining with the increasing of the amount of information for each source, 
+the assessment of the classifier learned with the use of an alternative ensemble learning algorithm 
+(e.g., adaptive boosting algorithm; AdaBoost, \citealt{Freund97}) 
+would be meaningful to ascertain and boost the power of the star--galaxy separation \citep{Sevilla18}. 
+}
+This power is particularly important
 for improving the scientific output and follow-up efficiency of time-domain
 surveys.
 
