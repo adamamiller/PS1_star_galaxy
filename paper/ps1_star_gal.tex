@@ -23,7 +23,7 @@
 %%
 %%
 %% using aastex version 6.1
-\documentclass[twocolumn]{aastex62}
+\documentclass[twocolumn, dvipdfmx]{aastex62}
 
 %% The default is a single spaced, 10 point font, single spaced article.
 %% There are 5 other style options available via an optional argument. They
@@ -286,7 +286,10 @@ imaging catalogs in the past two decades. Separating unresolved point sources (i
 [QSOs]) from photometrically extended sources (i.e., galaxies) is one of the
 most challenging and important steps in the extraction of astronomical
 information from these imaging catalogs. For faint sources especially,
-performing this task well boosts our progress in understanding the Universe.
+performing this task well boosts our progress in understanding the Universe 
+\NC{
+(e.g., \citealt{Sevilla18}).
+}
 The high fidelity separation of stars and galaxies allows us to investigate
 the nature of dark matter by: (i) tracing structure in the Milky Way halo
 (e.g., \citealt{Belokurov06}), (ii) measuring galaxy-galaxy correlation
@@ -552,7 +555,10 @@ catalog is being developed precisely to answer this question. Furthermore,
 the pencil beam sample from the \textit{HST} training set traces a narrow
 range of dust columns, so the application of a model including color
 information without reddening corrections would lead to biased
-classifications, particularly in regions of high reddening (e.g., the
+classifications 
+\NC{
+\citep{Sevilla18},}
+ particularly in regions of high reddening (e.g., the
 Galactic plane). We conclude that the benefits of the ``white flux''
 features, which eliminate the need for reddening corrections, outweigh any
 losses from the exclusion of color information.
@@ -1273,10 +1279,11 @@ positive in the search for fast transients. Nevertheless, our ability to now
 merge several $\sim$all-sky surveys provides unprecedented power in the
 classification astronomical sources. 
 \NC{
-Combining with the increasing of the amount of information for each source, 
-the assessment of the classifier learned with the use of an alternative ensemble learning algorithm 
-(e.g., adaptive boosting algorithm; AdaBoost, \citealt{Freund97}) 
-would be meaningful to ascertain and boost the power of the star--galaxy separation \citep{Sevilla18}. 
+In addition to the reinforcement of the amount of relevant information for each source, 
+the assessment and the use of a machine-learned classifier 
+with an alternative ensemble learning algorithm 
+(e.g., adaptive boosting algorithm; \citealt{Freund97}) 
+would be meaningful to ensure and to strengthen the power of the star--galaxy separation \citep{Sevilla18}. 
 }
 This power is particularly important
 for improving the scientific output and follow-up efficiency of time-domain
