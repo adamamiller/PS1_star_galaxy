@@ -286,11 +286,9 @@ imaging catalogs in the past two decades. Separating unresolved point sources (i
 [QSOs]) from photometrically extended sources (i.e., galaxies) is one of the
 most challenging and important steps in the extraction of astronomical
 information from these imaging catalogs. For faint sources especially,
-performing this task well boosts our progress in understanding the Universe 
-\NC{
+performing this task well accelerates our progress in understanding the Universe 
 (e.g., \citealt{Sevilla18}).
-}
-The high fidelity separation of stars and galaxies allows us to investigate
+Separating stars and galaxies allows us to investigate
 the nature of dark matter by: (i) tracing structure in the Milky Way halo
 (e.g., \citealt{Belokurov06}), (ii) measuring galaxy-galaxy correlation
 functions (e.g., \citealt{Ross11, Ho15}), and (iii) detecting the weak
@@ -547,21 +545,18 @@ classifier. Ultimately, we tested models with and without the ``white flux''
 features and found that they are statistically equivalent when tested with
 the \textit{HST} training set.
 
-The direct use of color information as model features would require reddening
-corrections for all PS1 sources. Not only is this a daunting task, but
-accurate corrections would require a priori knowledge as to which sources are
-Galactic and which are extragalactic (e.g., \citealt{Green15}). The PS1
-catalog is being developed precisely to answer this question. Furthermore,
-the pencil beam sample from the \textit{HST} training set traces a narrow
-range of dust columns, so the application of a model including color
-information without reddening corrections would lead to biased
-classifications 
-\NC{
-\citep{Sevilla18},}
- particularly in regions of high reddening (e.g., the
-Galactic plane). We conclude that the benefits of the ``white flux''
-features, which eliminate the need for reddening corrections, outweigh any
-losses from the exclusion of color information.
+The direct use of color information as model features would require
+reddening corrections for all PS1 sources. Not only is this a daunting task,
+but accurate corrections would require a priori knowledge as to which
+sources are Galactic and which are extragalactic (e.g., \citealt{Green15}).
+The PS1 catalog is being developed precisely to answer this question.
+Furthermore, the pencil beam sample from the \textit{HST} training set
+traces a narrow range of dust columns, so the application of a model
+including color information without reddening corrections would lead to
+biased classifications \citep{Sevilla18} particularly in regions of high
+reddening (e.g., the Galactic plane). We conclude that the benefits of the
+``white flux'' features, which eliminate the need for reddening corrections,
+outweigh any losses from the exclusion of color information.
 
 \begin{figure*}[htb]
  \centering
@@ -706,12 +701,20 @@ classification accuracy of $\sim$91\%.
 
 \subsubsection{The Random Forest Algorithm}\label{sec:rf_alg}
 
-Based on its success in previous astronomical applications (e.g., \citealt{Richards12a, Huppenkothen17, Brink13, Wright15, Goldstein15}), including
-star--galaxy separation (e.g., \citealt{Vasconcellos11,Miller17}), we adopt
-the RF algorithm \citep{Breiman01} for our machine learning model. Briefly,
-RF is built on decision tree models \citep{Quinlan93} that utilize bagging
-\citep{Breiman96}, wherein bootstrap samples of the training set are used to
-train each of the $N_{\mathrm{tree}}$ individual trees. Within the
+Based on its success in previous astronomical applications (e.g.,
+\citealt{Richards12a, Huppenkothen17, Brink13, Wright15, Goldstein15}),
+including star--galaxy separation (e.g., \citealt{Vasconcellos11,Miller17}),
+we adopt the RF algorithm \citep{Breiman01} for our machine learning model.
+In fact, following the comparison of several different algorithms it was
+recently found that ensemble tree-based methods, such as RF, perform best
+when separating stars and galaxies \citep{Sevilla18}. In future work, we
+will consider alternative ensemble methods (such as adaptive boosting;
+\citealt{Freund97}), which is found to slightly outperform RF for
+star--galaxy separation \citep{Sevilla18}.
+
+Briefly, RF is built on decision tree models \citep{Quinlan93} that utilize
+bagging \citep{Breiman96}, wherein bootstrap samples of the training set are
+used to train each of the $N_{\mathrm{tree}}$ individual trees. Within the
 individual trees, only $m_{\mathrm{try}}$ randomly selected features are
 used to separate sources at each node, and nodes cannot be further split if
 there are fewer than \texttt{nodesize} sources in the node. The randomness
@@ -879,7 +882,7 @@ that the RF model uses 10 additional features beyond
     PS1 & 0.290 $\pm$ 0.004 & 0.9612 $\pm$ 0.0001 & 0.98411 $\pm$ 0.00007 \\
     SDSS & 0.777 $\pm$ 0.003 & \textbf{0.9713} $\pm$ 0.0001 & 0.98660 $\pm$ 0.00008 \\
     \enddata
-    \tablecomments{Uncertainties represent the sample standard deviation for the 100 bootstrap resampling.} 
+    \tablecomments{Uncertainties represent the sample standard deviation for the 100 bootstrap samples of the SDSS test set.} 
     \tablenotetext{a}{Classification accuracies are evaluated using classification cuts of $0.5$, $9.2 \times 10^{-7}$, $0.05$, and $0.145$ for the RF, simple, PS1, and SDSS models, respectively.}
 \end{deluxetable}
 
@@ -1277,15 +1280,7 @@ purposes, as it only detects sources with $G \lesssim 21$\,mag, which does
 not include the faint, flaring stars that we expect to be the primary false
 positive in the search for fast transients. Nevertheless, our ability to now
 merge several $\sim$all-sky surveys provides unprecedented power in the
-classification astronomical sources. 
-\NC{
-In addition to the reinforcement of the amount of relevant information for each source, 
-the assessment and the use of a machine-learned classifier 
-with an alternative ensemble learning algorithm 
-(e.g., adaptive boosting algorithm; \citealt{Freund97}) 
-would be meaningful to ensure and to strengthen the power of the star--galaxy separation \citep{Sevilla18}. 
-}
-This power is particularly important
+classification of astronomical sources. This power is particularly important
 for improving the scientific output and follow-up efficiency of time-domain
 surveys.
 
