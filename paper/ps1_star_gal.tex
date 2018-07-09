@@ -1107,34 +1107,10 @@ accuracy.
 \section{The PS1 Catalog Deployed: Integration in ZTF}
 \label{sec:ztf}
 
-%%%%%%%%
-\begin{deluxetable*}{lcc|lccccc}
-    \tablecolumns{9} 
-    \tablewidth{0pt} 
-    \tablecaption{Classification thresholds for the ZTF-PS1 Catalog.
-\label{tbl:fpr}}
-    \tablehead{ 
-    \colhead{Selection criteria} & \colhead{$N$\tablenotemark{a}} & \colhead{Accuracy\tablenotemark{b}} & \colhead{FPR} & \colhead{0.005} & \colhead{0.01} & \colhead{0.02} & \colhead{0.05} & \colhead{0.1}
-    }
-    \startdata
-\multirow{2}{*}{All sources} & \multirow{2}{*}{35,007} & \multirow{2}{*}{$93.9\pm0.1$\%} &                     TPR  & $0.733 \pm 0.011$ &  $0.793 \pm 0.007$ & $0.844 \pm 0.005$ & $0.906 \pm 0.004$ & $0.946 \pm 0.002$ \\
-\multicolumn{1}{l}{}                 & & & Threshold & $0.830 \pm 0.015$ &  $0.721 \pm 0.012$ & $0.597 \pm 0.009$ & $0.393 \pm 0.007$ & $0.224 \pm 0.004$
-\\ \hline
-\multirow{2}{*}{$\mathtt{rKronMag} < 21$} & \multirow{2}{*}{13,570} & \multirow{2}{*}{$98.0\pm0.1$\%} &
-                                              TPR  & $0.771 \pm 0.069$ &  $0.963 \pm 0.006$ & $0.979 \pm 0.002$ & $0.990 \pm 0.001$ & $0.995 \pm 0.001$ \\
-                                                & & & Threshold & $0.975 \pm 0.043$ &  $0.658 \pm 0.055$ & $0.414 \pm 0.025$ & $0.170 \pm 0.012$ & $0.069 \pm 0.004$   \\ \hline
-\multirow{2}{*}{$\mathtt{rKronMag} < 20$}  & \multirow{2}{*}{6,956}& \multirow{2}{*}{$99.0\pm0.1$\%} &
-                                              TPR  & $0.621 \pm 0.164$ &  $0.951 \pm 0.056$ & $0.994 \pm 0.001$ & $0.997 \pm 0.001$ & $0.998 \pm 0.001$  \\
-                                                 & &  & Threshold & $0.995 \pm 0.019$ &  $0.930 \pm 0.172$ & $0.331 \pm 0.053$ & $0.133 \pm 0.021$ & $0.049 \pm 0.004$
-    \enddata
-    \tablecomments{10-fold CV is performed on the entire \textit{HST} training set, but the metrics reported here include only sources that satisfy the selection criteria defined by the first column and $\mathtt{nDetections} \ge 3$.} 
-    \tablenotetext{a}{Number of \textit{HST} test set sources within the selected subset.}
-    \tablenotetext{b}{Classification accuracies are reported relative to a $\mathrm{RF \; score} = 0.5$ classification threshold.}
-\end{deluxetable*}
-%%%%%%%%
+\subsection{The Zwicky Transient Facility}
 
 While we have developed a general model to separate stars and galaxies, the
-resulting RF classifications has been specifically deployed in the Zwicky
+resulting RF classifications have been specifically deployed in the Zwicky
 Transient Facility\footnote{\url{http://www.ztf.caltech.edu/}} (ZTF;
 \citealt{Bellm:18:ZTF, Dekany:18:ZTF}) real-time pipeline
 \citep{Masci:18:ZTF}. Briefly, ZTF is the next-generation Palomar
@@ -1146,6 +1122,8 @@ $R_\mathrm{ZTF} \approx 20.4$\,mag ($5\sigma$). ZTF will observe the entire
 sky with $\delta > -30^{\circ}$ $\sim$300 times per year, with publicly
 distributed alerts on newly observed positional or flux variability released
 in near real time \citep{Patterson:18:ZTF}.
+
+\subsection{Integration in the ZTF Alert Stream}
 
 An initial, and pressing, question for filtering the ZTF alert stream, is:
 does the newly identified variable have a Galactic or extragalactic origin?
@@ -1192,19 +1170,46 @@ ZTF calibration sources. Ultimately, non-unique sources (i.e., if a single
 
 In total, there are 1,484,281,394 sources with classifications in the ZTF
 database. A histogram showing the distribution of the final classifications
-is shown in Figure~\ref{fig:ztf_hist}. The thresholds appropriate for
-identifying point-source counterparts to the ZTF candidates are reported in
-Table~\ref{tbl:fpr} (note that these thresholds apply to
-$\mathtt{nDetections} \ge 3$ sources). Of the $\sim$1.5$\times 10^{9}$
-sources in the ZTF-PS1 catalog, 734,476,355 ($\sim$50\%) are classified as
-stars using the FoM-optimized classification threshold of 0.83.
+is shown in Figure~\ref{fig:ztf_hist}. \todo{re-word after writing the gaia
+section} The thresholds appropriate for identifying point-source
+counterparts to the ZTF candidates are reported in Table~\ref{tbl:fpr} (note
+that these thresholds apply to $\mathtt{nDetections} \ge 3$ sources). Of the
+$\sim$1.5$\times 10^{9}$ sources in the ZTF-PS1 catalog, 734,476,355
+($\sim$50\%) are classified as stars using the FoM-optimized classification
+threshold of 0.83.
+
+%%%%%%%%
+\begin{deluxetable*}{lcc|lccccc}
+    \tablecolumns{9} 
+    \tablewidth{0pt} 
+    \tablecaption{Classification thresholds for the ZTF-PS1 Catalog.
+\label{tbl:fpr}}
+    \tablehead{ 
+    \colhead{Selection criteria} & \colhead{$N$\tablenotemark{a}} & \colhead{Accuracy\tablenotemark{b}} & \colhead{FPR} & \colhead{0.005} & \colhead{0.01} & \colhead{0.02} & \colhead{0.05} & \colhead{0.1}
+    }
+    \startdata
+\multirow{2}{*}{All sources} & \multirow{2}{*}{35,007} & \multirow{2}{*}{$93.9\pm0.1$\%} &                     TPR  & $0.733 \pm 0.011$ &  $0.793 \pm 0.007$ & $0.844 \pm 0.005$ & $0.906 \pm 0.004$ & $0.946 \pm 0.002$ \\
+\multicolumn{1}{l}{}                 & & & Threshold & $0.830 \pm 0.015$ &  $0.721 \pm 0.012$ & $0.597 \pm 0.009$ & $0.393 \pm 0.007$ & $0.224 \pm 0.004$
+\\ \hline
+\multirow{2}{*}{$\mathtt{rKronMag} < 21$} & \multirow{2}{*}{13,570} & \multirow{2}{*}{$98.0\pm0.1$\%} &
+                                              TPR  & $0.771 \pm 0.069$ &  $0.963 \pm 0.006$ & $0.979 \pm 0.002$ & $0.990 \pm 0.001$ & $0.995 \pm 0.001$ \\
+                                                & & & Threshold & $0.975 \pm 0.043$ &  $0.658 \pm 0.055$ & $0.414 \pm 0.025$ & $0.170 \pm 0.012$ & $0.069 \pm 0.004$   \\ \hline
+\multirow{2}{*}{$\mathtt{rKronMag} < 20$}  & \multirow{2}{*}{6,956}& \multirow{2}{*}{$99.0\pm0.1$\%} &
+                                              TPR  & $0.621 \pm 0.164$ &  $0.951 \pm 0.056$ & $0.994 \pm 0.001$ & $0.997 \pm 0.001$ & $0.998 \pm 0.001$  \\
+                                                 & &  & Threshold & $0.995 \pm 0.019$ &  $0.930 \pm 0.172$ & $0.331 \pm 0.053$ & $0.133 \pm 0.021$ & $0.049 \pm 0.004$
+    \enddata
+    \tablecomments{10-fold CV is performed on the entire \textit{HST} training set, but the metrics reported here include only sources that satisfy the selection criteria defined by the first column and $\mathtt{nDetections} \ge 3$.} 
+    \tablenotetext{a}{Number of \textit{HST} test set sources within the selected subset.}
+    \tablenotetext{b}{Classification accuracies are reported relative to a $\mathrm{RF \; score} = 0.5$ classification threshold.}
+\end{deluxetable*}
+%%%%%%%%
 
 Figure~\ref{fig:ztf_hist} additionally shows that most of the stars in the
 catalog are located in the Galactic plane, most of the (high-confidence)
 galaxies are outside the plane, and (unsurprisingly) that classification is
 more challenging in regions of high stellar density. At high galactic
 latitudes ($|b| > 50^{\circ}$), where the distribution of sources is similar
-to the \textit{HST} training set, sources are well-segregated (RF score
+to the \textit{HST} training set, sources are well segregated (RF score
 $\approx$0 or 1), with very few ambiguous classifications ($0.2 \lesssim
 \mathrm{RF\;score} \lesssim 0.8$). The Galactic plane region ($|b| <
 15^{\circ}$) dominates the ambiguous classifications in the ZTF-PS1 catalog.
@@ -1214,8 +1219,11 @@ in point sources appearing extended. Thus, identifying stellar sources in
 the plane likely requires a lower threshold than the FoM-optimized
 classification value. The final tuning of the star--galaxy classification
 thresholds is a critical early step in the filtering of ZTF candidates
-(e.g., \citealt{Kasliwal:18:ZTF}), which is necessary to optimize follow-up of newly
-discovered transients.
+(e.g., \citealt{Kasliwal:18:ZTF}), which is necessary to optimize follow-up
+of newly discovered transients.
+
+\subsection{Verifying, and Updating, the Catalog with \textit{Gaia}}
+
 
 
 \section{Summary and Conclusions}
