@@ -24,6 +24,7 @@
 %%
 %% using aastex version 6.1
 \documentclass[twocolumn]{aastex62}
+\usepackage{CJK}
 
 %% The default is a single spaced, 10 point font, single spaced article.
 %% There are 5 other style options available via an optional argument. They
@@ -151,6 +152,7 @@
 %% manuscript itself with \begin{document}.
 
 \begin{document}
+\begin{CJK*}{UTF8}{gbsn}
 
 \title{A PanSTARRS1 Star--Galaxy Separation Model: \\
        Application in the ZTF Real-Time Pipeline
@@ -207,7 +209,7 @@
 \email{tachibana@hp.phys.titech.ac.jp}
 
 
-\author[0000-0001-6584-6945]{Yutaro Tachibana}
+\author[0000-0001-6584-6945]{Yutaro Tachibana (優太朗橘)}
 \affil{Department of Physics, Tokyo Institute of Technology, 2-12-1 Ookayama, Meguro-ku, Tokyo 152-8551,
 Japan}
 \affil{Department of Physics, Math, and Astronomy, California Institute of Technology, Pasadena, CA, 91125}
@@ -1335,5 +1337,5 @@ Telescope Corporation in support of the Data Science Fellowship Program.
 
 \bibliographystyle{aasjournal}
 \bibliography{star_gal}
-
+\end{CJK*}
 \end{document}
