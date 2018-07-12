@@ -24,6 +24,7 @@
 %%
 %% using aastex version 6.1
 \documentclass[twocolumn]{aastex62}
+\usepackage{CJK}
 
 %% The default is a single spaced, 10 point font, single spaced article.
 %% There are 5 other style options available via an optional argument. They
@@ -151,6 +152,7 @@
 %% manuscript itself with \begin{document}.
 
 \begin{document}
+\begin{CJK*}{UTF8}{gbsn}
 
 \title{A PanSTARRS1 Star--Galaxy Separation Model: \\
        Application in the ZTF Real-Time Pipeline
@@ -207,7 +209,7 @@
 \email{tachibana@hp.phys.titech.ac.jp}
 
 
-\author[0000-0001-6584-6945]{Yutaro Tachibana}
+\author[0000-0001-6584-6945]{Yutaro Tachibana (優太朗橘)}
 \affil{Department of Physics, Tokyo Institute of Technology, 2-12-1 Ookayama, Meguro-ku, Tokyo 152-8551,
 Japan}
 \affil{Department of Physics, Math, and Astronomy, California Institute of Technology, Pasadena, CA, 91125}
@@ -1224,7 +1226,69 @@ of newly discovered transients.
 
 \subsection{Verifying, and Updating, the Catalog with \textit{Gaia}}
 
-The \textit{Gaia} satellite \citep{Gaia-Collaboration16} is currently conducting an all-sky survey that provides unprecedented astrometric accuracy in measuring the positions, parallaxes, and proper motions of $\sim$1.3 billion sources (\citealt{Gaia-Collaboration18}; an additional $\sim$0.3 billion sources have just position measurements). The \textit{Gaia} selection function is biased against resolved galaxies \citep{Gaia-Collaboration16}, so it cannot provide a symmetric test of the ZTF-PS1 catalog. Nevertheless, using high-significance parallax and proper motion measurements it is possible to select a pure sample of unresolved stars in the \textit{Gaia} data (e.g., \citealt{Lindegren18}).
+The \textit{Gaia} satellite \citep{Gaia-Collaboration16} is currently
+conducting an all-sky survey that provides unprecedented astrometric
+accuracy in measuring the positions, parallaxes, and proper motions of
+$\sim$1.3 billion sources (\citealt{Gaia-Collaboration18}; an additional
+$\sim$0.3 billion sources have just position measurements). The
+\textit{Gaia} selection function is biased against resolved galaxies
+\citep{Gaia-Collaboration16}, so it cannot provide a symmetric test of the
+ZTF-PS1 catalog. Nevertheless, \textit{Gaia} has identified hundreds of
+millions of stars that can be used to test our classifications.
+
+
+% using high-significance parallax and proper
+% motion measurements it is possible to select a pure sample of unresolved
+% stars in the \textit{Gaia} data (e.g., \citealt{Lindegren18}).
+
+Given that \textit{Gaia} does not classify the sources it detects as either
+resolved or unresolved, we test the PS1-ZTF catalog by selecting a pure
+sample of \textit{Gaia} stars based on high-significance parallax, $\varpi$,
+and proper motion, $\mu$, measurements.\footnote{Any extragalactic sources
+will have small low SNR $\varpi$ and $\mu$ measurments.} We define the
+$\varpi$ significance as $\varpi$/$\sigma_\varpi$ (called
+\texttt{parallax\_over\_error} in the \textit{Gaia} database). We obtain the
+total proper motion $\mu$ by adding the proper motion in Right Ascension
+$\mu_{\alpha\ast}$ and Declination $\mu_{\delta}$ (\texttt{pmra} and
+\texttt{pmdec} in the database, respectively) in quadrature. The uncertainty
+in the total proper motion, $\sigma_\mu$,
+is calculated via the proper motion uncertainties in Right Ascension, $\sigma_{\mu_{\alpha\ast}}$, and
+Declination, $\sigma_{\mu_{\delta}}$, while accounting for the correlation coefficient between
+$\mu_{\alpha\ast}$ and $\mu_{\delta}$, $\rho(\mu_{\alpha\ast}\mu_{\delta})$:
+
+%
+$$ \sigma_\mu^2 = \frac{\mu_{\alpha\ast}^2}{\mu^2}\sigma_{\mu_{\alpha\ast}}^2 +
+\frac{\mu_{\delta}^2}{\mu^2}\sigma_{\mu_{\delta}}^2 +
+2\frac{\mu_{\alpha\ast}\mu_{\delta}}{\mu^2} \rho(\mu_{\alpha\ast}\mu_{\delta})
+\sigma_{\mu_{\alpha\ast}}\sigma_{\mu_{\delta}}.$$
+%
+The proper motion signficance is then defined as $\mu/\sigma_\mu$.
+
+To determine the threshold for ``high significance'' we select all \aam{XXX}
+sources from the \textit{Gaia} database with $\varpi$ and $\mu$ measurments
+and $20.5\,\mathrm{mag} \le G \le 21\,\mathrm{mag}$, where $G$ is the mean
+brightness measured by \textit{Gaia} in the $G$ filter. These sources, which
+are the lowest SNR \textit{Gaia} detections, provide an estimate of the
+scatter of the parallax and proper motion significance, as they are too
+faint for high-significance detections.\footnote{The typical uncertainty on
+parallax for sources this faint is $\sigma_\varpi \approx 2$\,mas
+\citep{Lindegren18}. While some of these $\sim$\aam{XXX} sources may be at a
+distance $<$500\,pc away, that will not be true for the vast majority, and
+thus they will not have significant parallax measurements.} Looking at the
+full distribution of parallax and proper motion significance for these faint
+sources we find the 99.997-th percentile (roughly 4$\sigma$ for a Gaussian
+distribution) corresponds to 8.19 and \aam{YYY}, repectively. Thus, we apply
+\textit{conservative cuts} to the parallax significance and the proper
+motion significance of $>$8 and $>$\aam{YYY}, respecively, to select
+bonafide stars from the \textit{Gaia} data. We further cull this sample by
+removing sources with large unit weight error relative to their brightness
+(see Appendix~C and Eqn.\~C.1 in \citealt{Lindegren18}) and removing sources
+with large excess flux factors (see
+\citealt{Gaia-Collaboration18a,Lindegren18}).
+
+Using the existing cross match between \textit{Gaia} and PS1 
+
+
 
 \section{Summary and Conclusions}
 
@@ -1335,5 +1399,5 @@ Telescope Corporation in support of the Data Science Fellowship Program.
 
 \bibliographystyle{aasjournal}
 \bibliography{star_gal}
-
+\end{CJK*}
 \end{document}
