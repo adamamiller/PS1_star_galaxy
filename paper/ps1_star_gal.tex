@@ -314,7 +314,7 @@ $g_{\mathrm{P1}}$, $r_{\mathrm{P1}}$, $i_{\mathrm{P1}}$, $z_{\mathrm{P1}}$,
 and $y_{\mathrm{P1}}$ (hereafter $grizy_{\mathrm{P1}}$). The PS1 3$\pi$
 survey scanned the entire visible sky ($\delta > -30^\circ$) $\sim$60 times
 in the five filters over a 4\,yr time span \citep{Chambers16}. This
-repeated imaging was used to create deep stacks \citep{Magnier16b}, with a
+repeated imaging was used to create deep stacks \citep{Magnier16a}, with a
 typical 5$\sigma$ depth of $\sim$23.2\,mag and a median seeing of
 $1.19\arcsec$ in the $r$-band \citep{Tonry12, Schlafly12, Chambers16}. The
 first PS1 data release (DR1) provides flux and pixel-based shape
@@ -505,7 +505,7 @@ detected in all 5 filters, neither of these possiblities is attractive for
 our present purposes.
 
 Rather than use the raw features from the database, we engineer a series of ``white flux'' features that combine the relevant measurements across all filters in which a source is detected. In a given filter, a source is detected if the $\mathtt{PSFFlux}_f$, $\mathtt{KronFlux}_f$, 
-and $\mathtt{ApFlux}_f$\footnote{These flux measurements are taken from the \textit{StackObjectAttributes} table in the PS1 database. The aperture flux is measured using an ``optimal'' aperture radius based on the local PSF, and corrected based on the wings of the PSF to provide a total flux (for point sources). The Kron flux is measured inside 2.5 times the first radial moment, which is expected to miss up to $\sim$10\% of the total light from galaxies \citep{Magnier16}.} 
+and $\mathtt{ApFlux}_f$\footnote{These flux measurements are taken from the \textit{StackObjectAttributes} table in the PS1 database. The aperture flux is measured using an ``optimal'' aperture radius based on the local PSF, and corrected based on the wings of the PSF to provide a total flux (for point sources). The Kron flux is measured inside 2.5 times the first radial moment, which is expected to miss up to $\sim$10\% of the total light from galaxies \citep{Magnier16b}.} 
 are \textit{all $> 0$}, where the $f$ subscript refers to a specific filter. The ``white flux'' feature is then created as:
 %
 \begin{equation}
