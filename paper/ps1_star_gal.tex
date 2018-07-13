@@ -491,10 +491,21 @@ accuracy of the model following construction.
 
 \section{Model Features}\label{sec:model_features}
 
-In addition to developing a training set, we must select features to use as an input for the model. As noted in \S\ref{sec:model_data}, the PS1 database provides flux and shape measurements in each of the $grizy_\mathrm{PS1}$ filters. Adopting each of these measurements as features for the model presents a significant problem: missing data. There are relatively few sources in the PS1 database that are detected in all 5 filters. Typically, to cope with missing data one can either (i) remove sources detected in fewer than 5 filters, or (ii) assign some value, via either imputation (e.g., \citealt{Miller17}) or the use of a dummy variable, to the missing data. Given that the vast majority of PS1 sources are faint and are not detected in all 5 filters, neither of these possiblities is attractive for our present purposes.
+In addition to developing a training set, we must select features to use as
+an input for the model. As noted in \S\ref{sec:model_data}, the PS1 database
+provides flux and shape measurements in each of the $grizy_\mathrm{PS1}$
+filters. Adopting each of these measurements as features for the model
+presents a significant problem: missing data. There are relatively few
+sources in the PS1 database that are detected in all 5 filters. Typically,
+to cope with missing data one can either (i) remove sources detected in
+fewer than 5 filters, or (ii) assign some value, via either imputation
+(e.g., \citealt{Miller17}) or the use of a dummy variable, to the missing
+data. Given that the vast majority of PS1 sources are faint and are not
+detected in all 5 filters, neither of these possiblities is attractive for
+our present purposes.
 
 Rather than use the raw features from the database, we engineer a series of ``white flux'' features that combine the relevant measurements across all filters in which a source is detected. In a given filter, a source is detected if the $\mathtt{PSFFlux}_f$, $\mathtt{KronFlux}_f$, 
-and $\mathtt{ApFlux}_f$\footnote{\NC{Flux measurement by PSF photometry, Kron photometry, and aperture photometry, respectively.}} 
+and $\mathtt{ApFlux}_f$\footnote{These flux measurements are taken from the \textit{StackObjectAttributes} table in the PS1 database. The aperture flux is measured using an ``optimal'' aperture radius based on the local PSF, and corrected based on the wings of the PSF to provide a total flux (for point sources). The Kron flux is measured inside 2.5 times the first radial moment, which is expected to miss up to $\sim$10\% of the total light from galaxies \citep{Magnier16}.} 
 are \textit{all $> 0$}, where the $f$ subscript refers to a specific filter. The ``white flux'' feature is then created as:
 %
 \begin{equation}
