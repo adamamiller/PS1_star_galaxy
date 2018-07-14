@@ -24,6 +24,7 @@
 %%
 %% using aastex version 6.1
 \documentclass[twocolumn]{aastex62}
+\usepackage{CJK}
 
 %% The default is a single spaced, 10 point font, single spaced article.
 %% There are 5 other style options available via an optional argument. They
@@ -151,6 +152,7 @@
 %% manuscript itself with \begin{document}.
 
 \begin{document}
+\begin{CJK*}{UTF8}{gbsn}
 
 \title{A PanSTARRS1 Star--Galaxy Separation Model: \\
        Application in the ZTF Real-Time Pipeline
@@ -207,7 +209,7 @@
 \email{tachibana@hp.phys.titech.ac.jp}
 
 
-\author[0000-0001-6584-6945]{Yutaro Tachibana}
+\author[0000-0001-6584-6945]{Yutaro Tachibana (優太朗橘)}
 \affil{Department of Physics, Tokyo Institute of Technology, 2-12-1 Ookayama, Meguro-ku, Tokyo 152-8551,
 Japan}
 \affil{Department of Physics, Math, and Astronomy, California Institute of Technology, Pasadena, CA, 91125}
@@ -312,7 +314,7 @@ $g_{\mathrm{P1}}$, $r_{\mathrm{P1}}$, $i_{\mathrm{P1}}$, $z_{\mathrm{P1}}$,
 and $y_{\mathrm{P1}}$ (hereafter $grizy_{\mathrm{P1}}$). The PS1 3$\pi$
 survey scanned the entire visible sky ($\delta > -30^\circ$) $\sim$60 times
 in the five filters over a 4\,yr time span \citep{Chambers16}. This
-repeated imaging was used to create deep stacks \citep{Magnier16b}, with a
+repeated imaging was used to create deep stacks \citep{Magnier16a}, with a
 typical 5$\sigma$ depth of $\sim$23.2\,mag and a median seeing of
 $1.19\arcsec$ in the $r$-band \citep{Tonry12, Schlafly12, Chambers16}. The
 first PS1 data release (DR1) provides flux and pixel-based shape
@@ -489,10 +491,21 @@ accuracy of the model following construction.
 
 \section{Model Features}\label{sec:model_features}
 
-In addition to developing a training set, we must select features to use as an input for the model. As noted in \S\ref{sec:model_data}, the PS1 database provides flux and shape measurements in each of the $grizy_\mathrm{PS1}$ filters. Adopting each of these measurements as features for the model presents a significant problem: missing data. There are relatively few sources in the PS1 database that are detected in all 5 filters. Typically, to cope with missing data one can either (i) remove sources detected in fewer than 5 filters, or (ii) assign some value, via either imputation (e.g., \citealt{Miller17}) or the use of a dummy variable, to the missing data. Given that the vast majority of PS1 sources are faint and are not detected in all 5 filters, neither of these possiblities is attractive for our present purposes.
+In addition to developing a training set, we must select features to use as
+an input for the model. As noted in \S\ref{sec:model_data}, the PS1 database
+provides flux and shape measurements in each of the $grizy_\mathrm{PS1}$
+filters. Adopting each of these measurements as features for the model
+presents a significant problem: missing data. There are relatively few
+sources in the PS1 database that are detected in all 5 filters. Typically,
+to cope with missing data one can either (i) remove sources detected in
+fewer than 5 filters, or (ii) assign some value, via either imputation
+(e.g., \citealt{Miller17}) or the use of a dummy variable, to the missing
+data. Given that the vast majority of PS1 sources are faint and are not
+detected in all 5 filters, neither of these possiblities is attractive for
+our present purposes.
 
 Rather than use the raw features from the database, we engineer a series of ``white flux'' features that combine the relevant measurements across all filters in which a source is detected. In a given filter, a source is detected if the $\mathtt{PSFFlux}_f$, $\mathtt{KronFlux}_f$, 
-and $\mathtt{ApFlux}_f$\footnote{\NC{Flux measurement by PSF photometry, Kron photometry, and aperture photometry, respectively.}} 
+and $\mathtt{ApFlux}_f$\footnote{These flux measurements are taken from the \textit{StackObjectAttributes} table in the PS1 database. The aperture flux is measured using an ``optimal'' aperture radius based on the local PSF, and corrected based on the wings of the PSF to provide a total flux (for point sources). The Kron flux is measured inside 2.5 times the first radial moment, which is expected to miss up to $\sim$10\% of the total light from galaxies \citep{Magnier16b}.} 
 are \textit{all $> 0$}, where the $f$ subscript refers to a specific filter. The ``white flux'' feature is then created as:
 %
 \begin{equation}
@@ -609,7 +622,7 @@ are classified as
 galaxies.\footnote{\url{https://outerspace.stsci.edu/display/PANSTARRS/How+to+
 separate+stars+and+galaxies}} The documentation notes that this
 classification can be performed using photometry from any of the
-\textit{MeanObject}, \textit{ForcedMeanObject}, or \textit{StackedObjectThin}
+\textit{MeanObject}, \textit{ForcedMeanObject}, or \textit{StackObjectThin}
 tables. The PS1 documentation further notes that this basic cut does not
 perform well for sources with $i \gtrsim 21\,\mathrm{mag}$, which constitutes
 the majority of sources detected by PS1, and motivates us to develop
@@ -1224,7 +1237,99 @@ of newly discovered transients.
 
 \subsection{Verifying, and Updating, the Catalog with \textit{Gaia}}
 
-The \textit{Gaia} satellite \citep{Gaia-Collaboration16} is currently conducting an all-sky survey that provides unprecedented astrometric accuracy in measuring the positions, parallaxes, and proper motions of $\sim$1.3 billion sources (\citealt{Gaia-Collaboration18}; an additional $\sim$0.3 billion sources have just position measurements). The \textit{Gaia} selection function is biased against resolved galaxies \citep{Gaia-Collaboration16}, so it cannot provide a symmetric test of the ZTF-PS1 catalog. Nevertheless, using high-significance parallax and proper motion measurements it is possible to select a pure sample of unresolved stars in the \textit{Gaia} data (e.g., \citealt{Lindegren18}).
+The \textit{Gaia} satellite \citep{Gaia-Collaboration16} is currently
+conducting an all-sky survey that provides unprecedented astrometric
+accuracy in measuring the positions, parallaxes, and proper motions of
+$\sim$1.3 billion sources (\citealt{Gaia-Collaboration18}; an additional
+$\sim$0.3 billion sources have just position measurements). The
+\textit{Gaia} selection function is biased against resolved galaxies
+\citep{Gaia-Collaboration16}, so it cannot provide a symmetric test of the
+ZTF-PS1 catalog. Nevertheless, \textit{Gaia} has identified hundreds of
+millions of stars that can be used to test our classifications.
+
+Given that \textit{Gaia} does not classify the sources it detects as either
+resolved or unresolved, we test the PS1-ZTF catalog by selecting a pure
+sample of \textit{Gaia} stars based on high-significance parallax, $\varpi$,
+and proper motion, $\mu$, measurements.\footnote{Any extragalactic sources
+will have small low SNR $\varpi$ and $\mu$ measurments.} We define the
+$\varpi$ significance as $\varpi$/$\sigma_\varpi$ (called
+\texttt{parallax\_over\_error} in the \textit{Gaia} database). We obtain the
+total proper motion $\mu$ by adding the proper motion in Right Ascension
+$\mu_{\alpha\ast}$ and Declination $\mu_{\delta}$ (\texttt{pmra} and
+\texttt{pmdec} in the database, respectively) in quadrature. The uncertainty
+in the total proper motion, $\sigma_\mu$,
+is calculated via the proper motion uncertainties in Right Ascension, $\sigma_{\mu_{\alpha\ast}}$, and
+Declination, $\sigma_{\mu_{\delta}}$, while accounting for the correlation coefficient between
+$\mu_{\alpha\ast}$ and $\mu_{\delta}$, $\rho(\mu_{\alpha\ast}\mu_{\delta})$:
+
+%
+$$ \sigma_\mu^2 = \frac{\mu_{\alpha\ast}^2}{\mu^2}\sigma_{\mu_{\alpha\ast}}^2 +
+\frac{\mu_{\delta}^2}{\mu^2}\sigma_{\mu_{\delta}}^2 +
+2\frac{\mu_{\alpha\ast}\mu_{\delta}}{\mu^2} \rho(\mu_{\alpha\ast}\mu_{\delta})
+\sigma_{\mu_{\alpha\ast}}\sigma_{\mu_{\delta}}.$$
+%
+The proper motion signficance is then defined as $\mu/\sigma_\mu$.
+
+To determine the threshold for ``high significance'' we select all \aam{XXX}
+sources from the \textit{Gaia} database with $\varpi$ and $\mu$ measurments
+and $20.5\,\mathrm{mag} \le G \le 21\,\mathrm{mag}$, where $G$ is the mean
+brightness measured by \textit{Gaia} in the $G$ filter. These sources, which
+are the lowest SNR \textit{Gaia} detections, provide an estimate of the
+scatter of the parallax and proper motion significance, as they are too
+faint for high-significance detections.\footnote{The typical uncertainty on
+parallax for sources this faint is $\sigma_\varpi \approx 2$\,mas
+\citep{Lindegren18}. While some of these $\sim$\aam{XXX} sources may be at a
+distance $<$500\,pc away, that will not be true for the vast majority, and
+thus they will not have significant parallax measurements.} Looking at the
+full distribution of parallax and proper motion significance for these faint
+sources we find the 99.997-th percentile (roughly 4$\sigma$ for a Gaussian
+distribution) corresponds to 8.19 and \aam{YYY}, repectively. Thus, we apply
+\textit{conservative cuts} to the parallax significance and the proper
+motion significance of $>$8 and $>$\aam{YYY}, respecively, to select
+bonafide stars from the \textit{Gaia} data. We further cull this sample by
+removing sources with large unit weight error relative to their brightness
+(see Appendix~C and Eqn.~C.1 in \citealt{Lindegren18}) and removing sources
+outside the range of normal excess flux factors (see
+\citealt{Gaia-Collaboration18a,Lindegren18}).
+
+Using the existing crossmatch between \textit{Gaia} and PS1,\footnote{See
+\citet{Marrese17} for details on \textit{Gaia} crossmatching external
+catalogs.
+\url{https://gea.esac.esa.int/archive/documentation//GDR2/Catalogue_consolida
+tion/chap_cu9val_cu9val/ssec_cu9xma/sssec_cu9xma_extcat.html} has details
+about the 810,359,898 \textit{Gaia} sources crossmatched with PS1.} we have
+identified \aam{ZZZ} high-confidence stars based on the selection criteria
+described above. Of these, \aam{AAA} have counterparts in the ZTF-PS1
+catalog (the remaining \aam{ZZZ - AAA} sources have either 0 or $>$1 entires
+in the PS1 \textit{StackObjectThin} table). For these high-confidence stars,
+we show the distribution of RF classification scores for these stellar
+objects in Figure~\ref{fig:gaia}. It is clear from Figure~\ref{fig:gaia}
+that the vast majority of stars are classified correctly. \aam{Sentence here
+about percentages above different classification thresholds.} We conclude
+that the \textit{Gaia} data confirms that our method does an excellent job
+of identifying unresolved sources.
+
+\begin{figure}[htb]
+ \centering
+  \includegraphics[width=3.35in]{./Figures/Gaia_PS1_cat_hist.pdf}
+  %
+  \caption{ The distribution of RF classification score for sources in the
+  ZTF-PS1 star--galaxy catalog that are high-probability stars from
+  \textit{Gaia} data. Note that the number counts are shown on a log scale.
+  The vertical dotted line shows the FoM-optimized classification threshold,
+  sources to the right of the line are classified as stars. The full catalog
+  is shown in blue, while Galactic plane sources ($|b| < 10^{\circ}$) are
+  shown in orange, and high galactic latitude sources ($|b| > 30^{\circ}$)
+  are shown in grey. A very small fraction of these stars have
+  $\mathrm{RF\;score} \lesssim 0.5$.}
+  %
+  \label{fig:gaia}
+\end{figure}
+
+Finally, the \aam{ZZZ - AAA} sources that do not have counterparts in the
+ZTF-PS1 catalog are assigned an RF classification score of 1 in the ZTF
+database. Thus, new transient candidates with positions consistent with
+these sources will be flagged as likely stars.
 
 \section{Summary and Conclusions}
 
@@ -1307,12 +1412,12 @@ surveys.
 
 \acknowledgements
 
-This work would not have been possible without the public release of the PS1
-and SDSS data. We are particularly grateful to the MAST PS1 team for
-answering several inquiries regarding the PS1 data, and especially B.~Shiao,
-who helped us navigate the PS1 database. We thank M.~Graham and A.~Mahabal
-for early conversations regarding the training of the RF model, and B.~Bue
-for a discussion about cross validation strategies.
+This work would not have been possible without the public release of the
+PS1, SDSS, and \textit{Gaia} data. We are particularly grateful to the MAST
+PS1 team for answering several inquiries regarding the PS1 data, and
+especially B.~Shiao, who helped us navigate the PS1 database. We thank
+M.~Graham and A.~Mahabal for early conversations regarding the training of
+the RF model, and B.~Bue for a discussion about cross validation strategies.
 
 Y.T.\ is funded by JSPS KAKENHI Grant Numbers JP16J05742. Y.T.\ studied as a
 Global Relay of Observatories Watching Transients Happen (GROWTH) intern at
@@ -1335,5 +1440,5 @@ Telescope Corporation in support of the Data Science Fellowship Program.
 
 \bibliographystyle{aasjournal}
 \bibliography{star_gal}
-
+\end{CJK*}
 \end{document}
