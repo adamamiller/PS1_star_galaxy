@@ -1250,8 +1250,7 @@ millions of stars that can be used to test our classifications.
 Given that \textit{Gaia} does not classify the sources it detects as either
 resolved or unresolved, we test the PS1-ZTF catalog by selecting a pure
 sample of \textit{Gaia} stars based on high-significance parallax, $\varpi$,
-and proper motion, $\mu$, measurements.\footnote{Any extragalactic sources
-will have small low SNR $\varpi$ and $\mu$ measurments.} We define the
+and proper motion, $\mu$, measurements.\footnote{Given the large distances, \textit{Gaia} will measure low SNR $\varpi$ and $\mu$ for extragalactic (i.e., extended) sources.} We define the
 $\varpi$ significance as $\varpi$/$\sigma_\varpi$ (called
 \texttt{parallax\_over\_error} in the \textit{Gaia} database). We obtain the
 total proper motion $\mu$ by adding the proper motion in Right Ascension
@@ -1270,27 +1269,23 @@ $$ \sigma_\mu^2 = \frac{\mu_{\alpha\ast}^2}{\mu^2}\sigma_{\mu_{\alpha\ast}}^2 +
 %
 The proper motion signficance is then defined as $\mu/\sigma_\mu$.
 
-To determine the threshold for ``high significance'' we select all \aam{XXX}
-sources from the \textit{Gaia} database with $\varpi$ and $\mu$ measurments
+To determine the threshold for ``high significance'' in $\varpi$ and $\mu$ we use faint stars and activate galactic nuclei (AGN), respectively. In \citet{Lindegren18}, a sample of $\sim$5.5$\times10^{5}$ AGN with \textit{Gaia} observations were identified, and the cosmological distances to these sources mean they should have extremely small parallaxes and proper motions. We find that 99.997\% of these AGN have $\mu$ significance $< 5.62$, and the highest $\mu$ significance in the entire AGN sample is $\sim$7.42. Thus, we apply a conservative cut of 7.5 on $\mu$ significance to select a pure set of stars with little contamination from extended, extragalactic objects. The AGN sample is not sufficient for defining a cut on $\varpi$ significance because \citet{Lindegren18} require $\varpi$/$\sigma_\varpi < 5$ for inclusion in the sample. Instead, we use the 20,568,254 \textit{Gaia} sources with $\varpi$ and $\mu$ measurments,
 and $20.5\,\mathrm{mag} \le G \le 21\,\mathrm{mag}$, where $G$ is the mean
-brightness measured by \textit{Gaia} in the $G$ filter. These sources, which
+brightness measured by \textit{Gaia} in the $G$ filter, and that pass the cuts defined by Eqn.~(C.1) and (C.2) in \citet{Lindegren18}. These cuts are designed to remove low-confidence parallax measurements in regions of high stellar density. 
+
+ These sources, which
 are the lowest SNR \textit{Gaia} detections, provide an estimate of the
-scatter of the parallax and proper motion significance, as they are too
+scatter of the parallax significance, as they are too
 faint for high-significance detections.\footnote{The typical uncertainty on
 parallax for sources this faint is $\sigma_\varpi \approx 2$\,mas
-\citep{Lindegren18}. While some of these $\sim$\aam{XXX} sources may be at a
+\citep{Lindegren18}. While some of these $\sim$2$\times10^7$ sources may be at a
 distance $<$500\,pc away, that will not be true for the vast majority, and
 thus they will not have significant parallax measurements.} Looking at the
-full distribution of parallax and proper motion significance for these faint
+full distribution of parallax significance for these faint
 sources we find the 99.997-th percentile (roughly 4$\sigma$ for a Gaussian
-distribution) corresponds to 8.19 and \aam{YYY}, repectively. Thus, we apply
-\textit{conservative cuts} to the parallax significance and the proper
-motion significance of $>$8 and $>$\aam{YYY}, respecively, to select
-bonafide stars from the \textit{Gaia} data. We further cull this sample by
-removing sources with large unit weight error relative to their brightness
-(see Appendix~C and Eqn.~C.1 in \citealt{Lindegren18}) and removing sources
-outside the range of normal excess flux factors (see
-\citealt{Gaia-Collaboration18a,Lindegren18}).
+distribution) corresponds to 7.94. Thus, we apply
+\textit{conservative cuts} to the parallax significance of $\ge$8 and to select
+bonafide stars from the \textit{Gaia} data.
 
 Using the existing crossmatch between \textit{Gaia} and PS1,\footnote{See
 \citet{Marrese17} for details on \textit{Gaia} crossmatching external
