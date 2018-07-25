@@ -1269,32 +1269,43 @@ $$ \sigma_\mu^2 = \frac{\mu_{\alpha\ast}^2}{\mu^2}\sigma_{\mu_{\alpha\ast}}^2 +
 %
 The proper motion signficance is then defined as $\mu/\sigma_\mu$.
 
-To determine the threshold for ``high significance'' in $\varpi$ and $\mu$ we use faint stars and activate galactic nuclei (AGN), respectively. In \citet{Lindegren18}, a sample of $\sim$5.5$\times10^{5}$ AGN with \textit{Gaia} observations were identified, and the cosmological distances to these sources mean they should have extremely small parallaxes and proper motions. We find that 99.997\% of these AGN have $\mu$ significance $< 5.62$, and the highest $\mu$ significance in the entire AGN sample is $\sim$7.42. Thus, we apply a conservative cut of 7.5 on $\mu$ significance to select a pure set of stars with little contamination from extended, extragalactic objects. 
+To determine the threshold for ``high significance'' in $\varpi$ and $\mu$
+we use faint stars and activate galactic nuclei (AGN), respectively. In
+\citet{Lindegren18}, a sample of $\sim$5.5$\times10^{5}$ AGN with
+\textit{Gaia} observations were identified, and the cosmological distances
+to these sources mean they should have extremely small parallaxes and proper
+motions. We find that 99.997\% of these AGN have $\mu$ significance $<
+5.62$, and the highest $\mu$ significance in the entire AGN sample is
+$\sim$7.42. Thus, we apply a conservative cut of 7.5 on $\mu$ significance
+to select a pure set of stars with little contamination from extended,
+extragalactic objects.
 
-The AGN sample is not sufficient for defining a cut on $\varpi$ significance because \citet{Lindegren18} require $\varpi$/$\sigma_\varpi < 5$. Instead, we use the 20,568,254 \textit{Gaia} sources with $\varpi$ and $\mu$ measurments, $20.5\,\mathrm{mag} \le G \le 21\,\mathrm{mag}$, where $G$ is the mean
-brightness measured by \textit{Gaia} in the $G$ filter, and that pass the cuts defined by Eqn.~(C.1) and (C.2) in \citet{Lindegren18}. These cuts are designed to remove low-confidence parallax measurements in regions of high stellar density. The low SNR detections for these \textit{Gaia} sources provide an estimate of the
-scatter of the parallax significance, as they are too
-faint for high-significance detections.\footnote{The typical uncertainty on
-parallax for sources this faint is $\sigma_\varpi \approx 2$\,mas
-\citep{Lindegren18}. While some of these $\sim$2$\times10^7$ sources may be at a
-distance $<$500\,pc away, that will not be true for the vast majority, and
-thus they will not have significant parallax measurements.} Looking at the
-full distribution of parallax significance for these faint
-sources we find the 99.997-th percentile (roughly 4$\sigma$ for a Gaussian
-distribution) corresponds to 7.94. Thus, we apply
-\textit{conservative cuts} to the parallax significance of $\ge$8 and to select
-bonafide stars from the \textit{Gaia} data.
+The AGN sample is not sufficient for defining a cut on $\varpi$ significance
+because \citet{Lindegren18} require $\varpi$/$\sigma_\varpi < 5$. Instead,
+we use the 20,568,254 \textit{Gaia} sources with $\varpi$ and $\mu$
+measurments, $20.5\,\mathrm{mag} \le G \le 21\,\mathrm{mag}$, where $G$ is
+the mean brightness measured by \textit{Gaia} in the $G$ filter, and that
+pass the cuts defined by Eqn.~(C.1) and (C.2) in \citet{Lindegren18}. These
+cuts are designed to remove low-confidence parallax measurements in regions
+of high stellar density. The low SNR detections for these \textit{Gaia}
+sources provide an estimate of the scatter of the parallax significance, as
+they are too faint for high-significance detections.\footnote{The typical
+uncertainty on parallax for sources this faint is $\sigma_\varpi \approx
+2$\,mas \citep{Lindegren18}. While some of these $\sim$2$\times10^7$ sources
+may be at a distance $<$500\,pc away, that will not be true for the vast
+majority, and thus they will not have significant parallax measurements.}
+Looking at the full distribution of parallax significance for these faint
+sources we find that 99.997\% have parallax significance $< 7.94$. Again, we
+apply a conservative cut of parallax significance $\ge$8 to select bonafide
+stars from the \textit{Gaia} data.
 
 Using the existing crossmatch between \textit{Gaia} and PS1,\footnote{See
 \citet{Marrese17} for details on \textit{Gaia} crossmatching external
-catalogs.
-\url{https://gea.esac.esa.int/archive/documentation//GDR2/Catalogue_consolida
-tion/chap_cu9val_cu9val/ssec_cu9xma/sssec_cu9xma_extcat.html} has details
-about the 810,359,898 \textit{Gaia} sources crossmatched with PS1.} we have
-identified \aam{ZZZ} high-confidence stars based on the selection criteria
-described above. Of these, \aam{AAA} have counterparts in the ZTF-PS1
-catalog (the remaining \aam{ZZZ - AAA} sources have either 0 or $>$1 entires
-in the PS1 \textit{StackObjectThin} table). For these high-confidence stars,
+catalogs. There are 810,359,898 \textit{Gaia} sources crossmatched with PS1, see: \url{https://gea.esac.esa.int/archive/documentation//GDR2/Catalogue_consolida
+tion/chap_cu9val_cu9val/ssec_cu9xma/sssec_cu9xma_extcat.html}.} we have
+identified 38,764,553 and 234,176,264 high-confidence stars selected by the above parallax and proper motion cuts, respectively. Of these, 35,599,830 and 225,682,755 have respective counterparts in the ZTF-PS1
+catalog (the respective differences of 3,164,723 and 8,493,509 correspond to sources with either 0 or $>$1 entires
+in the PS1 \textit{StackObjectThin} table). For the proper motion selected stars,
 we show the distribution of RF classification scores for these stellar
 objects in Figure~\ref{fig:gaia}. It is clear from Figure~\ref{fig:gaia}
 that the vast majority of stars are classified correctly. \aam{Sentence here
@@ -1304,17 +1315,19 @@ of identifying unresolved sources.
 
 \begin{figure}[htb]
  \centering
-  \includegraphics[width=3.35in]{./Figures/Gaia_PS1_cat_hist.pdf}
+  \includegraphics[width=3.3in]{./Figures/Gaia_PS1_pm_hist.pdf}
   %
-  \caption{ The distribution of RF classification score for sources in the
-  ZTF-PS1 star--galaxy catalog that are high-probability stars from
-  \textit{Gaia} data. Note that the number counts are shown on a log scale.
-  The vertical dotted line shows the FoM-optimized classification threshold,
-  sources to the right of the line are classified as stars. The full catalog
-  is shown in blue, while Galactic plane sources ($|b| < 10^{\circ}$) are
-  shown in orange, and high galactic latitude sources ($|b| > 30^{\circ}$)
-  are shown in grey. A very small fraction of these stars have
-  $\mathrm{RF\;score} \lesssim 0.5$.}
+  \caption{ 
+  % The distribution of RF classification score for sources in the
+  % ZTF-PS1 star--galaxy catalog that are high-probability stars from
+  % \textit{Gaia} data. Note that the number counts are shown on a log scale.
+  % The vertical dotted line shows the FoM-optimized classification threshold,
+  % sources to the right of the line are classified as stars. The full catalog
+  % is shown in blue, while Galactic plane sources ($|b| < 10^{\circ}$) are
+  % shown in orange, and high galactic latitude sources ($|b| > 30^{\circ}$)
+  % are shown in grey. A very small fraction of these stars have
+  % $\mathrm{RF\;score} \lesssim 0.5$.
+  }
   %
   \label{fig:gaia}
 \end{figure}
