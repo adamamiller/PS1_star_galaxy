@@ -1299,6 +1299,26 @@ sources we find that 99.997\% have parallax significance $< 7.94$. Again, we
 apply a conservative cut of parallax significance $\ge$8 to select bonafide
 stars from the \textit{Gaia} data.
 
+\begin{figure}[htb]
+ \centering
+  \includegraphics[width=3.3in]{./Figures/Gaia_PS1_pm_hist.pdf}
+  %
+  \caption{ 
+  The distribution of RF classification score for sources in the ZTF-PS1
+  star--galaxy catalog selected as high-probability stars from \textit{Gaia}
+  due to their significant proper motion (see text for further details).
+  Note that the number counts are shown on a log scale. The vertical dotted
+  line shows the FoM-optimized classification threshold, sources to the
+  right of the line are classified as stars. The full catalog is shown in
+  blue, while Galactic plane sources ($|b| < 10^{\circ}$) are shown in
+  orange, and high galactic latitude sources ($|b| > 30^{\circ}$) are shown
+  in grey. Less than 0.25\% of these stars have $\mathrm{RF\;score} \lesssim
+  0.5$.
+  }
+  %
+  \label{fig:gaia}
+\end{figure}
+
 Using the existing crossmatch between \textit{Gaia} and PS1,\footnote{See
 \citet{Marrese17} for details on \textit{Gaia} crossmatching external
 catalogs. There are 810,359,898 \textit{Gaia} sources crossmatched with PS1,
@@ -1320,25 +1340,6 @@ $\mathrm{RF\;score}\ge 0.5$, the traditional binary classification
 threshold. The percentages are even higher for the parallax-selected sample.
 We conclude that the \textit{Gaia} data confirms that our method does an
 excellent job of identifying unresolved sources.
-
-\begin{figure}[htb]
- \centering
-  \includegraphics[width=3.3in]{./Figures/Gaia_PS1_pm_hist.pdf}
-  %
-  \caption{ 
-  % The distribution of RF classification score for sources in the
-  % ZTF-PS1 star--galaxy catalog that are high-probability stars from
-  % \textit{Gaia} data. Note that the number counts are shown on a log scale.
-  % The vertical dotted line shows the FoM-optimized classification threshold,
-  % sources to the right of the line are classified as stars. The full catalog
-  % is shown in blue, while Galactic plane sources ($|b| < 10^{\circ}$) are
-  % shown in orange, and high galactic latitude sources ($|b| > 30^{\circ}$)
-  % are shown in grey. A very small fraction of these stars have
-  % $\mathrm{RF\;score} \lesssim 0.5$.
-  }
-  %
-  \label{fig:gaia}
-\end{figure}
 
 Finally, the \aam{ZZZ - AAA} sources selected by either the parallax or proper motion cuts described above that do not have counterparts in the
 ZTF-PS1 catalog are assigned an RF classification score of 1 in the ZTF
