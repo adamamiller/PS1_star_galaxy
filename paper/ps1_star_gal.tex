@@ -1301,17 +1301,25 @@ stars from the \textit{Gaia} data.
 
 Using the existing crossmatch between \textit{Gaia} and PS1,\footnote{See
 \citet{Marrese17} for details on \textit{Gaia} crossmatching external
-catalogs. There are 810,359,898 \textit{Gaia} sources crossmatched with PS1, see: \url{https://gea.esac.esa.int/archive/documentation//GDR2/Catalogue_consolida
-tion/chap_cu9val_cu9val/ssec_cu9xma/sssec_cu9xma_extcat.html}.} we have
-identified 38,764,553 and 234,176,264 high-confidence stars selected by the above parallax and proper motion cuts, respectively. Of these, 35,599,830 and 225,682,755 have respective counterparts in the ZTF-PS1
-catalog (the respective differences of 3,164,723 and 8,493,509 correspond to sources with either 0 or $>$1 entires
-in the PS1 \textit{StackObjectThin} table). For the proper motion selected stars,
-we show the distribution of RF classification scores for these stellar
-objects in Figure~\ref{fig:gaia}. It is clear from Figure~\ref{fig:gaia}
-that the vast majority of stars are classified correctly. \aam{Sentence here
-about percentages above different classification thresholds.} We conclude
-that the \textit{Gaia} data confirms that our method does an excellent job
-of identifying unresolved sources.
+catalogs. There are 810,359,898 \textit{Gaia} sources crossmatched with PS1,
+see:
+\url{https://gea.esac.esa.int/archive/documentation//GDR2/Catalogue_consolida
+ tion/chap_cu9val_cu9val/ssec_cu9xma/sssec_cu9xma_extcat.html}.} we have
+identified 38,764,553 and 234,176,264 high-confidence stars selected by the
+above parallax and proper motion cuts, respectively. Of these, 35,599,830
+and 225,682,755 have respective counterparts in the ZTF-PS1 catalog (the
+respective differences of 3,164,723 and 8,493,509 correspond to sources with
+either 0 or $>$1 entires in the PS1 \textit{StackObjectThin} table). For the
+proper motion selected stars, we show the distribution of RF classification
+scores for these stellar objects in Figure~\ref{fig:gaia}. It is clear from
+Figure~\ref{fig:gaia} that the vast majority of stars are classified
+correctly. Half of the stars selected via proper motion have
+$\mathrm{RF\;score}\ge 0.99$, while 98.1\% have $\mathrm{RF\;score}\ge
+0.83$, the FoM classification threshold, and 99.75\% have
+$\mathrm{RF\;score}\ge 0.5$, the traditional binary classification
+threshold. The percentages are even higher for the parallax-selected sample.
+We conclude that the \textit{Gaia} data confirms that our method does an
+excellent job of identifying unresolved sources.
 
 \begin{figure}[htb]
  \centering
@@ -1332,7 +1340,7 @@ of identifying unresolved sources.
   \label{fig:gaia}
 \end{figure}
 
-Finally, the \aam{ZZZ - AAA} sources that do not have counterparts in the
+Finally, the \aam{ZZZ - AAA} sources selected by either the parallax or proper motion cuts described above that do not have counterparts in the
 ZTF-PS1 catalog are assigned an RF classification score of 1 in the ZTF
 database. Thus, new transient candidates with positions consistent with
 these sources will be flagged as likely stars.
