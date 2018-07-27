@@ -332,7 +332,7 @@ transients in the Zwicky Transient Facility (ZTF; \citealt{Bellm:18:ZTF}).
 Previously, a similar catalog was developed using Palomar Transient Factory
 (PTF) data \citep{Miller17}.
 
-The PTF star--galaxy catalog was developed using \texttt{SExtractor}
+The PTF point-source catalog was developed using \texttt{SExtractor}
 \citep{bertin96} flux and shape measurements made on deep stacks of PTF
 images. Stars and galaxies were separated using a machine learning
 methodology built on the random forest (RF) algorithm \citep{Breiman01}.
@@ -371,47 +371,38 @@ provide an improvement over the Sloan Digital Sky Survey (SDSS;
 \citet{Miller17}, we use the RF algorithm to separate point sources and
 extended sources and we optimize our model to maximize the same FoM. Our new
 PS1 model outperforms alternatives and has already been incorporated into
-the ZTF real-time pipeline.
+the ZTF real-time pipeline. 
 
-
-%%%
-\if0
-The system comprises a 1.8 m primary and 0.9 m secondary mirrors \citep{Hodapp04}, 
-produces a field of view of 3.3 deg$^2$ with 60 CCD chips each of 4800$\times$4800 pixels, 
-and the pixel resolution is 0.258 arcsec pixel$^{-1}$ at the focal plane. 
-The filter system consists of five main broadband filters, 
-$g_{\mathrm{P1}}$, $r_{\mathrm{P1}}$, $i_{\mathrm{P1}}$, $z_{\mathrm{P1}}$, and $y_{\mathrm{P1}}$, 
-and that effective wavelength is 481 nm, 617 nm, 752 nm, 866 nm, and 962 nm, 
-respectively \citep{Tonry12, Schlafly12}. 
-The typical 5$\sigma$ depth of stack image is 23.3, 23.2, 23.1, 22.3, and 21.3 mag 
-white that of a single epoch is 22.0, 21.8, 21.5, 20.9, and 19.7 mag in the AB system, 
-with a median seeing of 1.31, 1.19, 1.11, 1.07, and 1.02 arcsec, respectively \citep{Chambers16}. 
-\fi
-%%%
-
+Alongside this paper, we have released our open-source analysis, and queries
+to recreate the data utilized in this study. These are available online at
+\url{https://github.com/ adamamiller/iPTF16abc}. The final PS1-ZTF catalog
+created during this study is available as a High Level Science Product via
+the MAST archive \textit{Note to the referee- STScI will provide this url
+once the paper is accepted}.
 
 \section{Model Data}\label{sec:model_data}
 
-Data for the star-galaxy model were obtained from the PS1 casjobs
-server.\footnote{\url{http://mastweb.stsci.edu/ps1casjobs/home.aspx}} The PS1
-database provides flux measurements via aperture photometry,
+Data for the resolved--unresolved model were obtained from the PS1 casjobs
+server.\footnote{\url{http://mastweb.stsci.edu/ps1casjobs/home.aspx}} The
+PS1 database provides flux measurements via aperture photometry,
 point-spread-function (PSF) photometry, and \citet{Kron80}
 photometry.\footnote{A subset of bright sources ($i < 21\,\mathrm{mag}$)
 outside the Galactic plane have additional photometric measurements, e.g.,
-exponential or \citet{Sersic63} profiles, in the \textit{StackModelFitExp} and
-\textit{StackModelFitSer} tables, respectively. We ignore these measurements
-for this study as they are not available for all sources.} These flux
-measurements are produced by PS1 in 3 different ways. The mean brightness
-measured on the individual PS1 frames is reported in the \textit{MeanObject}
-table, the mean brightness measured via forced-PSF/aperture photometry on the
-individual PS1 frames is reported in the \textit{ForcedMeanObject} table, and
-finally, the brightness measured on the full-depth stacked PS1 images is
-reported in the \textit{StackObjectThin} table. The
-\textit{StackObjectAttributes} table further supplements these tables with
-point-source object shape measurements, which prove useful to discriminate
-stars and galaxies. Ultimately, see \S\ref{sec:simple_model}, we use flux
-measurements from the \textit{StackObjectThin} table and shape measurements
-from the \textit{StackObjectAttributes} to build our models.
+exponential or \citet{Sersic63} profiles, in the \textit{StackModelFitExp}
+and \textit{StackModelFitSer} tables, respectively. We ignore these
+measurements for this study as they are not available for all sources.}
+These flux measurements are produced by PS1 in 3 different ways. The mean
+brightness measured on the individual PS1 frames is reported in the
+\textit{MeanObject} table, the mean brightness measured via
+forced-PSF/aperture photometry on the individual PS1 frames is reported in
+the \textit{ForcedMeanObject} table, and finally, the brightness measured on
+the full-depth stacked PS1 images is reported in the
+\textit{StackObjectThin} table. The \textit{StackObjectAttributes} table
+further supplements these tables with point-source object shape
+measurements, which prove useful for identifying unresolved sources.
+Ultimately, see \S\ref{sec:simple_model}, we use flux measurements from the
+\textit{StackObjectThin} table and shape measurements from the
+\textit{StackObjectAttributes} table to build our models.
 
 \subsection{The \textit{HST} Training Set} \label{sec:hst_train}
 
@@ -433,16 +424,16 @@ classifications of \textit{HST} COSMOS sources are provided in
 classifications to $\sim$25\,mag, which is significantly deeper than the
 faintest sources detected by PS1. We identify counterparts in the PS1 and
 \textit{HST} data by performing a spatial crossmatch between the two catalogs
-using a 1\arcsec radius.\footnote{This matching radius is the same employed
+using a 1\arcsec\ radius.\footnote{This matching radius is the same employed
 by PS1 to associate individual detections in the \textit{MeanObject} table
 with detections in the \textit{StackObjectAttributes} table.} We further
 excluded sources from the \citet{Leauthaud07} catalog with
 $\texttt{MAG\_AUTO} > 25$\,mag, as these sources are too faint to be detected
-by PS1 meaning their crossmatch counterparts are likely spurious. Following
+by PS1, meaning their crossmatch counterparts are likely spurious. Following
 this procedure, we find that there are 87,431 sources in the
 \citet{Leauthaud07} catalog with PS1 counterparts. Of these, 80,974 are
 unique in that there is a one-to-one correspondence between \textit{HST}
-source and a single PS1 \textit{ObjID}. The training set is further reduced
+source and a single PS1 \texttt{ObjID}. The training set is further reduced
 to 75,927 once our detection criteria are applied (see
 \S\ref{sec:simple_model}), and, of those, only 47,093 have
 $\texttt{nDetections} \ge 1$ in the PS1 database (hereafter, the \textit{HST}
@@ -458,11 +449,11 @@ stack images.}
   \includegraphics[width=7.2in]{./Figures/ColorMagDiagram.pdf}
   %
   \caption{ PS1 color-magnitude diagrams for \textit{left}: $10^6$ randomly
-  selected sources, \textit{center}: the \textit{HST} training set, and
+  selected PS1 sources, \textit{center}: the \textit{HST} training set, and
   \textit{right}: the SDSS training set. The primary panels show a
   two-dimensional (2D) Gaussian kernel density estimate (KDE) of the
   probability density function (PDF) of each subset of sources in the
-  $r_\mathrm{PS1}$--$g_\mathrm{PS1} - r_\mathrm{PS1}$ plane. The shown
+  $r_\mathrm{PS1}$ vs.\ $g_\mathrm{PS1} - r_\mathrm{PS1}$ plane. The shown
   contour levels extend from 0.9 to 0.1 in 0.1 intervals. To the top and
   right of the primary panels are marginalized 1D KDEs of the PDF for the
   $g_\mathrm{PS1} - r_\mathrm{PS1}$ color and $r_\mathrm{PS1}$ brightness,
@@ -477,11 +468,11 @@ star, galaxy, or quasi-stellar object (QSO). Using a $1\arcsec$ cross-match
 radius, we find 3,834,627 sources with SDSS optical spectra have PS1
 counterparts (hereafter, the SDSS training set). Thus, with an orders of
 magnitude larger training set, and spectroscopic classifications that should
-be pristine and superior to mophological clsasifications, one might expect
-the SDSS training set to be optimal for training the machine learning model.
-However, as noted in \citep{Miller17}, the SDSS spectroscopic targeting
-algorithms were highly biased, and as a result prove challenging as a
-training set.
+be both pristine and superior to mophological clsasifications, one might
+expect the SDSS training set to be optimal for training the machine learning
+model. However, as noted in \citet{Miller17}, the SDSS spectroscopic
+targeting algorithms were highly biased, and as a result these sources prove
+challenging as a training set.
 
 Color-magnitude diagrams (CMDs) of the \textit{HST} and SDSS training sets
 are compared to a random selection of $10^6$ sources from the PS1 database in
