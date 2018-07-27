@@ -562,19 +562,14 @@ features and found that they are statistically equivalent when tested with
 the \textit{HST} training set.
 
 The direct use of color information as model features would require
-reddening corrections for all PS1 sources 
-\NC{
-if the training set does not sample the wide distribution of reddening that is observed in the full PS1 data set, 
-otherwise the use of color information leads to a bias.
-}
-Not only is this a daunting task,
+reddening corrections for all PS1 sources. Not only is this a daunting task,
 but accurate corrections would require a priori knowledge as to which
 sources are Galactic and which are extragalactic (e.g., \citealt{Green15}).
 The PS1 catalog is being developed precisely to answer this question.
 Furthermore, the pencil beam sample from the \textit{HST} training set
 traces a narrow range of dust columns, so the application of a model
 including color information without reddening corrections would lead to
-biased classifications \citep{Sevilla18} particularly in regions of high
+biased classifications \citep{Sevilla18}, particularly in regions of high
 reddening (e.g., the Galactic plane). We conclude that the benefits of the
 ``white flux'' features, which eliminate the need for reddening corrections,
 outweigh any losses from the exclusion of color information.
@@ -759,14 +754,10 @@ this via forward and backward feature selection \citep{Guyon03}. Forward and
 backward feature selection involve the iterative addition or removal of
 features from the model, respectively. Like \citet{Richards12a}, we rank
 order the features for either addition or subtraction based on their
-RF-determined importance \citep{Breiman02}.
-\NC{
-We find that \texttt{whitePSFKronDist} shows the highest importance, 
-and in either case of feature selection, 
-removing features does not improve the CV FoM.
-We therefore include all 11
+RF-determined importance \citep{Breiman02}. This method shows
+\texttt{whitePSFKronDist} to be the most important feature, and we find that
+removing features does not improve the CV FoM. We therefore include all 11
 features from \S\ref{sec:model_features} in the final RF model.
-}
 
 \subsubsection{Optimizing the Model Tuning Parameters}
 
