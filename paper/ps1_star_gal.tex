@@ -154,7 +154,7 @@
 \begin{document}
 \begin{CJK*}{UTF8}{gbsn}
 
-\title{A Morphological Classification Model for Unresolved 
+\title{A Morphological Classification Model to Identify Unresolved 
        PanSTARRS1 Sources: \\
        Application in the ZTF Real-Time Pipeline
        }
@@ -237,25 +237,26 @@ Japan}
 
 In the era of large photometric surveys, the importance of automated and
 accurate classification is rapidly increasing. Specifically, the separation
-of stars and galaxies in astronomical imaging is a critical initial step for
-a wide array of studies, ranging from Galactic science to large scale
-structure and cosmology. Here, we present our method to construct a large,
-deep catalog of stars and galaxies utilizing Pan-STARRS1 (PS1) 3$\pi$ survey
-data, which consists of $\sim$3$\times10^9$ sources with
+of resolved and unresolved sources in astronomical imaging is a critical
+initial step for a wide array of studies, ranging from Galactic science to
+large scale structure and cosmology. Here, we present our method to
+construct a large, deep catalog of point sources utilizing Pan-STARRS1 (PS1)
+3$\pi$ survey data, which consists of $\sim$3$\times10^9$ sources with
 $m\lesssim23.5$\,mag. We develop a supervised machine-learning methodology,
-using the random forest (RF) algorithm, to construct the PS1 star--galaxy
-separation model. We train the model using $\sim$5$\times10^4$ PS1 sources
-with \textit{HST} COSMOS morphological classifications and assess its
-performance using $\sim$4$\times10^6$ sources with Sloan Digital Sky Survey
-(SDSS) spectra. We construct 11 ``white flux'' features, which combine PS1
-flux and shape measurements across 5 filters, to increase the signal-to-noise
-ratio relative to any individual filter. The RF model is compared to 3
-alternative models, including the SDSS and PS1 photometric classification
-models, and we find that the RF model performs best. By number the PS1
-catalog is dominated by faint sources ($m\gtrsim21$\,mag), and in this regime
-the RF model significantly outperforms the SDSS and PS1 models. For
-time-domain surveys, star--galaxy separation is crucial for identifying the
-Galactic or extragalactic origin of new transients. We have classified
+using the random forest (RF) algorithm, to construct the PS1 morphology
+model. We train the model using $\sim$5$\times10^4$ PS1 sources with
+\textit{HST} COSMOS morphological classifications and assess its performance
+using $\sim$4$\times10^6$ sources with Sloan Digital Sky Survey (SDSS)
+spectra and $\sim$2$\times10^8$ \textit{Gaia} sources. We construct 11
+``white flux'' features, which combine PS1 flux and shape measurements
+across 5 filters, to increase the signal-to-noise ratio relative to any
+individual filter. The RF model is compared to 3 alternative models,
+including the SDSS and PS1 photometric classification models, and we find
+that the RF model performs best. By number the PS1 catalog is dominated by
+faint sources ($m\gtrsim21$\,mag), and in this regime the RF model
+significantly outperforms the SDSS and PS1 models. For time-domain surveys,
+identifying unresolved sources is crucial for inferring the Galactic or
+extragalactic origin of new transients. We have classified
 $\sim$1.5$\times10^9$ sources using the RF model, and these results are used
 within the Zwicky Transient Facility real-time pipeline to automatically
 reject stellar sources from the extragalactic alert stream.
