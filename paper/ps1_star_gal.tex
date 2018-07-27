@@ -1171,25 +1171,30 @@ ZTF calibration sources. Ultimately, non-unique sources (i.e., if a single
  \centering
   \includegraphics[width=3.35in]{./Figures/ZTF_PS1_cat_hist.pdf}
   %
-  \caption{ The distribution of RF classification score for all sources 
- in the ZTF-PS1 star--galaxy
-  catalog. Note that the number counts are shown on a log scale. The vertical dotted line shows the FoM-optimized classification threshold, sources to the right of the line are classified as stars. The full catalog is shown in blue, while Galactic plane sources ($|b| <
-15^{\circ}$) are shown in orange, and high galactic latitude sources ($|b| > 50^{\circ}$) are shown in grey. Ambiguous classifications ($0.2 \lesssim
-\mathrm{RF\;score} \lesssim 0.8$) in the catalog are dominated by sources in the Galactic plane.}
+  \caption{ The distribution of RF classification score for all sources in
+  the ZTF-PS1 star--galaxy catalog. Note that the number counts are shown on
+  a log scale. The vertical dotted line shows the FoM-optimized
+  classification threshold, sources to the right of the line are classified
+  as stars. The full catalog is shown in blue, while Galactic plane sources
+  ($|b| < 15^{\circ}$) are shown in orange, and high galactic latitude
+  sources ($|b| > 50^{\circ}$) are shown in grey. Ambiguous classifications
+  ($0.2 \lesssim \mathrm{RF\;score} \lesssim 0.8$) in the catalog are
+  dominated by sources in the Galactic plane.}
   %
   \label{fig:ztf_hist}
 \end{figure}
 %%%%%%%%%%%%%
 
-In total, there are 1,484,281,394 sources with classifications in the ZTF
-database. A histogram showing the distribution of the final classifications
-is shown in Figure~\ref{fig:ztf_hist}. \todo{re-word after writing the gaia
-section} The thresholds appropriate for identifying point-source
-counterparts to the ZTF candidates are reported in Table~\ref{tbl:fpr} (note
-that these thresholds apply to $\mathtt{nDetections} \ge 3$ sources). Of the
-$\sim$1.5$\times 10^{9}$ sources in the ZTF-PS1 catalog, 734,476,355
-($\sim$50\%) are classified as stars using the FoM-optimized classification
-threshold of 0.83.
+In total, there are 1,484,281,394 PS1 sources with RF
+classifications.\footnote{An additional 8,520,167 sources with
+significant parallax or proper motion have $\mathrm{RF\;score} = 1$ in the
+ZTF database (see \S\ref{sec:gaia}).} A histogram showing the distribution
+of the final RF classifications is shown in Figure~\ref{fig:ztf_hist}. The
+thresholds appropriate for identifying point-source counterparts to the ZTF
+candidates are reported in Table~\ref{tbl:fpr} (note that these thresholds
+apply to $\mathtt{nDetections} \ge 3$ sources). Of the $\sim$1.5$\times
+10^{9}$ sources in the ZTF-PS1 catalog, 734,476,355 ($\sim$50\%) are
+classified as stars using the FoM-optimized classification threshold of 0.83.
 
 %%%%%%%%
 \begin{deluxetable*}{lcc|lccccc}
@@ -1236,6 +1241,7 @@ thresholds is a critical early step in the filtering of ZTF candidates
 of newly discovered transients.
 
 \subsection{Verifying, and Updating, the Catalog with \textit{Gaia}}
+\label{sec:gaia}
 
 The \textit{Gaia} satellite \citep{Gaia-Collaboration16} is currently
 conducting an all-sky survey that provides unprecedented astrometric
@@ -1341,10 +1347,11 @@ threshold. The percentages are even higher for the parallax-selected sample.
 We conclude that the \textit{Gaia} data confirms that our method does an
 excellent job of identifying unresolved sources.
 
-Finally, the \aam{ZZZ - AAA} sources selected by either the parallax or proper motion cuts described above that do not have counterparts in the
-ZTF-PS1 catalog are assigned an RF classification score of 1 in the ZTF
-database. Thus, new transient candidates with positions consistent with
-these sources will be flagged as likely stars.
+Finally, the 8,520,167 sources selected by either the parallax or proper
+motion cuts described above that do not have counterparts in the ZTF-PS1
+catalog are assigned an RF classification score of 1 in the ZTF database.
+Thus, new transient candidates with positions consistent with these sources
+will be flagged as likely stars.
 
 \section{Summary and Conclusions}
 
