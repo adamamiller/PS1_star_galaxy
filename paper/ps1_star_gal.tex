@@ -286,25 +286,25 @@ reject stellar sources from the extragalactic alert stream.
 \section{Introduction}\label{sec:intro}
 
 The proliferation of wide-field optical detectors has led to a plethora of
-imaging catalogs in the past two decades. Separating unresolved point sources (i.e., stars and quasi-stellar objects
-[QSOs]) from photometrically extended sources (i.e., galaxies) is one of the
-most challenging and important steps in the extraction of astronomical
-information from these imaging catalogs. For faint sources especially,
-performing this task well accelerates our progress in understanding the Universe 
-(e.g., \citealt{Sevilla18}).
-Separating stars and galaxies allows us to investigate
-the nature of dark matter by: (i) tracing structure in the Milky Way halo
-(e.g., \citealt{Belokurov06}), (ii) measuring galaxy-galaxy correlation
-functions (e.g., \citealt{Ross11, Ho15}), and (iii) detecting the weak
-lensing signal from cosmic shear \citep{Soumagnac15}. Complete, and pure,
-catalogs of galaxies can be used to assess the the geometry of the Universe
-\citep{Yasuda01} and the theory of galaxy formation (e.g.,
+imaging catalogs in the past two decades. Separating unresolved point
+sources (i.e., stars and quasi-stellar objects [QSOs]) from photometrically
+extended sources (i.e., galaxies) is one of the most challenging and
+important steps in the extraction of astronomical information from these
+imaging catalogs. For faint sources especially, performing this task well
+accelerates our progress in understanding the Universe (e.g.,
+\citealt{Sevilla18}). Separating resolved and unresolved sources allows us
+to investigate the nature of dark matter by: (i) tracing structure in the
+Milky Way halo (e.g., \citealt{Belokurov06}), (ii) measuring galaxy-galaxy
+correlation functions (e.g., \citealt{Ross11, Ho15}), and (iii) detecting
+the weak lensing signal from cosmic shear \citep{Soumagnac15}. Complete, and
+pure, catalogs of galaxies can be used to assess the the geometry of the
+Universe \citep{Yasuda01} and the theory of galaxy formation (e.g.,
 \citealt{Loveday12, Moorman15}). Finally, for time-domain surveys,
-star--galaxy catalogs enable an immediate classification for all newly
+point-source catalogs enable an immediate classification for all newly
 discovered variable phenomena as being either Galatic or extragalactic in
 origin (e.g., \citealt{Berger12,Miller17}).
 
-Given the many applications for a catalog that separates point sources from
+Given the many applications for separating point sources from
 galaxies, we turn our attention to the Pan-STARRS1 (PS1) 3$\pi$ survey
 \citep{Chambers16}, whose $\sim$3$\times 10^{9}$ source catalog provides a
 felicitous data set.
@@ -322,9 +322,10 @@ $1.19\arcsec$ in the $r$-band \citep{Tonry12, Schlafly12, Chambers16}. The
 first PS1 data release (DR1) provides flux and pixel-based shape
 measurements for $>$3 billion sources \citep{Flewelling16}.
 
-Our aim is to develop a large, deep catalog of stars and galaxies using PS1
-data.\footnote{Throughout this paper, we interchangably use the term star to
-mean unresolved point source, which includes both stars and QSOs.} The
+Our aim is to develop a large, deep catalog of resolved and unresolved
+sources using PS1 data.\footnote{Throughout this paper, we interchangably
+use the term star to mean unresolved point source, which includes both stars
+and QSOs, while the term galaxy refers to resolved, extended sources.} The
 catalog is general purpose and can serve many different science goals,
 however, our immediate goal is to support the real-time search for
 transients in the Zwicky Transient Facility (ZTF; \citealt{Bellm:18:ZTF}).
@@ -347,28 +348,29 @@ The PTF point-source catalog was constructed to support the real-time search
 for electromagetic counterparts to gravitational wave events. Given that
 these events are expected to be very rare (e.g., \citealt{Scolnic18}), the
 figure of merit (FoM) for the PTF model was defined as the true positive
-rate (corresponding to the fraction of stars that are correctly classified)
-at a fixed false positive rate (fraction of galaxies that are misclassified)
-equal to 0.005 \citep{Miller17}. This FoM is designed to reject as many
-stars as possible, while still ensuring that nearly every extragalactic
-transient ($\sim$99.5\%) remains in the candidate stream. While the PTF
-point-source catalog includes $\sim$1.7$\times 10^8$ objects, the PS1
-database includes an order of magnitude more sources.
+rate (corresponding to the fraction of point sources that are correctly
+classified) at a fixed false positive rate (fraction of resolved source that
+are misclassified) equal to 0.005 \citep{Miller17}. Maximizing the FoM will
+reject as many point sources as possible, while still ensuring that nearly
+every extragalactic transient ($\sim$99.5\%) remains in the candidate
+stream. While the PTF point-source catalog includes $\sim$1.7$\times 10^8$
+objects, the PS1 database includes an order of magnitude more sources.
 
-A star--galaxy separation model built on PS1 data will produce dramatic
-improvements over the PTF catalog. PS1 observations are deeper, feature
-better seeing, and include 5 filters (the PTF catalog was built with
+A resolved--unresolved separation model built on PS1 data will produce
+dramatic improvements over the PTF catalog. PS1 observations are deeper,
+feature better seeing, and include 5 filters (the PTF catalog was built with
 observations in a single filter, $R_\mathrm{PTF}$). Additionally, one of the
 12 CCDs in the PTF camera did not work \citep{Law09}, meaning $\sim$8\% of
 the $\delta > -30^\circ$ sky has no PTF classifications.
 
-Here, we construct a new star--galaxy separation model using PS1 DR1 data in
-conjunction with a new machine learning methodology. The model is trained
-using \textit{Hubble Space Telescope} observations, which should provide an
-improvement over the Sloan Digital Sky Survey (SDSS; \citealt{York00})
-spectroscopic training set used in \citet{Miller17}. As in \citet{Miller17},
-we use the RF algorithm to separate point sources and extended sources and we optimize our model to maximize the same FoM. Our
-new PS1 model outperforms alternatives and has already been incorporated into
+Here, we construct a new morphological classification model using PS1 DR1
+data in conjunction with a new machine learning methodology. The model is
+trained using \textit{Hubble Space Telescope} observations, which should
+provide an improvement over the Sloan Digital Sky Survey (SDSS;
+\citealt{York00}) spectroscopic training set used in \citet{Miller17}. As in
+\citet{Miller17}, we use the RF algorithm to separate point sources and
+extended sources and we optimize our model to maximize the same FoM. Our new
+PS1 model outperforms alternatives and has already been incorporated into
 the ZTF real-time pipeline.
 
 
