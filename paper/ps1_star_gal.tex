@@ -807,37 +807,37 @@ models in Figure~\ref{fig:cvroc_hst}. ROC curves show how the true positive
 rate (TPR)\footnote{$\mathrm{TPR} = \mathrm{TP}/(\mathrm{TP} +
 \mathrm{FP})$, where TP is the total number of true positive classifications
 and FP is the number of false positives.} and false positive rate
-(FPR)\footnote{$\mathrm{FPR} = \mathrm{FP}/(\mathrm{FP} + \mathrm{TN})$,
-where TN is the number of true negatives.} vary as a function of
-classification threshold. As a reminder, stars are considered the positive
-class in this study. To construct ROC curves for the simple and PS1 models
-we vary the classification thresholds from $\mathrm{whitePSFKronDist} =
-4.24\times 10^{-3}$ to $-16.23\times10^{-3}$ and $\mathtt{iPSFMag} -
-\mathtt{iKronMag} = 5.10\;\mathrm{mag}$ to $-2.81\;\mathrm{mag}$,
-respectively. Figure~\ref{fig:cvroc_hst} highlights the strength of the
-simple model approach: by using a metric that essentially captures both the
-difference between the PSF and Kron-aperture measurements \textit{and} the
-SNR, the simple model produces much higher TPR at low FPR than the PS1
-model, which eliminates any information about the SNR.
+(FPR)\footnote{$\mathrm{FPR} = \mathrm{FP}/(\mathrm{FP}+\mathrm{TN})$, where
+TN is the number of true negatives.} vary as a function of classification
+threshold. As a reminder, point sources are considered the positive class in
+this study. To construct ROC curves for the simple and PS1 models we vary
+the classification thresholds from $\mathtt{whitePSFKronDist} = 4.24\times
+10^{-3}$ to $-16.23\times10^{-3}$ and $\mathtt{iPSFMag} - \mathtt{iKronMag}
+= 5.10\;\mathrm{mag}$ to $-2.81\;\mathrm{mag}$, respectively.
+Figure~\ref{fig:cvroc_hst} highlights the strength of the simple model
+approach: by using a metric that essentially captures both the difference
+between the PSF and Kron flux measurements \textit{and} the SNR, the simple
+model produces much higher TPR at low FPR than the PS1 model, which does not
+capture information about the SNR.
 
 Summary statistics showing the superior performance of the RF model relative
-to the simple and PS1 models are presented in Table~\ref{tbl:hst_cv}.
-These statistics include the FoM, the integrated area under the ROC curve
-(ROC AUC), and the overall accuracy of the 3 models as evaluted on the
-subset of \textit{HST} training set sources with $i_\mathrm{PS1}$
+to the simple and PS1 models are presented in Table~\ref{tbl:hst_cv}. These
+statistics include the FoM, the overall classification accuracy, and the
+integrated area under the ROC curve (ROC AUC) of the 3 models as evaluted on
+the subset of \textit{HST} training set sources with $i_\mathrm{PS1}$
 detections. We use 10-fold CV to measure the summary statistics, with
 identical folds for each model. Strictly speaking, this CV procedure is only
 needed for the RF model, which needs to be re-trained for every fold, but
 testing the simple and PS1 models on the individual folds provides an
 estimate in the scatter of the final reported metrics. From
-Table~\ref{tbl:hst_cv} it is clear that the RF model greatly outperforms
-the simple and PS1 models.
+Table~\ref{tbl:hst_cv} it is clear that the RF model greatly outperforms the
+simple and PS1 models.
 
 
 \begin{deluxetable}{cccc}
     \tablecolumns{4} 
     \tablewidth{0pt} 
-    \tablecaption{ CV Results for \textit{HST} Training Set \label{tbl:hst_cv}}
+    \tablecaption{ CV Results for the \textit{HST} Training Set \label{tbl:hst_cv}}
     \tablehead{ 
     \colhead{model} & \colhead{FoM} & \colhead{Accuracy} & \colhead{ROC AUC}
     }
@@ -856,8 +856,8 @@ the simple and PS1 models.
   %
   \caption{ ROC curves comparing the relative performance of the PS1,
   simple, and RF models as tested by the subset of \textit{HST} training set
-  sources with $i_\mathrm{PS1}$ detections. The thick, solid orange, blue,
-  and black lines show the ROC curves for the PS1, simple, and RF models,
+  sources with $i_\mathrm{PS1}$ detections. The thick, solid slate gray, green,
+  and purple lines show the ROC curves for the PS1, simple, and RF models,
   respectively. The light, thin lines show the ROC curves for the individual
   CV folds. The inset on the right shows a zoom in around FPR = 0.005, shown
   as a dotted vertical line, corresponding to the FoM (the PS1 model is not
@@ -871,15 +871,17 @@ the simple and PS1 models.
   \includegraphics[width=3.35in]{./Figures/CV_Accuracy_HST.pdf}
   %
   \caption{Model accuracy as a function of \texttt{whiteKronMag} evaluated
-  on the subset of the \textit{HST} training set sources with
-  $i_\mathrm{PS1}$ detections. Accuracy curves for the PS1, simple and RF
-  models are shown in orange, blue, and black, respectively. The bin widths
-  are 0.5\,mag, and the error bars represent the 68\% interval from
-  bootstrap resampling. Additionally, a Gaussian KDE of
-  the PDF for the entire \textit{HST} training set subset, as well as the
-  stars and galaxies in the subset is shown in the shaded grey, red, and
-  green regions, respectively. The amplitude of the star and galaxy PDFs
-  have been normalized by their relative ratio compared to the full subset. }
+  on the subset of \textit{HST} training set sources with $i_\mathrm{PS1}$
+  detections. Accuracy curves for the PS1, simple and RF models are shown as
+  slate gray pentagons, green triangles, and purple circles, respectively. The bin
+  widths are 0.5\,mag, and the error bars represent the 68\% interval from
+  bootstrap resampling. Additionally, a Gaussian KDE of the PDF for the
+  $i_\mathrm{PS1}$-detection subset of \textit{HST} training set, as well as
+  the point sources (labeled stars) and extended objects (labeled galaxies)
+  in the same subset is shown in the shaded gray, red, and green regions,
+  respectively. The amplitude of the star and galaxy PDFs have been
+  normalized by their relative ratio compared to the full subset. \yutaro{Is
+  the KDE for entire HST training set, or just i-band subset?}}
   %
   \label{fig:cvacc_hst}
 \end{figure}
@@ -915,7 +917,7 @@ that the RF model uses 10 additional features beyond
     PS1 & 0.290 $\pm$ 0.004 & 0.9612 $\pm$ 0.0001 & 0.98411 $\pm$ 0.00007 \\
     SDSS & 0.777 $\pm$ 0.003 & \textbf{0.9713} $\pm$ 0.0001 & 0.98660 $\pm$ 0.00008 \\
     \enddata
-    \tablecomments{Uncertainties represent the sample standard deviation for the 100 bootstrap samples of the SDSS test set.} 
+    \tablecomments{Uncertainties represent the sample standard deviation for 100 bootstrap samples of the SDSS test set.} 
     \tablenotetext{a}{Classification accuracies are evaluated using classification cuts of $0.5$, $9.2 \times 10^{-7}$, $0.05$, and $0.145$ for the RF, simple, PS1, and SDSS models, respectively.}
 \end{deluxetable}
 
@@ -923,15 +925,20 @@ that the RF model uses 10 additional features beyond
 \begin{figure}[t]
  \centering
   \includegraphics[width=3.35in]{./Figures/ROC_curves_log_inset2.pdf}
-  %
-  \caption{ ROC curves comparing the relative performance of the SDSS (orange
-  dot-dashed line), PS1 (slate grey dashed line), simple (green dotted line),
-  and RF (solid purple) models as tested by the SDSS test set. The vertical
-  dotted line shows $\mathrm{FPR} = 0.005$, corresponding to the FoM. The
-  inset shows a zoom in around the region where the ROC curves cross (see
-  text for further details). The black and the red stars show the FPR and TPR
-  if adopting the PS1 model and SDSS \textit{photo} classification cuts,
-  respectively. The RF model delivers the highest FoM.}
+  %  
+  \caption{ \yutaro{Can you adjust the inset up slightly so the dotted line
+  does not pass through 0.96? If possible it'd be good to do this for 0.015
+  as well. Alternatively, you could make that axis only show 0.01 and 0.02
+  and then make the minor ticks 0.0025 which might make that a little easier
+  to read} ROC curves comparing the relative performance of the SDSS (orange
+  dot-dashed line), PS1 (slate grey dashed line), simple (green dotted
+  line), and RF (solid purple) models as tested by the SDSS test set. Note
+  that the FPR is shown on a logarithmic scale. The vertical dotted line
+  shows $\mathrm{FPR} = 0.005$, corresponding to the FoM. The inset shows a
+  zoom in around the region where the ROC curves cross (see text for further
+  details). The black and red stars show the FPR and TPR if adopting the PS1
+  model and SDSS \textit{photo} classification cuts, respectively. The RF
+  model delivers the highest FoM.}
   %
   \label{fig:roc_sdss}
 \end{figure}
@@ -940,13 +947,13 @@ that the RF model uses 10 additional features beyond
 While CV on the \textit{HST} training set shows that the RF model
 outperforms the alternatives, here, we test each of the previous models with
 the SDSS training set, which provides an independent set of $\sim$3.8$\times
-10^6$ sources with high-confidence
-labels. Additionally, the use of SDSS spectra allows us to compare our new
-models to the classifications from the SDSS \texttt{photo} pipeline,
-hereafter the SDSS model, which soundly outperformed the PTF RF star--galaxy
-model \citep{Miller17}. We create an ROC curve for the SDSS model by
-thresholding on the ratio of PSF flux to \texttt{cmodel} flux measured in the
-SDSS images (see \citealt{Miller17} for more details).
+10^6$ sources with high-confidence labels. Additionally, the use of SDSS
+spectra allows us to compare our new models to the classifications from the
+SDSS \texttt{photo} pipeline, hereafter the SDSS model, which soundly
+outperformed the PTF point source classification model \citep{Miller17}. We
+create an ROC curve for the SDSS model by thresholding on the ratio of PSF
+flux to \texttt{cmodel} flux measured in the SDSS images (see
+\citealt{Miller17} for more details).
 
 To compare the 4 models, we evaluate the performance of each model on the
 subset of SDSS training set sources that have $i_\mathrm{PS1}$ detections
@@ -1008,103 +1015,107 @@ is why these curves cross.
   \includegraphics[width=6.2in]{./Figures/SDSS_acc_mag.pdf}
   %
   \caption{ Model accuracy for the RF (purple circles), simple (green
-  triangles), PS1 (slate grey pentagons), and SDSS (orange squares) models
+  triangles), PS1 (slate gray pentagons), and SDSS (orange squares) models
   as a function of \texttt{whiteKronMag} evaluated on the SDSS test set. The
   bin widths are 0.5\,mag, and the error bars represent the central 68\%
   interval from bootstrap resampling within each bin.
   %
   \textit{Top}: Model accuracy curves for the SDSS test set. This panel also
   shows a Gaussian KDE of the PDF for the SDSS test set, as well as the
-  stars and galaxies in the SDSS test set in the shaded grey, red, and green
-  regions, respectively. The amplitude of the star and galaxy PDFs have been
-  normalized by their relative fraction of the full test set.
+  point sources (labeled stars) and extended objects (labeled galaxies) in
+  the SDSS test set in the shaded gray, red, and green regions,
+  respectively. The amplitude of the point source and extended object PDFs
+  have been normalized by their relative fraction of the full test set.
   %
-  \textit{Middle}: Accuracy curves for individual stars and galaxies,
-  equivalent to the TPR and TNR, respectively, in the SDSS test set as
-  classified by the RF and SDSS models (the simple and PS1 models are not
+  \textit{Middle}: SDSS test set accuracy curves for individual point
+  sources and extended objects, equivalent to the TPR and TNR, respectively,
+  as classified by the RF and SDSS models (the simple and PS1 models are not
   shown for clarity). Note -- all 3 panels have the same bin centers, though
   here the markers are slightly offset for clarity. The SDSS model
-  classifies faint stars correctly, but has poor performance on faint
-  galaxies, while the opposite is true for the RF model.
+  classifies faint point sources correctly, but has poor performance on
+  faint extended objects, while the opposite is true for the RF model.
   %
   \textit{Bottom}: The accuracy curves for all 4 models following the
   bootstrap procedure (described in the text) to correct for the SDSS test
-  set bias whereby stars outnumber galaxies at $\mathtt{whiteKronMag}
-  \gtrsim 20.5\,\mathrm{mag}$. The PDFs shown in this panel are derived from
-  KDEs of the \textit{HST} training set (as in Figure~\ref{fig:cvacc_hst}).
-  After correcting for the SDSS test set number count bias, the RF and
-  simple models produce more accurate classifications of faint sources than
-  the SDSS and PS1 models.}
+  set bias whereby point sources outnumber extended objects at
+  $\mathtt{whiteKronMag} \gtrsim 20.5\,\mathrm{mag}$. The PDFs shown in this
+  panel are derived from KDEs of the \textit{HST} training set (as in
+  Figure~\ref{fig:cvacc_hst}). After correcting for the SDSS test set number
+  count bias, the RF and simple models produce more accurate classifications
+  of faint sources than the SDSS and PS1 models.}
   %
   \label{fig:acc_sdss}
 \end{figure*}
 %%%%%%%%%%%%%
 
-The classification accuracy for each of the 4 models, as evaluated on the
-SDSS test set, is shown in the top panel of Figure~\ref{fig:acc_sdss}. The
-RF, simple, and SDSS models all provide near-perfect ($\ge 97.5$\% accuracy)
-down to \texttt{whiteKronMag} $\approx 20\,\mathrm{mag}$. The PS1 model is
-similar, though has a noticably worse performance for the brightest
+Accuracy curves for each of the 4 models, as evaluated on the SDSS test set,
+is shown in the top panel of Figure~\ref{fig:acc_sdss}. The RF, simple, and
+SDSS models all provide near-perfect ($\ge 97.5$\%) accuracy down to
+\texttt{whiteKronMag} $\approx 20\,\mathrm{mag}$. The PS1 model is similar,
+though has a noticably worse performance for the brightest
 (\texttt{whiteKronMag} $\lesssim 14.5\,\mathrm{mag}$) sources. For sources
 with $\mathtt{whiteKronMag} > 21\,\mathrm{mag}$, the SDSS and PS1 models
 provide far more accurate classifications than the RF and simple models. In
-this faint regime, the SDSS test set is dominated by stars (top panel,
-Figure~\ref{fig:roc_sdss}). This is counter to what is observed in nature
-(at high galactic latitudes), as galaxy number counts exceed those of stars
-around $r \gtrsim 20\,\mathrm{mag}$ (e.g., \citealt{Yasuda01,Shanks15}).
-This bias in the SDSS test set is due to the SDSS targeting proclivity for
-luminous red galaxies (LRGs) at $z \approx 0.5$ (e.g.,
-\citealt{Eisenstein01}) and faint $z \approx 2.7$ QSOs (e.g.,
-\citealt{Ross12}).\footnote{For the SDSS test set, the peak in the galaxy
-PDF at $\mathtt{whiteKronMag} \approx 19.75\,\mathrm{mag}$ is dominated by
-LRGs, while the population of faint ($\mathtt{whiteKronMag} >
-21\,\mathrm{mag}$) stars is dominated by QSOs.}
+this faint regime, the SDSS test set is dominated by point sources (top
+panel, Figure~\ref{fig:roc_sdss}). This is counter to what is observed in
+nature (at high galactic latitudes), as extended object number counts exceed
+those of point sources around $r \gtrsim 20\,\mathrm{mag}$ (e.g.,
+\citealt{Yasuda01,Shanks15}). This bias in the SDSS test set is due to the
+SDSS targeting proclivity for luminous red galaxies (LRGs) at $z \approx
+0.5$ (e.g., \citealt{Eisenstein01}) and faint $z \approx 2.7$ QSOs (e.g.,
+\citealt{Ross12}).\footnote{For the SDSS test set, the peak in the extended
+object PDF at $\mathtt{whiteKronMag} \approx 19.75\,\mathrm{mag}$ is
+dominated by LRGs, while the population of faint ($\mathtt{whiteKronMag} >
+21\,\mathrm{mag}$) point sources is dominated by QSOs.}
 
 In addition to this bias in the SDSS test set, the SDSS (and PS1) model are
-biased towards classifying faint galaxies as stars. This is due to the hard
-cut on a single value of the PSF to \texttt{cModel} (or \texttt{Kron} for
-PS1) flux ratio. The reason for this can easily be seen in the top left
-panel of Figure~\ref{fig:features}, where a classification cut at
-$\mathtt{whitePSFKronRatio} = 0.875$ (equivalent to the SDSS cut) correctly
-identifies nearly all of the stars, but does a particularly bad job with the
-faintest galaxies. At low SNR the large scatter in flux ratio measurements
-results in many galaxy misclassifications.
+biased towards classifying faint resolved sources as unresolved. This is due
+to the hard cut on a single value of the PSF to \texttt{cModel} (or
+\texttt{Kron} for PS1) flux ratio. The reason for this can easily be seen in
+the top left panel of Figure~\ref{fig:features}, where a classification cut
+at $\mathtt{whitePSFKronRatio} = 0.875$ (equivalent to the SDSS cut)
+correctly identifies nearly all of the point sources, but does a
+particularly bad job with the faintest extended objects. At low SNR the
+large scatter in flux ratio measurements results in many misclassifications.
 
 We show further evidence for this classification bias in the middle panel of
 Figure~\ref{fig:acc_sdss}, which shows the accuracy with which individual
-galaxies and stars in the SDSS test set are classified\footnote{This is
-equivalent to showing the true negative rate (TNR = TN/[TN + FP]) and TPR,
-respectively.} by the RF and SDSS models (curves for the simple and PS1
-models show similar trends as the RF and SDSS models, respectively, but are
-omitted for clarity). For faint ($\mathtt{whitePSFKronRatio} >
-21\,\mathrm{mag}$) sources, the SDSS model performs well on stars
-($\mathrm{TPR} \gtrsim 0.9$) and poorly on galaxies ($\mathrm{TNR} \approx
-0.5$). The opposite is true for the RF model, with $\mathrm{TNR} \gtrsim
-0.8$ and a TPR that declines to $\sim$0.2 for the faintest SDSS test set
-sources. Thus, for faint sources the RF model is slightly biased towards
-galaxy classifications, however, this bias is in line with what is observed
-in nature. These classification biases, taken together with the SDSS test
-set bias towards stars at the faint end, explain why the accuracy curves for
-the SDSS (and PS1) model outperform the RF (and simple) model (and also why
-their ROC curves cross in Figure~\ref{fig:roc_sdss}).
+extended sources and point sources in the SDSS test set are
+classified\footnote{This is equivalent to showing the true negative rate
+(TNR = TN/[TN + FP]) and TPR, respectively.} by the RF and SDSS models
+(curves for the simple and PS1 models show similar trends as the RF and SDSS
+models, respectively, but are omitted for clarity). For faint
+($\mathtt{whitePSFKronRatio} > 21\,\mathrm{mag}$) sources, the SDSS model
+performs well on point sources ($\mathrm{TPR} \gtrsim 0.9$) and poorly on
+extended sources ($\mathrm{TNR} \approx 0.5$). The opposite is true for the
+RF model, with $\mathrm{TNR} \gtrsim 0.8$ and a TPR that declines to
+$\sim$0.2 for the faintest SDSS test set sources. Thus, for faint sources
+the RF model is slightly biased towards resolved object classifications,
+however, this bias is in line with what is observed in nature. These
+classification biases, taken together with the SDSS test set bias towards
+point sources at the faint end, explain why the accuracy curves for the SDSS
+(and PS1) model outperform the RF (and simple) model (and also why their ROC
+curves cross in Figure~\ref{fig:roc_sdss}).
 
 The bottom panel of Figure~\ref{fig:acc_sdss} shows that after correcting
 for the number counts bias in the SDSS test set, the RF and simple models
 greatly outperform the SDSS and PS1 models. We correct for the number count
-bias via bootstrap resampling, whereby we select a subset of stars and
-galaxies from the SDSS test set to match the ratio of stars to galaxies in
-the \textit{HST} training set. The \textit{HST} training set, which is
-selected photometrically, should serve as a far better approximation for the
-relative number counts of stars and galaxies at high-Galactic latitudes than
-the SDSS test set. The bootstrap occurs in bins of width 0.5\,mag from
+bias via bootstrap resampling, whereby we select a subset of point sources
+and extended objects from the SDSS test set to match the ratio of point
+sources to extended objects in the \textit{HST} training set. The
+\textit{HST} training set, which is selected photometrically, should serve
+as a far better approximation for the relative number counts of point
+sources and extended objects at high-Galactic latitudes than the SDSS test
+set. The bootstrap occurs in bins of width 0.5\,mag from
 \texttt{whiteKronmag} = 15\,mag to 23.5\,mag, and we select 100 bootstrap
 samples within each bin. In each bin the size of the bootstrap sample is set
 by the underrepresented class within the SDSS test set. For example, if the
-\textit{HST} training set has a star--galaxy number ratio of 0.6 and in the
-same bin the SDSS test set has 1000 stars and 4000 galaxies, then 1000 stars
-and 1667 galaxies will be selected in each bootstrap sample. Similarly, for
-a star--galaxy number ratio of 0.25 in a bin with 800 stars and 1000
-galaxies, then 250 stars and 1000 galaxies will be selected.
+\textit{HST} training set has an unresolved--resolved number ratio of 0.6
+and in the same bin the SDSS test set has 1000 point sources and 4000
+extended objects, then 1000 point sources and 1667 extended objects will be
+selected in each bootstrap sample. Similarly, for an unresolved--resolved
+number ratio of 0.25 in a bin with 800 point sources and 1000 extended
+objects, then 250 point sources and 1000 extended objects will be selected.
 
 Correcting for the number counts bias in the SDSS test set reveals some
 interesting trends: as was the case prior to correction all 4 models perform
@@ -1115,12 +1126,9 @@ Figure~\ref{fig:acc_sdss} also shows a kink at \texttt{whiteKronMag}
 $\approx 19.75\,\mathrm{mag}$. As first explained in \citet{Miller17}, this
 kink is due to blended, faint red stars that were targeted as candidate
 LRGs. Thus, spectra show these sources to be stellar, while they appear
-extended in imaging data. The bias correction further shows that the PS1
-model does not perform well in any brightness regime when compared to the
-other models considered here. Finally, we conclude that for source
-distributions similar to what is observed in nature, the RF model
-outperforms the alternatives discussed here in both the FoM and the overall
-accuracy.
+extended in imaging data. Finally, we conclude that for source distributions
+similar to what is observed in nature, the RF model outperforms the
+alternatives discussed here in both the FoM and the overall accuracy.
 
 % \section{Discussion}
 
