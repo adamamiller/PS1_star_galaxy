@@ -734,14 +734,14 @@ accuracy of $\sim$91\%.
 
 Based on its success in previous astronomical applications (e.g.,
 \citealt{Richards12a, Huppenkothen17, Brink13, Wright15, Goldstein15}),
-including star--galaxy separation (e.g., \citealt{Vasconcellos11,Miller17}),
+including morphological classification (e.g., \citealt{Vasconcellos11,Miller17}),
 we adopt the RF algorithm \citep{Breiman01} for our machine learning model.
 In fact, following the comparison of several different algorithms it was
 recently found that ensemble tree-based methods, such as RF, perform best
 when separating stars and galaxies \citep{Sevilla18}. In future work, we
 will consider alternative ensemble methods (such as adaptive boosting;
 \citealt{Freund97}), which is found to slightly outperform RF for
-star--galaxy separation \citep{Sevilla18}.
+similar problems \citep{Sevilla18}.
 
 Briefly, RF is built on decision tree models \citep{Quinlan93} that utilize
 bagging \citep{Breiman96}, wherein bootstrap samples of the training set are
@@ -772,19 +772,20 @@ order the features for either addition or subtraction based on their
 RF-determined importance \citep{Breiman02}. This method shows
 \texttt{whitePSFKronDist} to be the most important feature, and we find that
 removing features does not improve the CV FoM. We therefore include all 11
-features from \S\ref{sec:model_features} in the final RF model.
+``white flux'' features from \S\ref{sec:model_features} in the final RF
+model.
 
 \subsubsection{Optimizing the Model Tuning Parameters}
 
 As noted in \S\ref{sec:simple_model}, we optimize the RF model tuning
 parameters via an outter and inner 10-fold CV procedure. We perform a grid
 search over $N_{\mathrm{tree}}$, $m_{\mathrm{try}}$ and \texttt{nodesize},
-and find that the FoM of \textit{HST} training is maximized with
+and find that the FoM for the \textit{HST} training set is maximized with
 $N_{\mathrm{tree}} = 400$, $m_{\mathrm{try}} = 4$, and $\mathtt{nodesize} =
 2$. The final model FoM is not strongly sensitive to the choice of these
 parameters: changing any of the optimal parameters by a factor of $\sim$2
-does not decrease the optimal CV FoM, 0.71, by more than the scatter
-measured from the individual folds, 0.02. Finally, while a detailed
+does not decrease the optimal CV FoM, $\sim$0.71, by more than the scatter
+measured from the individual folds, $\sim$0.02. Finally, while a detailed
 comparison is presented in \S\ref{sec:comp_hst}, we note that the RF model
 significantly outperforms the simple model based on the CV FoM.
 
