@@ -375,9 +375,9 @@ the ZTF real-time pipeline.
 
 Alongside this paper, we have released our open-source analysis, and queries
 to recreate the data utilized in this study. These are available online at
-\url{https://github.com/ adamamiller/iPTF16abc}. The final PS1-ZTF catalog
+\url{https://github.com/ adamamiller/PS1_star_galaxy}. The final PS1-ZTF catalog
 created during this study is available as a High Level Science Product via
-the MAST archive \textit{Note to the referee- STScI will provide this url
+the MAST archive \textit{Note to the referee-- STScI will provide this url
 once the paper is accepted}.
 
 \section{Model Data}\label{sec:model_data}
@@ -516,8 +516,7 @@ where the sum is over the 5 PS1 filters, \texttt{Feat} is the feature from the \
 equivalent to signal-to-noise ratio (SNR) squared in the given filter. 
 Ultimately, the ``white flux'' features correspond to a weighted mean, with weights equal to the square of the SNR \citep{Bevington03}. 
 
-Our final model includes 11 ``white flux'' features to separate stars and
-galaxies. The database features include: \texttt{PSFFlux},\footnote{For the
+Our final model includes 11 ``white flux'' features to separate resolved and unresolved sources. The database features include: \texttt{PSFFlux},\footnote{For the
 \texttt{PSFFlux} feature $w_f =
 (\mathtt{PSFFlux}_f/\mathtt{PSFFluxErr}_f)^2$.} \texttt{KronFlux},
 \texttt{ApFlux},\footnote{For the \texttt{ApFlux} feature $w_f =
@@ -545,16 +544,16 @@ different flux measures: \texttt{whitePSFKronRatio} =
 \texttt{whitePSFKronDist} (see \S\ref{sec:simple_model}).
 
 As we previously alluded to, the primary benefit of the ``white flux''
-features is that they can be calculated for every source in PS1 thus allowing
-each to be compared on common ground. Furthermore, the SNR for the ``white
-flux'' features is greater than the SNR for the equivalent feature in a
-single filter. The downside of these features is that for some sources,
+features is that they can be calculated for every source in PS1 thus
+allowing each to be compared on common ground. Furthermore, the SNR for the
+``white flux'' features is greater than the SNR for the equivalent feature
+in a single filter. The downside of these features is that for some sources,
 especially at the bright end, color information is lost. While a blue source
 and red source with identical \texttt{whitePSFFlux} values are intrinsically
 very different, the ``white flux'' features obscure that information for the
-classifier. Ultimately, we tested models with and without the ``white flux''
-features and found that they are statistically equivalent when tested with
-the \textit{HST} training set.
+classifier. Ultimately, we tested models using the ``white flux'' features
+with and without additional color features and found that they are
+statistically equivalent when tested with the \textit{HST} training set.
 
 The direct use of color information as model features would require
 reddening corrections for all PS1 sources. Not only is this a daunting task,
@@ -573,17 +572,19 @@ outweigh any losses from the exclusion of color information.
  \centering
   \includegraphics[width=5.75in]{./Figures/whiteFeatures.pdf}
   \caption{
-  The primary square panels show KDEs of the PDF for each of the ``white
-  flux'' features as a function of \texttt{whiteKronMag}
+  The primary square panels show Gaussian KDEs of the PDF for each of the
+  ``white flux'' features as a function of \texttt{whiteKronMag}
   ($=-2.5\log_{10}[\mathtt{whiteKronFlux}/3631]$) for all sources in the
-  \textit{HST} training set. Stars are shown via the red-purple contours,
-  while galaxies are shown via blue-green contours. The shown contour levels
-  extend from 0.9 to 0.1 in 0.1 intervals. To the right of each primary panel
-  is a marginalized 1D KDE of the PDF for the individual features, where the
-  amplitudes of the KDEs have been normalized by the relative number of stars
-  and galaxies. The clear overlap between faint stars and galaxies suggests
-  that a machine learning model may provide significant improvement over the
-  PS1 and simple models.}
+  \textit{HST} training set. Unresolved point sources (labeled stars) are
+  shown via the red-purple contours, while resolved, extended objects
+  (labeled galaxies) are shown via blue-green contours. The shown contour
+  levels extend from 0.9 to 0.1 in 0.1 intervals. To the right of each
+  primary panel is a marginalized 1D KDE of the PDF for the individual
+  features, where the amplitudes of the KDEs have been normalized by the
+  relative number of point sources and extended objects. The clear overlap
+  between faint resolved and unresolved sources suggests that a machine
+  learning model may provide significant improvement over the PS1 and simple
+  models.}
   %
   \label{fig:features}
 \end{figure*}
@@ -591,48 +592,60 @@ outweigh any losses from the exclusion of color information.
 The distribution of ``white flux'' features for stars and galaxies in the
 \textit{HST} training set is shown in Figure~\ref{fig:features}
 (\texttt{whitePSFKronDist} is shown in Figure~\ref{fig:psfkrondist}). As
-might be expected, it is clear from Figure~\ref{fig:features} that stars and
-galaxies are easily separated at the bright end ($\lesssim 20$\,mag), but
-there is significant overlap in the featurespace between the two populations
-at the faint end ($\sim$23\,mag). Machine learning algorithms are capable of
-capturing non-linear behavior in multidimentional data sets, which will
-prove especially useful for the sources under consideration in the PS1 data
-set.
+might be expected, it is clear from Figure~\ref{fig:features} that point
+sources and extended objects are easily separated at the bright end
+($\lesssim 20$\,mag), but there is significant overlap in the featurespace
+between the two populations at the faint end ($\sim$23\,mag). Machine
+learning algorithms are capable of capturing non-linear behavior in
+multidimentional data sets, which will prove especially useful for the
+sources under consideration in the PS1 data set.
 
 \section{Model Construction}
 \subsection{The PS1 Baseline Model}\label{sec:ps1_model}
 
-To establish a baseline for the performance of our star-galaxy separation
-models we adopt the classification criteria in the PS1 documentation, namely
-sources with 
-%
-$$ \mathtt{iPSFMag} - \mathtt{iKronMag} > 0.05\;\mathrm{mag},$$
-%
+To establish a baseline for the performance of our resolved--unresolved
+separation models we adopt the classification criteria in the PS1
+documentation, namely sources with 
+% 
+$$ \mathtt{iPSFMag} - \mathtt{iKronMag}
+> 0.05\;\mathrm{mag},$$ 
+% 
 are classified as
-galaxies.\footnote{\url{https://outerspace.stsci.edu/display/PANSTARRS/How+to+
-separate+stars+and+galaxies}} The documentation notes that this
+galaxies.\footnote{\url{https://outerspace.stsci.edu/display/PANSTARRS/How+to
+ +separate+stars+and+galaxies}} The documentation notes that this
 classification can be performed using photometry from any of the
 \textit{MeanObject}, \textit{ForcedMeanObject}, or \textit{StackObjectThin}
 tables. The PS1 documentation further notes that this basic cut does not
-perform well for sources with $i \gtrsim 21\,\mathrm{mag}$, which constitutes
-the majority of sources detected by PS1, and motivates us to develop
-alternative models. We use the performance of the $\mathtt{iPSFMag} -
-\mathtt{iKronMag} > 0.05\;\mathrm{mag}$ model (hereafter, the PS1 model) as a
-baseline to compare to the models discussed below.
+perform well for sources with $i \gtrsim 21\,\mathrm{mag}$, which
+constitutes the majority of sources detected by PS1, and motivates us to
+develop alternative models. We use the performance of the $\mathtt{iPSFMag}
+- \mathtt{iKronMag} > 0.05\;\mathrm{mag}$ model (hereafter, the PS1 model)
+as a baseline to com pare to the models discussed below.
 
 \subsection{Simple Model}\label{sec:simple_model}
 
-While our ultimate goal is to build a machine learning model to separate
-stars and galaxies (\S\ref{sec:rf_model}), we first construct a
-straightforward model. This model is inspired by the SDSS \texttt{photo}
-pipeline \citep{Lupton01}, and combines the flux in each of the 5 PS1 filters
-to improve the SNR relative to any individual band. In addition to being easy
+While our ultimate goal is to build a machine learning model to identify
+point sources (\S\ref{sec:rf_model}), we first construct a straightforward
+model. This model is inspired by the SDSS \texttt{photo} pipeline
+\citep{Lupton01}, and combines the flux in each of the 5 PS1 filters to
+improve the SNR relative to any individual band. In addition to being easy
 to interpret, this model (hereafter, the simple model), which utilizes the
 difference between the PSF flux and the Kron-aperture flux for
 classification, serves as an additional baseline to test the need for a more
 complicated machine learning model.
 
-It stands to reason that a model built on all five PS1 filters should outperform a model constructed from a single filter. To that end, we examine the \texttt{whitePSFKronRatio} (equivalent to $\mathtt{whitePSFMag} - \mathtt{whiteKronMag}$) to discriminate between stars and galaxies. The upper left panel of Figure~\ref{fig:features} shows that sources with $\mathtt{whitePSFKronRatio} \gtrsim 1$ are very likely to be stars. A single hard cut on \texttt{whitePSFKronRatio}, similar to the SDSS \texttt{photo} pipeline or the PS1 model, removes any sense of confidence in the corresponding classification. For example, a source with $\mathtt{whitePSFKronRatio} = 1.1$ and $\mathtt{whiteKronMag} \approx 17\,\mathrm{mag}$ is far more likely to be a star than a source with the same \texttt{whitePSFKronRatio} value but $\mathtt{whiteKronMag} \approx 23\,\mathrm{mag}$ (see Figure~\ref{fig:features}).
+It stands to reason that a model built on all five PS1 filters should
+outperform a model constructed from a single filter. To that end, we examine
+the \texttt{whitePSFKronRatio} (equivalent to $\mathtt{whitePSFMag} -
+\mathtt{whiteKronMag}$) to discriminate between resolved and unresolved
+sources. The upper left panel of Figure~\ref{fig:features} shows that
+sources with $\mathtt{whitePSFKronRatio} \gtrsim 1$ are very likely point sources. A single hard cut on \texttt{whitePSFKronRatio}, similar to the SDSS
+\texttt{photo} pipeline or the PS1 model, removes any sense of confidence in
+the corresponding classification. For example, a source with
+$\mathtt{whitePSFKronRatio} = 1.1$ and $\mathtt{whiteKronMag} \approx
+17\,\mathrm{mag}$ is far more likely to be a star than a source with the
+same \texttt{whitePSFKronRatio} value but $\mathtt{whiteKronMag} \approx
+23\,\mathrm{mag}$ (see Figure~\ref{fig:features}).
 
 To address this issue of classification confidence, we measure the
 orthogonal distance from a line ($\mathtt{whitePSFFlux} = a\times
@@ -646,27 +659,33 @@ $\mathtt{whitePSFFlux}$--$\mathtt{whiteKronFlux}$ plane to define the simple mod
 \end{multline}
 %
 where $a$ is the slope of the line. For $a \approx 1$, which is similar to a
-hard cut with $\mathtt{whitePSFKronRatio} = a$, bright stars will have
-large, positive values of \texttt{whitePSFKronDist}, while bright galaxies
-will have large, negative values of \texttt{whitePSFKronDist}.
-Simultaneously, faint sources, which are more difficult to classify, will
-have small values of \texttt{whitePSFKronDist}. The simple model allows us
-to produce a rank ordered classification, which in turn allows us to
-evaluate the optimal classification threshold for the separation of stars
-and galaxies (see \S\ref{sec:comp_hst}).
+hard cut with $\mathtt{whitePSFKronRatio} = a$, bright point sources will
+have large, positive values of \texttt{whitePSFKronDist}, while bright
+extended objects will have large, negative values of
+\texttt{whitePSFKronDist}. Simultaneously, faint sources, which are more
+difficult to classify owing to the lower SNR, will have small values of
+\texttt{whitePSFKronDist}. The simple model allows us to produce a rank
+ordered classification, which in turn allows us to evaluate the optimal
+classification threshold for the separation of resolved and unresolved 
+sources (see \S\ref{sec:comp_hst}).
 
-The optimal value for $a$ is determined via $k$-fold cross validation (CV).
-We adopt identical procedures to optimize both the simple model and the
-machine learning model (see \S\ref{sec:rf_model}). We employ the use of an
-inner and outter CV loop, both of which have $k = 10$ folds. In the outter
-CV loop, the training set is split into 10 separate partitions, each
-iteratively withheld from the training. For each partition in the outter CV
-loop, an inner 10-fold CV is applied to the remaining $\sim$90\% of the
-training set to determine the optimal model parameters. Predictions on the
-sources withheld in the outter loop are made with the optimal model from the
-inner loop to provide model predictions for every source in the training
-set. We adopt final, optimal tuning parameters from the mean of the values
-determined in the inner CV.
+The optimal value for $a$ is determined via $k$-fold cross validation
+(CV).\footnote{In $k$-fold CV, $1/k$ of the training set is withheld during
+model construction, and the remaining $1-1/k$ fraction of the training set is
+used to predict the classification of the withheld data. This
+procedure is repeated $k$ times, with every training set source
+being withheld exactly once, so that predictions are made for each source in
+the training set enabling a measurement of the FoM.} We adopt identical
+procedures to optimize both the simple model and the machine learning model
+(see \S\ref{sec:rf_model}). We employ the use of an inner and outter CV
+loop, both of which have $k = 10$ folds. In the outter CV loop, the training
+set is split into 10 separate partitions, each iteratively withheld from the
+training. For each partition in the outter CV loop, an inner 10-fold CV is
+applied to the remaining $\sim$90\% of the training set to determine the
+optimal model parameters. Predictions on the sources withheld in the outter
+loop are made with the optimal model from the inner loop to provide model
+predictions for every source in the training set. We adopt final, optimal
+tuning parameters from the mean of the values determined in the inner CV.
 
 For the simple model, we employ a grid search over $a$ in the inner CV loops
 to maximize the FoM and thereby determine the optimal value of $a$.
@@ -676,7 +695,7 @@ optimal $a$ from the inner loops, and hence final model value, is 0.91375,
 with sample standard deviation $\sim$0.01. From this procedure, we find that
 for the simple model the $\mathrm{FoM} = 0.62 \pm 0.02$, where the
 uncertainty is estimated from the scatter in the outter CV
-results.\footnote{We find that PS1 flux measurements from the
+folds.\footnote{We find that PS1 flux measurements from the
 \textit{StackObjectThin} table produce a higher FoM for the simple model
 than flux measurements from the \textit{MeanObject} and
 \textit{ForcedMeanObject} tables. Thus, we adopt \textit{StackObjectThin}
@@ -689,24 +708,25 @@ fluxes for both the simple model and the machine learning model, as noted in
   \includegraphics[width=3.35in]{./Figures/whitePSFKronDist.pdf}
   %
   \caption{ The distribution of $\mathtt{whitePSFKronDist}$ values for
-  \textit{HST} training set stars and galaxies as a function of
-  \texttt{whiteKronMag}. The colors and contours are the same as
-  Figure~\ref{fig:features}. The horizontal dashed line shows the optimal
-  threshold ($\mathtt{whitePSFKronDist} \ge 9.2 \times 10^{-7}$) for
-  star--galaxy classification. The upper-right inset shows a zoom-out
-  highlighting the stark difference between stars and galaxies at the bright
-  end. }
+  \textit{HST} training set point sources (labeled stars) and extended
+  objects (labeled galaxies) as a function of \texttt{whiteKronMag}. The
+  colors and contours are the same as Figure~\ref{fig:features}. The
+  horizontal dashed line shows the optimal threshold
+  ($\mathtt{whitePSFKronDist} \ge 9.2 \times 10^{-7}$) for
+  resolved--unresolved classification. The upper-right inset shows a
+  zoom-out highlighting the stark difference between stars and galaxies at
+  the bright end. }
   %
   \label{fig:psfkrondist}
 \end{figure}
 
-The distribution of $\mathtt{whitePSFKronDist}(a=0.91375)$ is shown for
-\textit{HST} training set stars and galaxies in
-Figure~\ref{fig:psfkrondist}. $\mathtt{whitePSFKronDist}$ provides an
-excellent discriminant between bright ($\lesssim 20\,\mathrm{mag}$) stars
-and galaxies. We further find that adopting a stellar classification
-threshold of $\mathtt{whitePSFKronDist} \ge 9.2 \times 10^{-7}$ produces a
-classification accuracy of $\sim$91\%.
+The distribution of $\mathtt{whitePSFKronDist}(a=0.91375)$ is shown for the
+\textit{HST} training set in Figure~\ref{fig:psfkrondist}.
+$\mathtt{whitePSFKronDist}$ provides an excellent discriminant between
+bright ($\lesssim 20\,\mathrm{mag}$) point sources and extended objects. We
+further find that adopting a point source classification threshold of
+$\mathtt{whitePSFKronDist} \ge 9.2 \times 10^{-7}$ produces a classification
+accuracy of $\sim$91\%.
 
 \subsection{Random Forest Model}\label{sec:rf_model}
 
@@ -1331,7 +1351,7 @@ $\mathrm{RF\;score}\ge 0.99$, while 98.1\% have $\mathrm{RF\;score}\ge
 $\mathrm{RF\;score}\ge 0.5$, the traditional binary classification
 threshold. The percentages are even higher for the parallax-selected sample.
 We conclude that the \textit{Gaia} data confirms that our method does an
-excellent job of identifying unresolved sources.
+excellent job of identifying unresolved sources. \todo{Add sentence about brightness distribution of \textit{Gaia sources}. Add sentence about how it makes sense that 98\% are recovered at 0.83 threshold.}
 
 Finally, the 8,520,167 sources selected by either the parallax or proper
 motion cuts described above that do not have counterparts in the ZTF-PS1
