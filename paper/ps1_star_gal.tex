@@ -1381,10 +1381,10 @@ will be flagged as likely stars.
 \section{Summary and Conclusions}
 
 We have presented the development of a large ($\sim$1.5$\times 10^{9}$),
-deep ($m \lesssim 23.5\,\mathrm{mag}$) catalog of stars and galaxies based
-on PS1 data. We classify these stars using a machine-learning framework
-built on a RF model. The RF model is trained using 47,093 PS1 sources with
-\textit{HST} COSMOS morphological classifications.
+deep ($m \lesssim 23.5\,\mathrm{mag}$) catalog of point sources and extended
+objects based on PS1 data. We classify these sources using a machine
+learning framework built on a RF model. The RF model is trained using 47,093
+PS1 sources with \textit{HST} COSMOS morphological classifications.
 
 To construct the RF model, we introduced ``white flux'' features, which
 correspond to a weighted mean of the relevant features over the
@@ -1396,16 +1396,17 @@ its own for separating stars and galaxies. Unlike a hard cut on the PSF and
 Kron flux ratio, as is employed by the SDSS and PS1 models,
 \texttt{whitePSFKronDist} retains knowledge of the SNR and therefore can
 provide higher confidence classifications. From \texttt{whitePSFKronDist} we
-created the simple model, which does a good job of separating stars and
-galaxies. Ultimately, the 11 ``white flux'' features, used in combination
-with the RF algorithm, provide the best classification of PS1 sources.
+created the simple model, which does a good job of separating point sources
+and extended objects. Ultimately, the 11 ``white flux'' features, used in
+combination with the RF algorithm, provide the best classification of PS1
+sources.
 
 CV on the \textit{HST} training set shows that the RF (FoM$ = 0.71$) and
 simple (FoM$ = 0.657$) models greatly outperform the PS1 (FoM$ = 0.007$)
 model. For faint sources ($\mathtt{whiteKronMag} > 20$\,mag) the PS1 model
-misclassifies many galaxies as stars, while both the simple and RF models
-provide overall classification accuracies $\gtrsim 85$\% as faint as
-$\mathtt{whiteKronMag} = 23$\,mag.
+misclassifies many extended objects as point sources, while both the simple
+and RF models provide overall classification accuracies $\gtrsim 85$\% as
+faint as $\mathtt{whiteKronMag} = 23$\,mag.
 
 We find that when evaluated with the SDSS test set, the SDSS and PS1 models
 provide more accurate classifications than the RF and simple models,
@@ -1415,35 +1416,36 @@ attributed to a bias in the SDSS test set and the SDSS classification model.
 In the SDSS test set point sources outnumber galaxies at the faint end,
 which is counter to what is observed (at high galactic latitudes).
 Furthermore, the SDSS and PS1 models, which utilize a hard cut on flux
-ratios, are likely to classify low SNR sources as stars. Together, these
-effects amplify the perceived performance of the SDSS and PS1 models. Using
-a bootstrap resampling procedure, we correct for the relative number counts
-bias in the SDSS test set, and find that the RF and simple models outperform
-the SDSS and PS1 models, both in terms of FoM and overall accuracy. Thus, of
-the 4 models considered in this study the RF model is superior to all others.
+ratios, are likely to classify low SNR sources as point sources. Together,
+these effects amplify the perceived performance of the SDSS and PS1 models.
+Using a bootstrap resampling procedure, we correct for the relative number
+counts bias in the SDSS test set, and find that the RF and simple models
+outperform the SDSS and PS1 models, both in terms of FoM and overall
+accuracy. Thus, of the 4 models considered in this study the RF model is
+superior to all others.
 
 We have deployed the RF model in support of the ZTF real-time pipeline,
 resulting in the classification of $\sim$1.5$\times 10^{9}$ sources. The
-catalog is dominated by stars in the vicinity of the Galactic plane, though
-we find that there are more galaxies than stars at high galactic latitudes,
-as is expected at the depth of PS1. ZTF is currently producing public alerts
-for newly discovered variability, and the ZTF--PS1 catalog is essential for
-removing the numerous foreground stellar flares, false positives in the
-search for KNe and other fast transients, from the extragalactic alert
-stream.
+catalog is dominated by point sources in the vicinity of the Galactic plane,
+though we find that there are more extended objects than point sources at
+high galactic latitudes, as is expected at the depth of PS1. ZTF is
+currently producing public alerts for newly discovered variability, and the
+ZTF--PS1 catalog is essential for removing the numerous foreground of
+stellar flares, false positives in the search for fast transients and KNe,
+from the extragalactic alert stream.
 
-Moving forward, the release of parallax and proper motion measurements for
-$> 10^{9}$ compact sources observed by the \textit{Gaia} satellite
-\citep{GaiaDR2} will significantly increase the fidelity of the PS1
-star--galaxy catalog. The \textit{HST} training set has very few bright
-sources and no sources at low Galactic latitudes, leading to less confident
-classifications in these regions (see Figure~\ref{fig:ztf_hist}). As a
-space-based observatory, \textit{Gaia} will resolve many stellar blends in
-the Galactic plane and identify millions of stars brighter than 16\,mag.
-Many of the ambiguous classifications in the ZTF--PS1 catalog (see
-\S\ref{sec:ztf}) will be directly identified as stars due to their high
-proper motions and parallaxes. The addition of \textit{Gaia} will also
-present new challenges, however, as the spacecraft does not downlink
+Moving forward, future data releases and additional scrutiny of
+\textit{Gaia} data will significantly increase the fidelity of the PS1
+resolved--unresolved classification model. The \textit{HST} training set has
+very few bright sources and no sources at low Galactic latitudes, leading to
+less confident classifications in these regions (see
+Figure~\ref{fig:ztf_hist}). As a space-based observatory, \textit{Gaia} will
+resolve many stellar blends in the Galactic plane and identify millions of
+stars brighter than 16\,mag. Many of the ambiguous classifications in the
+ZTF--PS1 catalog (see \S\ref{sec:ztf}) will be directly identified as stars
+due to their high proper motions and parallaxes (similar to the analysis in
+\ref{sec:gaia}, though future \textit{Gaia} observations will lead to even
+better precision). As previously noted, \textit{Gaia} does not downlink
 measurements for extended sources. Thus, while \textit{Gaia} would allow us
 to increase the size of our training set by many orders of magnitude, it
 would also introduce a significant class imbalance. Correcting for the lack
