@@ -869,20 +869,19 @@ simple and PS1 models.
 \begin{figure}[t]
  \centering
   \includegraphics[width=3.35in]{./Figures/CV_Accuracy_HST.pdf}
-  %
+  %  
   \caption{Model accuracy as a function of \texttt{whiteKronMag} evaluated
   on the subset of \textit{HST} training set sources with $i_\mathrm{PS1}$
   detections. Accuracy curves for the PS1, simple and RF models are shown as
-  slate gray pentagons, green triangles, and purple circles, respectively. The bin
-  widths are 0.5\,mag, and the error bars represent the 68\% interval from
-  bootstrap resampling. Additionally, a Gaussian KDE of the PDF for the
-  $i_\mathrm{PS1}$-detection subset of \textit{HST} training set, as well as
-  the point sources (labeled stars) and extended objects (labeled galaxies)
-  in the same subset is shown in the shaded gray, red, and green regions,
-  respectively. The amplitude of the star and galaxy PDFs have been
-  normalized by their relative ratio compared to the full subset. \yutaro{Is
-  the KDE for entire HST training set, or just i-band subset? 
-  $\leftarrow$ I changed it from entire dataset to i-band subset.}}
+  slate gray pentagons, green triangles, and purple circles, respectively.
+  The bin widths are 0.5\,mag, and the error bars represent the 68\%
+  interval from bootstrap resampling. Additionally, a Gaussian KDE of the
+  PDF for the $i_\mathrm{PS1}$-detection subset of \textit{HST} training
+  set, as well as the point sources (labeled stars) and extended objects
+  (labeled galaxies) in the same subset is shown in the shaded gray, red,
+  and green regions, respectively. The amplitude of the star and galaxy PDFs
+  have been normalized by their relative ratio compared to the full
+  $i_\mathrm{PS1}$-band subset.} 
   %
   \label{fig:cvacc_hst}
 \end{figure}
@@ -1227,8 +1226,7 @@ classified as point sources using the FoM-optimized classification threshold of 
                                               TPR  & $0.634^{+0.228}_{-0.021}$ &  $0.955^{+0.032}_{-0.072}$ & $0.994^{+0.002}_{-0.001}$ & $0.994^{+0.002}_{-0.001}$ & $0.998^{+0.001}_{-0.001}$  \\
                                                  & &  & Threshold & $0.9952^{+0.0004}_{-0.0155}$ &  $0.923^{+0.051}_{-0.290}$ & $0.315^{+0.087}_{-0.021}$ & $0.132^{+0.020}_{-0.016}$ & $0.048^{+0.002}_{-0.002}$
     \enddata
-    \tablecomments{10-fold CV is performed on the entire \textit{HST} training set, but the metrics reported here include only sources that satisfy the selection criteria defined by the first column and $\mathtt{nDetections} \ge 3$. 
-\NC{Uncertainties in TPR and Threshold represent the 68\% interval from bootstrap resampling.}} 
+    \tablecomments{10-fold CV is performed on the entire \textit{HST} training set, but the metrics reported here include only sources that satisfy the selection criteria defined by the first column and $\mathtt{nDetections} \ge 3$. The reported uncertainties for the TPR and classification threshold represent the central 68\% interval from \yutaro{NNN} bootstrap resamples of the training set.} 
     \tablenotetext{a}{Number of \textit{HST} training set sources within the selected subset.}
     \tablenotetext{b}{Classification accuracies are reported relative to a $\mathrm{RF \; score} = 0.5$ classification threshold.}
 \end{deluxetable*}
