@@ -537,7 +537,7 @@ such as R.A.\ and Dec.\ (see e.g., \citealt{Richards12a}). We do not directly
 include \texttt{whitePSFFlux}, \texttt{whiteKronFlux}, and
 \texttt{whiteApFlux} in the model. We found that the inclusion of these
 features resulted in a bias whereby all sources brighter than $\sim$16\,mag
-were automatically classified as stars. Instead, we include the ratio of the
+were automatically classified as point sources. Instead, we include the ratio of the
 different flux measures: \texttt{whitePSFKronRatio} =
 \texttt{whitePSFFlux}/\texttt{whiteKronFlux}, \texttt{whitePSFApRatio} =
 \texttt{whitePSFFlux}/\texttt{whiteApFlux}, as well as a third feature
@@ -589,7 +589,7 @@ outweigh any losses from the exclusion of color information.
   \label{fig:features}
 \end{figure*}
 
-The distribution of ``white flux'' features for stars and galaxies in the
+The distribution of ``white flux'' features for point sources and extended objects in the
 \textit{HST} training set is shown in Figure~\ref{fig:features}
 (\texttt{whitePSFKronDist} is shown in Figure~\ref{fig:psfkrondist}). As
 might be expected, it is clear from Figure~\ref{fig:features} that point
@@ -643,7 +643,7 @@ sources with $\mathtt{whitePSFKronRatio} \gtrsim 1$ are very likely point source
 \texttt{photo} pipeline or the PS1 model, removes any sense of confidence in
 the corresponding classification. For example, a source with
 $\mathtt{whitePSFKronRatio} = 1.1$ and $\mathtt{whiteKronMag} \approx
-17\,\mathrm{mag}$ is far more likely to be a star than a source with the
+17\,\mathrm{mag}$ is far more likely to be a point source than a source with the
 same \texttt{whitePSFKronRatio} value but $\mathtt{whiteKronMag} \approx
 23\,\mathrm{mag}$ (see Figure~\ref{fig:features}).
 
@@ -881,7 +881,8 @@ simple and PS1 models.
   in the same subset is shown in the shaded gray, red, and green regions,
   respectively. The amplitude of the star and galaxy PDFs have been
   normalized by their relative ratio compared to the full subset. \yutaro{Is
-  the KDE for entire HST training set, or just i-band subset?}}
+  the KDE for entire HST training set, or just i-band subset? 
+  $\leftarrow$ I changed it from entire dataset to i-band subset.}}
   %
   \label{fig:cvacc_hst}
 \end{figure}
@@ -1227,7 +1228,7 @@ classified as point sources using the FoM-optimized classification threshold of 
                                                  & &  & Threshold & $0.9952^{+0.0004}_{-0.0155}$ &  $0.923^{+0.051}_{-0.290}$ & $0.315^{+0.087}_{-0.021}$ & $0.132^{+0.020}_{-0.016}$ & $0.048^{+0.002}_{-0.002}$
     \enddata
     \tablecomments{10-fold CV is performed on the entire \textit{HST} training set, but the metrics reported here include only sources that satisfy the selection criteria defined by the first column and $\mathtt{nDetections} \ge 3$. 
-\NC{Uncertainties represent the 68\% interval from bootstrap resampling.}} 
+\NC{Uncertainties in TPR and Threshold represent the 68\% interval from bootstrap resampling.}} 
     \tablenotetext{a}{Number of \textit{HST} training set sources within the selected subset.}
     \tablenotetext{b}{Classification accuracies are reported relative to a $\mathrm{RF \; score} = 0.5$ classification threshold.}
 \end{deluxetable*}
