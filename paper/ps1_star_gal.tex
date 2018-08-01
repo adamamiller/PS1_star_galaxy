@@ -537,7 +537,7 @@ such as R.A.\ and Dec.\ (see e.g., \citealt{Richards12a}). We do not directly
 include \texttt{whitePSFFlux}, \texttt{whiteKronFlux}, and
 \texttt{whiteApFlux} in the model. We found that the inclusion of these
 features resulted in a bias whereby all sources brighter than $\sim$16\,mag
-were automatically classified as stars. Instead, we include the ratio of the
+were automatically classified as point sources. Instead, we include the ratio of the
 different flux measures: \texttt{whitePSFKronRatio} =
 \texttt{whitePSFFlux}/\texttt{whiteKronFlux}, \texttt{whitePSFApRatio} =
 \texttt{whitePSFFlux}/\texttt{whiteApFlux}, as well as a third feature
@@ -589,7 +589,7 @@ outweigh any losses from the exclusion of color information.
   \label{fig:features}
 \end{figure*}
 
-The distribution of ``white flux'' features for stars and galaxies in the
+The distribution of ``white flux'' features for point sources and extended objects in the
 \textit{HST} training set is shown in Figure~\ref{fig:features}
 (\texttt{whitePSFKronDist} is shown in Figure~\ref{fig:psfkrondist}). As
 might be expected, it is clear from Figure~\ref{fig:features} that point
@@ -643,7 +643,7 @@ sources with $\mathtt{whitePSFKronRatio} \gtrsim 1$ are very likely point source
 \texttt{photo} pipeline or the PS1 model, removes any sense of confidence in
 the corresponding classification. For example, a source with
 $\mathtt{whitePSFKronRatio} = 1.1$ and $\mathtt{whiteKronMag} \approx
-17\,\mathrm{mag}$ is far more likely to be a star than a source with the
+17\,\mathrm{mag}$ is far more likely to be a point source than a source with the
 same \texttt{whitePSFKronRatio} value but $\mathtt{whiteKronMag} \approx
 23\,\mathrm{mag}$ (see Figure~\ref{fig:features}).
 
@@ -881,7 +881,8 @@ simple and PS1 models.
   in the same subset is shown in the shaded gray, red, and green regions,
   respectively. The amplitude of the star and galaxy PDFs have been
   normalized by their relative ratio compared to the full subset. \yutaro{Is
-  the KDE for entire HST training set, or just i-band subset?}}
+  the KDE for entire HST training set, or just i-band subset? 
+  $\leftarrow$ I changed it from entire dataset to i-band subset.}}
   %
   \label{fig:cvacc_hst}
 \end{figure}
@@ -926,11 +927,7 @@ that the RF model uses 10 additional features beyond
  \centering
   \includegraphics[width=3.35in]{./Figures/ROC_curves_log_inset2.pdf}
   %  
-  \caption{ \yutaro{Can you adjust the inset up slightly so the dotted line
-  does not pass through 0.96? If possible it'd be good to do this for 0.015
-  as well. Alternatively, you could make that axis only show 0.01 and 0.02
-  and then make the minor ticks 0.0025 which might make that a little easier
-  to read} ROC curves comparing the relative performance of the SDSS (orange
+  \caption{ROC curves comparing the relative performance of the SDSS (orange
   dot-dashed line), PS1 (slate grey dashed line), simple (green dotted
   line), and RF (solid purple) models as tested by the SDSS test set. Note
   that the FPR is shown on a logarithmic scale. The vertical dotted line
@@ -1220,17 +1217,18 @@ classified as point sources using the FoM-optimized classification threshold of 
     \colhead{Selection criteria} & \colhead{$N$\tablenotemark{a}} & \colhead{Accuracy\tablenotemark{b}} & \colhead{FPR} & \colhead{0.005} & \colhead{0.01} & \colhead{0.02} & \colhead{0.05} & \colhead{0.1}
     }
     \startdata
-\multirow{2}{*}{All sources} & \multirow{2}{*}{35,007} & \multirow{2}{*}{$93.9\pm0.1$\%} &                     TPR  & $0.733 \pm 0.011$ &  $0.793 \pm 0.007$ & $0.844 \pm 0.005$ & $0.906 \pm 0.004$ & $0.946 \pm 0.002$ \\
-\multicolumn{1}{l}{}                 & & & Threshold & $0.830 \pm 0.015$ &  $0.721 \pm 0.012$ & $0.597 \pm 0.009$ & $0.393 \pm 0.007$ & $0.224 \pm 0.004$
+\multirow{2}{*}{All sources} & \multirow{2}{*}{35,007} & \multirow{2}{*}{$93.9\pm0.1$\%} &                     TPR  & $0.729^{+0.014}_{-0.009}$ &  $0.793^{+0.008}_{-0.005}$ & $0.842^{+0.006}_{-0.004}$ & $ 0.905^{+0.003}_{-0.003}$ & $0.946^{+0.003}_{-0.002}$ \\
+\multicolumn{1}{l}{}                 & & & Threshold & $0.837^{+0.009}_{-0.023}$ &  $0.720^{+0.012}_{-0.015}$ & $0.601^{+0.007}_{-0.012}$ & $0.393^{+0.006}_{-0.006}$ & $0.224^{+0.005}_{-0.003}$
 \\ \hline
 \multirow{2}{*}{$\mathtt{rKronMag} < 21$} & \multirow{2}{*}{13,570} & \multirow{2}{*}{$98.0\pm0.1$\%} &
-                                              TPR  & $0.771 \pm 0.069$ &  $0.963 \pm 0.006$ & $0.979 \pm 0.002$ & $0.990 \pm 0.001$ & $0.995 \pm 0.001$ \\
-                                                & & & Threshold & $0.975 \pm 0.043$ &  $0.658 \pm 0.055$ & $0.414 \pm 0.025$ & $0.170 \pm 0.012$ & $0.069 \pm 0.004$   \\ \hline
+                                              TPR  & $0.772^{+0.114}_{-0.058}$ &  $0.964^{+0.005}_{-0.004}$ & $0.979^{+0.003}_{-0.002}$ & $0.989^{+0.001}_{-0.001}$ & $0.995^{+0.001}_{-0.001}$ \\
+                                                & & & Threshold & $0.975^{+0.008}_{-0.044}$ &  $0.653^{+0.042}_{-0.049}$ & $0.416^{+0.032}_{-0.043}$ & $0.173^{+0.010}_{-0.011}$ & $0.068^{+0.004}_{-0.002}$   \\ \hline
 \multirow{2}{*}{$\mathtt{rKronMag} < 20$}  & \multirow{2}{*}{6,956}& \multirow{2}{*}{$99.0\pm0.1$\%} &
-                                              TPR  & $0.621 \pm 0.164$ &  $0.951 \pm 0.056$ & $0.994 \pm 0.001$ & $0.997 \pm 0.001$ & $0.998 \pm 0.001$  \\
-                                                 & &  & Threshold & $0.995 \pm 0.019$ &  $0.930 \pm 0.172$ & $0.331 \pm 0.053$ & $0.133 \pm 0.021$ & $0.049 \pm 0.004$
+                                              TPR  & $0.634^{+0.228}_{-0.021}$ &  $0.955^{+0.032}_{-0.072}$ & $0.994^{+0.002}_{-0.001}$ & $0.994^{+0.002}_{-0.001}$ & $0.998^{+0.001}_{-0.001}$  \\
+                                                 & &  & Threshold & $0.9952^{+0.0004}_{-0.0155}$ &  $0.923^{+0.051}_{-0.290}$ & $0.315^{+0.087}_{-0.021}$ & $0.132^{+0.020}_{-0.016}$ & $0.048^{+0.002}_{-0.002}$
     \enddata
-    \tablecomments{\yutaro{I just noticed that for $r < 20$ and the 0.005 column has 0.995 +/- 0.019, which would go above 1.0. This is not possible, so do you have any idea what's happening here?} 10-fold CV is performed on the entire \textit{HST} training set, but the metrics reported here include only sources that satisfy the selection criteria defined by the first column and $\mathtt{nDetections} \ge 3$.} 
+    \tablecomments{10-fold CV is performed on the entire \textit{HST} training set, but the metrics reported here include only sources that satisfy the selection criteria defined by the first column and $\mathtt{nDetections} \ge 3$. 
+\NC{Uncertainties in TPR and Threshold represent the 68\% interval from bootstrap resampling.}} 
     \tablenotetext{a}{Number of \textit{HST} training set sources within the selected subset.}
     \tablenotetext{b}{Classification accuracies are reported relative to a $\mathrm{RF \; score} = 0.5$ classification threshold.}
 \end{deluxetable*}
