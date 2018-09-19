@@ -23,7 +23,7 @@
 %%
 %%
 %% using aastex version 6.1
-\documentclass[twocolumn]{aastex62}
+\documentclass[twocolumn, dvipdfmx]{aastex62}
 \usepackage{CJK}
 
 %% The default is a single spaced, 10 point font, single spaced article.
@@ -349,7 +349,7 @@ for electromagetic counterparts to gravitational wave events. Given that
 these events are expected to be very rare (e.g., \citealt{Scolnic18}), the
 figure of merit (FoM) for the PTF model was defined as the true positive
 rate (corresponding to the fraction of point sources that are correctly
-classified) at a fixed false positive rate (fraction of resolved source that
+classified) at a fixed false positive rate (fraction of resolved sources that
 are misclassified) equal to 0.005 \citep{Miller17}. Maximizing the FoM will
 reject as many point sources as possible, while still ensuring that nearly
 every extragalactic transient ($\sim$99.5\%) remains in the candidate
@@ -377,8 +377,8 @@ Alongside this paper, we have released our open-source analysis, and queries
 to recreate the data utilized in this study. These are available online at
 \url{https://github.com/adamamiller/PS1_star_galaxy}. The final ZTF--PS1 catalog
 created during this study is available as a High Level Science Product via
-the MAST archive \textit{Note to the referee-- STScI will provide this url
-once the paper is accepted}.
+the MAST archive at \dataset[doi:10.17909/t9-xjrf-7g34]{http://dx.doi.org/10.17909/t9-xjrf-7g34} 
+and information on this catalog is provided at the MAST project page.\footnote{\url{https://archive.stsci.edu/prepds/ps1-psc/}}
 
 \section{Model Data}\label{sec:model_data}
 
@@ -466,7 +466,7 @@ stack images.}
 The SDSS spectroscopic catalog classifies everything it observes as either a
 star, galaxy, or quasi-stellar object (QSO). Using a $1\arcsec$ cross-match
 radius, we find 3,834,627 sources with SDSS optical spectra have PS1
-counterparts (hereafter, the SDSS training set). Thus, with an orders of
+counterparts (hereafter, the SDSS training set). Thus, with orders of
 magnitude larger training set, and spectroscopic classifications that should
 be both pristine and superior to mophological clsasifications, one might
 expect the SDSS training set to be optimal for training the machine learning
@@ -620,7 +620,7 @@ perform well for sources with $i \gtrsim 21\,\mathrm{mag}$, which
 constitutes the majority of sources detected by PS1, and motivates us to
 develop alternative models. We use the performance of the $\mathtt{iPSFMag}
 - \mathtt{iKronMag} > 0.05\;\mathrm{mag}$ model (hereafter, the PS1 model)
-as a baseline to com pare to the models discussed below.
+as a baseline to compare to the models discussed below.
 
 \subsection{Simple Model}\label{sec:simple_model}
 
@@ -1053,7 +1053,7 @@ though has a noticably worse performance for the brightest
 with $\mathtt{whiteKronMag} > 21\,\mathrm{mag}$, the SDSS and PS1 models
 provide far more accurate classifications than the RF and simple models. In
 this faint regime, the SDSS test set is dominated by point sources (top
-panel, Figure~\ref{fig:roc_sdss}). This is counter to what is observed in
+panel, Figure~\ref{fig:acc_sdss}). This is counter to what is observed in
 nature (at high galactic latitudes), as extended object number counts exceed
 those of point sources around $r \gtrsim 20\,\mathrm{mag}$ (e.g.,
 \citealt{Yasuda01,Shanks15}). This bias in the SDSS test set is due to the
@@ -1351,7 +1351,7 @@ pass the cuts defined by Eqn.~(C.1) and (C.2) in \citet{Lindegren18} and
 have parallax significance $\ge 8$ or proper motion significance $\ge 7.5$,
 respectively. Of these, 35,599,830 and 225,682,755 have respective
 counterparts in the ZTF--PS1 catalog (the respective differences of
-3,164,723 and 8,493,509 correspond to sources with either 0 or $>$1 entires
+3,164,723 and 8,493,509 correspond to sources with either 0 or $>$1 entries
 in the PS1 \textit{StackObjectThin} table). For the proper motion selected
 stars, we show the distribution of RF classification scores for these
 stellar objects in Figure~\ref{fig:gaia}. It is clear from
@@ -1429,7 +1429,9 @@ high galactic latitudes, as is expected at the depth of PS1. ZTF is
 currently producing public alerts for newly discovered variability, and the
 ZTF--PS1 catalog is essential for removing the numerous foreground of
 stellar flares, false positives in the search for fast transients and KNe,
-from the extragalactic alert stream.
+from the extragalactic alert stream. 
+The final ZTF--PS1 catalog is available at MAST 
+via \dataset[doi:10.17909/t9-xjrf-7g34]{http://dx.doi.org/10.17909/t9-xjrf-7g34}.
 
 Moving forward, future data releases and additional scrutiny of
 \textit{Gaia} data will significantly increase the fidelity of the PS1
