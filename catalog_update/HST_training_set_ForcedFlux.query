@@ -1,0 +1,105 @@
+/* This query selects the relevant features from the 
+ForcedMeanObject table to build a training set out 
+of the COSMOS matched sources from HST */
+
+select *, 
+(wwFPSFFlux - (0.7512*wwFKronFlux))/sqrt(1 + power(0.7512,2)) as wwFPSFKronDist,
+(wwFPSFFlux - (0.7784*wwFApFlux))/sqrt(1 + power(0.7784,2)) as wwFPSFApDist,
+wwFPSFFlux/wwFApFlux as wwFPSFApRatio,
+wwFPSFFlux/wwFKronFlux as wwFPSFKronRatio, 
+wwFPSFFlux/wwFmeanflxR5 as wwFPSFflxR5Ratio,
+wwFPSFFlux/wwFmeanflxR6 as wwFPSFflxR6Ratio,
+wwFPSFFlux/wwFmeanflxR7 as wwFPSFflxR7Ratio
+into mydb.HST_COSMOS_Forcefeatures
+from 
+(select cosmos.CLASS_STAR, cosmos.MU_CLASS, ot.objid, 
+        ot.raStack, ot.decStack, ot.nDetections, ot.qualityFlag, 
+        -2.5*log10(iDet*fmo.iFPSFFlux/nullif(fmo.iFKronFlux, 0)) as iFPSFminusFKron,
+       (fmo.gFPSFFlux*gPSFWeight + fmo.rFPSFFlux*rPSFWeight + fmo.iFPSFFlux*iPSFWeight +
+        fmo.zFPSFFlux*zPSFWeight + fmo.yFPSFFlux*yPSFWeight)/nullif(
+        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+        as wwFPSFFlux,
+       (fmo.gFKronFlux*gKronWeight + fmo.rFKronFlux*rKronWeight + fmo.iFKronFlux*iKronWeight +
+        fmo.zFKronFlux*zKronWeight + fmo.yFKronFlux*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwFKronFlux, 
+       (fmo.gFApFlux*gPSFWeight + fmo.rFApFlux*rPSFWeight + fmo.iFApFlux*iPSFWeight +
+        fmo.zFApFlux*zPSFWeight + fmo.yFApFlux*yPSFWeight)/nullif(
+        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+        as wwFApFlux,
+       (fmo.gFmeanflxR5*gPSFWeight + fmo.rFmeanflxR5*rPSFWeight + fmo.iFmeanflxR5*iPSFWeight +
+        fmo.zFmeanflxR5*zPSFWeight + fmo.yFmeanflxR5*yPSFWeight)/nullif(
+        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+        as wwFmeanflxR5,
+       (fmo.gFmeanflxR6*gPSFWeight + fmo.rFmeanflxR6*rPSFWeight + fmo.iFmeanflxR6*iPSFWeight +
+        fmo.zFmeanflxR6*zPSFWeight + fmo.yFmeanflxR6*yPSFWeight)/nullif(
+        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+        as wwFmeanflxR6,
+       (fmo.gFmeanflxR7*gPSFWeight + fmo.rFmeanflxR7*rPSFWeight + fmo.iFmeanflxR7*iPSFWeight +
+        fmo.zFmeanflxR7*zPSFWeight + fmo.yFmeanflxR7*yPSFWeight)/nullif(
+        gPSFWeight + rPSFWeight + iPSFWeight + zPSFWeight + yPSFWeight, 0)
+        as wwFmeanflxR7,
+       (fmo.gE1*gKronWeight + fmo.rE1*rKronWeight + fmo.iE1*iKronWeight +
+        fmo.zE1*zKronWeight + fmo.yE1*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwE1,
+       (fmo.gE2*gKronWeight + fmo.rE2*rKronWeight + fmo.iE2*iKronWeight + 
+        fmo.zE2*zKronWeight + fmo.yE2*yKronWeight)/nullif(
+        gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight, 0)
+        as wwE2
+
+        from
+(select fmo.objid, 
+      (case when (fmo.gFPSFFlux > 0 AND fmo.gFPSFFluxErr > 0 AND 
+                  fmo.gFKronFlux > 0 AND fmo.gFKronFluxErr > 0 AND 
+                  fmo.gFApFlux > 0 AND fmo.gFApFluxErr > 0) 
+             then power(fmo.gFPSFFlux,2)/power(fmo.gFPSFFluxErr,2) else 0 end) as gPSFWeight, 
+       (case when (fmo.rFPSFFlux > 0 AND fmo.rFPSFFluxErr > 0 AND 
+                   fmo.rFKronFlux > 0 AND fmo.rFKronFluxErr > 0 AND 
+                   fmo.rFApFlux > 0 AND fmo.rFApFluxErr > 0)
+             then power(fmo.rFPSFFlux,2)/power(fmo.rFPSFFluxErr,2) else 0 end) as rPSFWeight,
+       (case when (fmo.iFPSFFlux > 0 AND fmo.iFPSFFluxErr > 0 AND 
+                   fmo.iFKronFlux > 0 AND fmo.iFKronFluxErr > 0 AND 
+                   fmo.iFApFlux > 0 AND fmo.iFApFluxErr > 0)
+             then power(fmo.iFPSFFlux,2)/power(fmo.iFPSFFluxErr,2) else 0 end) as iPSFWeight,
+       (case when (fmo.zFPSFFlux > 0 AND fmo.zFPSFFluxErr > 0 AND 
+                   fmo.zFKronFlux > 0 AND fmo.zFKronFluxErr > 0 AND 
+                   fmo.zFApFlux > 0 AND fmo.zFApFluxErr > 0)
+             then power(fmo.zFPSFFlux,2)/power(fmo.zFPSFFluxErr,2) else 0 end) as zPSFWeight,
+       (case when (fmo.yFPSFFlux > 0 AND fmo.yFPSFFluxErr > 0 AND 
+                   fmo.yFKronFlux > 0 AND fmo.yFKronFluxErr > 0 AND 
+                   fmo.yFApFlux > 0 AND fmo.yFApFluxErr > 0)
+             then power(fmo.yFPSFFlux,2)/power(fmo.yFPSFFluxErr,2) else 0 end) as yPSFWeight, 
+       (case when (fmo.gFPSFFlux > 0 AND fmo.gFPSFFluxErr > 0 AND 
+                   fmo.gFKronFlux > 0 AND fmo.gFKronFluxErr > 0 AND 
+                   fmo.gFApFlux > 0 AND fmo.gFApFluxErr > 0) 
+             then power(fmo.gFKronFlux,2)/power(fmo.gFKronFluxErr,2) else 0 end) as gKronWeight, 
+       (case when (fmo.rFPSFFlux > 0 AND fmo.rFPSFFluxErr > 0 AND 
+                   fmo.rFKronFlux > 0 AND fmo.rFKronFluxErr > 0 AND 
+                   fmo.rFApFlux > 0 AND fmo.rFApFluxErr > 0)
+             then power(fmo.rFKronFlux,2)/power(fmo.rFKronFluxErr,2) else 0 end) as rKronWeight,
+       (case when (fmo.iFPSFFlux > 0 AND fmo.iFPSFFluxErr > 0 AND 
+                   fmo.iFKronFlux > 0 AND fmo.iFKronFluxErr > 0 AND 
+                   fmo.iFApFlux > 0 AND fmo.iFApFluxErr > 0)
+             then power(fmo.iFKronFlux,2)/power(fmo.iFKronFluxErr,2) else 0 end) as iKronWeight,
+       (case when (fmo.zFPSFFlux > 0 AND fmo.zFPSFFluxErr > 0 AND 
+                   fmo.zFKronFlux > 0 AND fmo.zFKronFluxErr > 0 AND 
+                   fmo.zFApFlux > 0 AND fmo.zFApFluxErr > 0)
+             then power(fmo.zFKronFlux,2)/power(fmo.zFKronFluxErr,2) else 0 end) as zKronWeight,
+       (case when (fmo.yFPSFFlux > 0 AND fmo.yFPSFFluxErr > 0 AND 
+                   fmo.yFKronFlux > 0 AND fmo.yFKronFluxErr > 0 AND 
+                   fmo.yFApFlux > 0 AND fmo.yFApFluxErr > 0)
+             then power(fmo.yFKronFlux,2)/power(fmo.yFKronFluxErr,2) else 0 end) as yKronWeight,
+       (case when (fmo.iFPSFFlux > 0 AND fmo.iFKronFlux > 0 AND fmo.iFApFlux > 0) 
+             then 1 else null end) as iDet
+from ForcedMeanObject as fmo 
+join mydb.COSMOS_PS1_Xmatch_unique cosmos on fmo.objid = cosmos.objid
+
+) dummy1 
+join mydb.COSMOS_PS1_Xmatch_unique cosmos on dummy1.objid = cosmos.objid
+join ForcedMeanObject as fmo on dummy1.objid = fmo.objid
+join objectthin ot on dummy1.objid = ot.objid
+where gKronWeight + rKronWeight + iKronWeight + zKronWeight + yKronWeight > 0
+
+) dummy2
+order by objid
