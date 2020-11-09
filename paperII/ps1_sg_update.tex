@@ -266,6 +266,86 @@ the $\sim$3.5 billion sources in the PS1 \texttt{ForcedMeanObject} table. The
 main difference between the PS1 PSC and PS1-STRM is the training set used by
 each machine learning model, which we discuss in more detail below.}
 
+\section{Model Data and PS1 Features}
+
+\todo{better section title}
+
+The methodology adopted here is extremely similar to the one presented in
+\citep{Tachibana18}. The only major difference between the two is the feature
+set used in the construction of the machine learning model. We discuss this
+difference below, followed by a brief summary of the model construction.
+
+\subsection{Training Set}
+
+
+\subsection{PS1 Forced Photometry Features}\label{sec:features}
+
+Regardless of the choice of algorithm, the basic goal of a machine learning
+model is to build a map between source features, numerical and/or categorical
+properties that can be measured for an individual source, and labels, the
+target output, often a classification, of the model. This mapping is learned
+via a training set, a subset of the data with known labels, afterwhich the
+model can classify any source based on its features.
+
+In \citet{Tachibana18} we introduced the concept of ``white flux'' features,
+whereby measurements in the five individual PS1 filters ($g_\mathrm{PS1}$,
+$r_\mathrm{PS1}$, $i_\mathrm{PS1}$, $z_\mathrm{PS1}$, $y_\mathrm{PS1}$) were
+summed, via a weighted mean, to produce a ``total'' flux or shape measurement
+across all filters.\footnote{Only filters in which the source is detected,
+i.e., the flux is $> 0$, are included in the sum.} Machine learning models are
+limited by their training sets: there is no guarantee that their empirical
+mapping will correctly extend beyond the boundaries enclosed by the training
+set. Given the significant systematic uncertainties associated with Galactic
+reddening, and the tendancy for spectroscopic samples, which are typically
+used to define training sets, to be biased in their target selection
+\citep[see e.g.,][]{Miller17}, the motivation for ``white flux'' features
+becomes clear: they reduce potential biases in the final classifications due
+to select effects in how the training set sources were targeted. Therefore, as
+in \citet{Tachibana18}, we use ``white flux'' features in this study.
+
+The PS1 \texttt{StackObjectAttributes} table provides both flux and shape
+(e.g., second moment of the radiation intensity) measurements in each of the
+five PS1 filters, whereas the \texttt{ForcedMeanObject} table only provides
+flux measurements.\footnote{The \texttt{ForcedMeanObject} table provides
+average measurements across all epochs on which a PS1 source is observed, and
+the average second moment of the radiation intensity is somewhat meaningless
+as the orientation of the detector and observing conditions vary image to
+image.} Morphological classification models, such as the one presented here,
+are somewhat hindered by the lack of shape information in the
+\texttt{ForcedMeanObject} table \citep[see for example the different shape
+features in Figure~2 of][]{Tachibana18}. 
+
+To create the feature set for our machine learning model, we create ``white
+flux'' features for the six different flux measurements available in the
+\texttt{ForcedMeanObject} table (\texttt{FPSFFlux}, \texttt{FKronFlux},
+\texttt{FApFlux}, \texttt{FmeanflxR5}, \texttt{FmeanflxR6},
+\texttt{FmeanflxR7}), as well as the \texttt{E1} and \texttt{E2} measurements,
+which represent the mean polarization parameters from \citet{Kaiser95}. As in
+\citet{Tachibana18}, we use flux ratios, rather than the raw flux
+measurements, which provide morphological classifications that are independent
+of S/N \citep{Lupton01}.
+
+Our final model includes nine features, five flux ratios:\\
+$\mathtt{whiteFPSFApRatio} = \mathtt{whiteFPSFlux/whiteFApFlux}$,
+$\mathtt{whiteFPSFKronRatio} = \mathtt{whiteFPSFlux/whiteFKronFlux}$,
+$\mathtt{whiteFPSFFflxR7Ratio} = \mathtt{whiteFPSFlux/whiteFFflxR7Flux}$,
+$\mathtt{whiteFPSFFflxR7Ratio} = \mathtt{whiteFPSFlux/whiteFFflxR7Flux}$,
+$\mathtt{whiteFPSFFflxR7Ratio} = \mathtt{whiteFPSFlux/whiteFFflxR7Flux}$, the
+white polarization parameters: \texttt{whiteE1} and \texttt{whiteE2}, and two
+``simple'' distance measures: \texttt{whiteFPSFKronDist} and
+\texttt{whiteFPSFKronDist} (see \S\ref{sec:simple_model}). The distribution of
+these features for stars and galaxies in the training set is shown in
+Figure~\ref{fig:features}.
+
+
+\subsection{Model Construction}
+
+
+\section{Cross-Validation Results}
+
+\subsection{The Simple Forced Model}\label{sec:simple_model}
+
+
 \acknowledgments
 
 \vspace{5mm}
