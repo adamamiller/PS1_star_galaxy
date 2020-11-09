@@ -1,0 +1,290 @@
+%% using aastex version 6.3
+\documentclass[twocolumn]{aastex63}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% The following section defines new commands for comments from co-authors
+%%
+\definecolor{DarkOrange}{RGB}{204, 85, 0}
+\definecolor{LincolnGreen}{RGB}{17, 102, 0}
+\definecolor{Rust}{HTML}{9B4F0F}
+\definecolor{DarkCyan}{HTML}{008B8B}
+\definecolor{MediumAquaMarine}{HTML}{66CDAA}
+
+
+\def\ion#1#2{#1$\;${\footnotesize\rm{#2}}\relax}
+
+\newcommand{\xander}[1]{{\color{red} KM: \textbf{#1}}}
+\newcommand{\aam}[1]{{\color{DarkOrange} aam: \textbf{#1}}}
+
+\newcommand{\todo}[1]{{\color{magenta} to-do: {#1}}}
+
+\usepackage{lineno}
+% \linenumbers
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Reintroduced the \received and \accepted commands from AASTeX v5.2
+\received{\today}
+\revised{}
+\accepted{}
+%% Command to document which AAS Journal the manuscript was submitted to.
+%% Adds "Submitted to " the argument.
+\submitjournal{}
+
+%% For manuscript that include authors in collaborations, AASTeX v6.3
+%% builds on the \collaboration command to allow greater freedom to 
+%% keep the traditional author+affiliation information but only show
+%% subsets. The \collaboration command now must appear AFTER the group
+%% of authors in the collaboration and it takes TWO arguments. The last
+%% is still the collaboration identifier. The text given in this
+%% argument is what will be shown in the manuscript. The first argument
+%% is the number of author above the \collaboration command to show with
+%% the collaboration text. If there are authors that are not part of any
+%% collaboration the \nocollaboration command is used. This command takes
+%% one argument which is also the number of authors above to show. A
+%% dashed line is shown to indicate no collaboration. This example manuscript
+%% shows how these commands work to display specific set of authors 
+%% on the front page.
+%%
+%% For manuscript without any need to use \collaboration the 
+%% \AuthorCollaborationLimit command from v6.2 can still be used to 
+%% show a subset of authors.
+%
+%\AuthorCollaborationLimit=2
+%
+%% will only show Schwarz & Muench on the front page of the manuscript
+%% (assuming the \collaboration and \nocollaboration commands are
+%% commented out).
+%%
+%% Note that all of the author will be shown in the published article.
+%% This feature is meant to be used prior to acceptance to make the
+%% front end of a long author article more manageable. Please do not use
+%% this functionality for manuscripts with less than 20 authors. Conversely,
+%% please do use this when the number of authors exceeds 40.
+%%
+%% Use \allauthors at the manuscript end to show the full author list.
+%% This command should only be used with \AuthorCollaborationLimit is used.
+
+%% The following command can be used to set the latex table counters.  It
+%% is needed in this document because it uses a mix of latex tabular and
+%% AASTeX deluxetables.  In general it should not be needed.
+%\setcounter{table}{1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% The following section outlines numerous optional output that
+%% can be displayed in the front matter or as running meta-data.
+%%
+%% If you wish, you may supply running head information, although
+%% this information may be modified by the editorial offices.
+\shorttitle{}
+\shortauthors{}
+%%
+%% You can add a light gray and diagonal water-mark to the first page 
+%% with this command:
+%% \watermark{text}
+%% where "text", e.g. DRAFT, is the text to appear.  If the text is 
+%% long you can control the water-mark size with:
+%% \setwatermarkfontsize{dimension}
+%% where dimension is any recognized LaTeX dimension, e.g. pt, in, etc.
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\graphicspath{{./}{figures/}}
+%% This is the end of the preamble.  Indicate the beginning of the
+%% manuscript itself with \begin{document}.
+
+\begin{document}
+
+\title{A Morphological Classification Model to Identify Unresolved PanSTARRS1 Sources II: Update to the PS1 Point Source Catalog}
+
+%% LaTeX will automatically break titles if they run longer than
+%% one line. However, you may use \\ to force a line break if
+%% you desire. In v6.3 you can include a footnote in the title.
+
+%% A significant change from earlier AASTEX versions is in the structure for 
+%% calling author and affiliations. The change was necessary to implement 
+%% auto-indexing of affiliations which prior was a manual process that could 
+%% easily be tedious in large author manuscripts.
+%%
+%% The \author command is the same as before except it now takes an optional
+%% argument which is the 16 digit ORCID. The syntax is:
+%% \author[xxxx-xxxx-xxxx-xxxx]{Author Name}
+%%
+%% This will hyperlink the author name to the author's ORCID page. Note that
+%% during compilation, LaTeX will do some limited checking of the format of
+%% the ID to make sure it is valid. If the "orcid-ID.png" image file is 
+%% present or in the LaTeX pathway, the OrcID icon will appear next to
+%% the authors name.
+%%
+%% Use \affiliation for affiliation information. The old \affil is now aliased
+%% to \affiliation. AASTeX v6.3 will automatically index these in the header.
+%% When a duplicate is found its index will be the same as its previous entry.
+%%
+%% Note that \altaffilmark and \altaffiltext have been removed and thus 
+%% can not be used to document secondary affiliations. If they are used latex
+%% will issue a specific error message and quit. Please use multiple 
+%% \affiliation calls for to document more than one affiliation.
+%%
+%% The new \altaffiliation can be used to indicate some secondary information
+%% such as fellowships. This command produces a non-numeric footnote that is
+%% set away from the numeric \affiliation footnotes.  NOTE that if an
+%% \altaffiliation command is used it must come BEFORE the \affiliation call,
+%% right after the \author command, in order to place the footnotes in
+%% the proper location.
+%%
+%% Use \email to set provide email addresses. Each \email will appear on its
+%% own line so you can put multiple email address in one \email call. A new
+%% \correspondingauthor command is available in V6.3 to identify the
+%% corresponding author of the manuscript. It is the author's responsibility
+%% to make sure this name is also in the author list.
+%%
+%% While authors can be grouped inside the same \author and \affiliation
+%% commands it is better to have a single author for each. This allows for
+%% one to exploit all the new benefits and should make book-keeping easier.
+%%
+%% If done correctly the peer review system will be able to
+%% automatically put the author and affiliation information from the manuscript
+%% and save the corresponding author the trouble of entering it by hand.
+
+\correspondingauthor{A.~A.~Miller}
+\email{amiller@northwestern.edu}
+
+
+%% Note that the \and command from previous versions of AASTeX is now
+%% depreciated in this version as it is no longer necessary. AASTeX 
+%% automatically takes care of all commas and "and"s between authors names.
+
+%% AASTeX 6.3 has the new \collaboration and \nocollaboration commands to
+%% provide the collaboration status of a group of authors. These commands 
+%% can be used either before or after the list of corresponding authors. The
+%% argument for \collaboration is the collaboration identifier. Authors are
+%% encouraged to surround collaboration identifiers with ()s. The 
+%% \nocollaboration command takes no argument and exists to indicate that
+%% the nearby authors are not part of surrounding collaborations.
+
+%% Mark off the abstract in the ``abstract'' environment. 
+\begin{abstract}
+
+
+\end{abstract}
+
+%% Keywords should appear after the \end{abstract} command. 
+%% See the online documentation for the full list of available subject
+%% keywords and the rules for their use.
+\keywords{}
+
+%% From the front matter, we move on to the body of the paper.
+%% Sections are demarcated by \section and \subsection, respectively.
+%% Observe the use of the LaTeX \label
+%% command after the \subsection to give a symbolic KEY to the
+%% subsection for cross-referencing in a \ref command.
+%% You can use LaTeX's \ref and \label commands to keep track of
+%% cross-references to sections, equations, tables, and figures.
+%% That way, if you change the order of any elements, LaTeX will
+%% automatically renumber them.
+%%
+%% We recommend that authors also use the natbib \citep
+%% and \citet commands to identify citations.  The citations are
+%% tied to the reference list via symbolic KEYs. The KEY corresponds
+%% to the KEY in the \bibitem in the reference list below. 
+
+\section{Introduction} \label{sec:intro}
+
+The proliferation of wide-field time-domain surveys over the past $\sim$decade
+has led to the discovery of a bevy of novel extragalactic transients
+\citep[e.g.,][]{quimby11,Gezari12,Gal-Yam14,Abbott17a,Prentice18,
+IceCube-Collaboration18}. While these wide-field surveys have been enabled by
+significant advances in detector technology, software has proven equally
+important \citep[e.g.,][]{Masci17,Masci19,Smith20,Jones20} as many of these
+critical discoveries have been facilitiated by the rapid identification and
+dissemination of new transient candidates in near real time
+\citep[e.g.,][]{Patterson19}.
+
+Reliable catalogs identifying stars and galaxies, or similarly unresolved and
+resolved sources, are an essential cog in the machinery necessary to identify
+extragalactic transients. On a nightly basis, time-domain sureys are inundated
+with transient candidates, the vast majority of which are considered ``bogus''
+\citep{Bloom12}. Despite sophisticated software capable of whittling down the
+number of likely transients by several orders of magnitude
+\citep[e.g.,][]{Brink13,Goldstein15,Duev19,Smith20}, the number of candidates
+still vastly outpaces the spectroscopic resources necessary to classify
+everything that varies \citep[e.g.,][]{Kulkarni20}. The aforementioned
+star--galaxy catalogs therefore play an essential role in the search for
+extragalactic transients by removing candidates that are associated with
+stellar-like objects that are therefore likely to be Galactic in origin.
+
+To this end we previously created the PanSTARRS-1 Point Source Catalog
+\citep[PS1 PSC; Tachibana \& Miller 2018, hereafter ][]{Tachibana18}, which
+provides probabilistic point-source like classifications for $\sim$1.5 billion
+sources detected by PanSTARRS-1 \citep[PS1;][]{Chambers16}. This catalog has
+been deployed by the Zwicky Transient Facility \citep[ZTF;][]{Bellm19} and
+other surveys \citep{Smith20,Moller20} to identify likely extragalactic
+transients. The PS1 PSC has been demonstrated to be an important ingredient in
+the systematic search for extragalactic transients \citep{Fremling20,De20}.
+
+\todo{??? Add quick explanation of mean, forced, and stack phot from PS1 ???}
+
+A downside to the PS1 PSC is that it does not provide classifications for
+sources that are not ``detected'' in the PS1 \texttt{StackObjectThin} table
+\citep[the definition of a PS1 stack detection is given in][]{Tachibana18}. Of
+the $\sim$3.5 billion sources in the PS1 \texttt{stackObjectThin} table, the
+vast majority of the $\sim$2 billion missing from the PS1 PSC are either
+spurious or have an extremely low signal-to-noise ratio (S/N), such that the
+methods in \citet{Tachibana18} would not provide a reliable classification.
+There are an additional \todo{$\sim$140; need final number} million high-S/N
+sources missing from the PS1 PSC because they have multiple entries in the PS1
+\texttt{StackObjectThin} table with $\mathtt{primaryDetection} =
+1$.\footnote{The \texttt{primaryDetection} flag identifies which entry within
+the PS1 \texttt{stackObjectThin} table was detected from the stack image that
+provides the best coverage with minimal projection stretching. Roughly 0.5\%
+of the \texttt{stackObjectThin} sources have multiple rows with
+$\mathtt{primaryDetection} = 1$, effectively making it impossible to identify
+which row should be used in conjunction with the model from
+\citet{Tachibana18}.} These sources, many of which are moderately bright
+stars, have an $\mathtt{sg_score} = 0.5$ within the ZTF alert packets, i.e.,
+there classification is ambiguous, and as a result stars can end up in
+extragalactic transient streams.
+
+Here, we present an update to the PS1 PSC by classifying these
+\todo{$\sim$140; need final number} million sources using photometry from the
+\texttt{ForcedObjectMean} table in the PS1 database. While we previously
+showed that the PS1 forced photometry does not separate resolved and
+unresolved sources with the same fidelity as its stack photometry
+\citep{Tachibana18}, we can, using a nearly identical methodology as
+\citet{Tachibana18}, nevertheless achieve similar performance with the PS1
+forced photometry. We apply our new model to the \todo{$\sim$140; need final
+number} million previously unclassified sources, providing a new and useful
+supplement to the PS1 PSC.\footnote{During the preparation of this manuscript
+\citet{Beck20} published a new machine learning catalog (PS1-STRM) to separate
+the $\sim$3.5 billion sources in the PS1 \texttt{ForcedMeanObject} table. The
+main difference between the PS1 PSC and PS1-STRM is the training set used by
+each machine learning model, which we discuss in more detail below.}
+
+\acknowledgments
+
+\vspace{5mm}
+\facilities{}
+
+%% Similar to \facility{}, there is the optional \software command to allow 
+%% authors a place to specify which programs were used during the creation of 
+%% the manuscript. Authors should list each code and include either a
+%% citation or url to the code inside ()s when available.
+
+\software{}
+
+\bibliography{/Users/adamamiller/Documents/tex_stuff/papers}{}
+\bibliographystyle{aas_arxiv}
+
+%% Include this line if you are using the \added, \replaced, \deleted
+%% commands to see a summary list of all changes at the end of the article.
+%\listofchanges
+
+\end{document}
+
+% End of file `sample63.tex'.
