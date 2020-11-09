@@ -327,10 +327,24 @@
   \href{https://arxiv.org/abs/2010.09724}{\color{magenta}arXiv},
   \href{https://ui.adsabs.harvard.edu/abs/2020arXiv201009724J}{\color{blue}arXiv:2010.09724}
 
+\bibitem[{{Kaiser} {et~al.}(1995){Kaiser}, {Squires}, \&
+  {Broadhurst}}]{Kaiser95}
+{Kaiser}, N., {Squires}, G., \& {Broadhurst}, T. 1995,
+  \href{http://dx.doi.org/10.1086/176071}{\color{magenta}\apj},
+  \href{https://ui.adsabs.harvard.edu/abs/1995ApJ...449..460K}{\color{blue}449},
+  \href{https://ui.adsabs.harvard.edu/abs/1995ApJ...449..460K}{\color{blue}460}
+
 \bibitem[{{Kulkarni}(2020)}]{Kulkarni20}
 {Kulkarni}, S.~R. 2020,
   \href{https://arxiv.org/abs/2004.03511}{\color{magenta}arXiv},
   \href{https://ui.adsabs.harvard.edu/abs/2020arXiv200403511K}{\color{blue}arXiv:2004.03511}
+
+\bibitem[{{Lupton} {et~al.}(2001){Lupton}, {Gunn}, {Ivezi{\'c}}, {Knapp}, \&
+  {Kent}}]{Lupton01}
+{Lupton}, R., {Gunn}, J.~E., {Ivezi{\'c}}, Z., {et~al.} 2001, Astronomical
+  Society of the Pacific Conference Series,
+  \href{http://adsabs.harvard.edu/abs/2001ASPC..238..269L}{\color{blue}238},
+  \href{http://adsabs.harvard.edu/abs/2001ASPC..238..269L}{\color{blue}269}
 
 \bibitem[{{Masci} {et~al.}(2017){Masci}, {Laher}, {Rebbapragada}, {Doran},
   {Miller}, {Bellm}, {Kasliwal}, {Ofek}, {Surace}, {Shupe}, {Grillmair},
@@ -353,6 +367,13 @@
   \href{http://dx.doi.org/10.1088/1538-3873/aae8ac}{\color{magenta}\pasp},
   \href{https://ui.adsabs.harvard.edu/abs/2019PASP..131a8003M}{\color{blue}131},
   \href{https://ui.adsabs.harvard.edu/abs/2019PASP..131a8003M}{\color{blue}018003}
+
+\bibitem[{{Miller} {et~al.}(2017){Miller}, {Kulkarni}, {Cao}, {Laher}, {Masci},
+  \& {Surace}}]{Miller17}
+{Miller}, A.~A., {Kulkarni}, M.~K., {Cao}, Y., {et~al.} 2017,
+  \href{http://dx.doi.org/10.3847/1538-3881/153/2/73}{\color{magenta}\aj},
+  \href{http://adsabs.harvard.edu/abs/2017AJ....153...73M}{\color{blue}153},
+  \href{http://adsabs.harvard.edu/abs/2017AJ....153...73M}{\color{blue}73}
 
 \bibitem[{{M{\"o}ller} {et~al.}(2020){M{\"o}ller}, {Peloton}, {Ishida},
   {Arnault}, {Bachelet}, {Blaineau}, {Boutigny}, {Chauhan}, {Gangler},

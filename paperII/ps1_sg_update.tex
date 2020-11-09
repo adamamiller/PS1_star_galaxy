@@ -251,6 +251,8 @@ stars, have an $\mathtt{sg_score} = 0.5$ within the ZTF alert packets, i.e.,
 there classification is ambiguous, and as a result stars can end up in
 extragalactic transient streams.
 
+\todo{Add note about ~1.92 B sources in ZTF PS1 table???}
+
 Here, we present an update to the PS1 PSC by classifying these
 \todo{$\sim$140; need final number} million sources using photometry from the
 \texttt{ForcedObjectMean} table in the PS1 database. While we previously
@@ -277,6 +279,15 @@ difference below, followed by a brief summary of the model construction.
 
 \subsection{Training Set}
 
+As a training set for the model, we use deep observations of the COSMOS field
+from the \textit{Hubble Space Telescope} (\textit{HST}). The superior
+resolution of \textit{HST} enables reliable morphological classifications for
+sources as faint as $\sim$25\,mag \citep{Leauthaud07}. There are 80,867 bright
+\textit{HST} sources from \citet{Leauthaud07} that have PS1 counterparts
+\citep[within a 1\arcsec match radius; see][]{Tachibana18} in the
+\texttt{ForcedMeanObject} table (see \S\ref{sec:features}). Of those, the
+47,825 PS1 sources with $\mathtt{nDetections} \ge 1$ are adopted as the
+training set for our model.
 
 \subsection{PS1 Forced Photometry Features}\label{sec:features}
 
