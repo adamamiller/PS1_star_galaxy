@@ -47,6 +47,21 @@
   \href{http://adsabs.harvard.edu/abs/2012PASP..124.1175B}{\color{blue}124},
   \href{http://adsabs.harvard.edu/abs/2012PASP..124.1175B}{\color{blue}1175}
 
+\bibitem[{Breiman(1996)}]{Breiman96}
+Breiman, L. 1996,
+  \href{http://dx.doi.org/10.1007/BF00058655}{\color{magenta}Machine Learning},
+  24, 123
+
+\bibitem[{Breiman(2001)}]{Breiman01}
+---. 2001,
+  \href{http://dx.doi.org/10.1023/A:1010933404324}{\color{magenta}Machine
+  Learning}, 45, 5
+
+\bibitem[{Breiman {et~al.}(1984)Breiman, Friedman, Stone, \&
+  Olshen}]{Breiman84}
+Breiman, L., Friedman, J., Stone, C.~J., \& Olshen, R.~A. 1984, Classification
+  and regression trees (CRC press)
+
 \bibitem[{{Brink} {et~al.}(2013){Brink}, {Richards}, {Poznanski}, {Bloom},
   {Rice}, {Negahban}, \& {Wainwright}}]{Brink13}
 {Brink}, H., {Richards}, J.~W., {Poznanski}, D., {et~al.} 2013,
@@ -339,6 +354,15 @@
   \href{https://arxiv.org/abs/2004.03511}{\color{magenta}arXiv},
   \href{https://ui.adsabs.harvard.edu/abs/2020arXiv200403511K}{\color{blue}arXiv:2004.03511}
 
+\bibitem[{{Leauthaud} {et~al.}(2007){Leauthaud}, {Massey}, {Kneib}, {Rhodes},
+  {Johnston}, {Capak}, {Heymans}, {Ellis}, {Koekemoer}, {Le F{\`e}vre},
+  {Mellier}, {R{\'e}fr{\'e}gier}, {Robin}, {Scoville}, {Tasca}, {Taylor}, \&
+  {Van Waerbeke}}]{Leauthaud07}
+{Leauthaud}, A., {Massey}, R., {Kneib}, J.-P., {et~al.} 2007,
+  \href{http://dx.doi.org/10.1086/516598}{\color{magenta}\apjs},
+  \href{http://adsabs.harvard.edu/abs/2007ApJS..172..219L}{\color{blue}172},
+  \href{http://adsabs.harvard.edu/abs/2007ApJS..172..219L}{\color{blue}219}
+
 \bibitem[{{Lupton} {et~al.}(2001){Lupton}, {Gunn}, {Ivezi{\'c}}, {Knapp}, \&
   {Kent}}]{Lupton01}
 {Lupton}, R., {Gunn}, J.~E., {Ivezi{\'c}}, Z., {et~al.} 2001, Astronomical
@@ -393,6 +417,12 @@
   \href{http://dx.doi.org/10.1088/1538-3873/aae904}{\color{magenta}\pasp},
   \href{https://ui.adsabs.harvard.edu/abs/2019PASP..131a8001P}{\color{blue}131},
   \href{https://ui.adsabs.harvard.edu/abs/2019PASP..131a8001P}{\color{blue}018001}
+
+\bibitem[{Pedregosa {et~al.}(2011)Pedregosa, Varoquaux, Gramfort, Michel,
+  Thirion, Grisel, Blondel, Prettenhofer, Weiss, Dubourg, Vanderplas, Passos,
+  Cournapeau, Brucher, Perrot, \& Duchesnay}]{Pedregosa11}
+Pedregosa, F., Varoquaux, G., Gramfort, A., {et~al.} 2011, Journal of Machine
+  Learning Research, 12, 2825
 
 \bibitem[{{Prentice} {et~al.}(2018){Prentice}, {Maguire}, {Smartt}, {Magee},
   {Schady}, {Sim}, {Chen}, {Clark}, {Colin}, {Fulton}, {McBrien}, {O'Neill},

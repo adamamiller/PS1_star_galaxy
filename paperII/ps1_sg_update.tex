@@ -353,9 +353,49 @@ white polarization parameters: \texttt{whiteE1} and \texttt{whiteE2}, and two
 these features for stars and galaxies in the training set is shown in
 Figure~\ref{fig:features}.
 
-\subsection{The Simple Forced Model}\label{sec:simple_model}
+\subsection{The ``Distance'' Features}\label{sec:simple_model}
 
+In \citet{Tachibana18} we introduced a ``simple'' model to classify sources
+based solely on their measured \texttt{whitePSFFlux} and
+\texttt{whiteKronFlux}. The model was inspired by the use of flux ratios,
+which have been shown to provide a good discriminant between resolved and
+unresolved sources \citep[e.g., the SDSS morphological \texttt{CLASS}
+parameter][]{Lupton01}. At moderate to low S/N, however, flux ratios no longer
+provide accurate classifications (see e.g., Figure~\ref{fig:features}). The
+simple model from \citet{Tachibana18} leverages this fact by measuring the
+distance of each source from a line drawn in the
+\texttt{whitePSFFlux}--\texttt{whiteKronFlux} plane. Unlike a flux ratio, the
+simple model preserves information about the S/N, meaning sources with large
+absolute distances from the dividing line can be classified with greater
+confidence.
 
+Following from Equation~3 in \citet{Tachibana18}, ``simple'' features can be
+calculated as:
+%
+\begin{multline}
+ \mathtt{whiteFlux1Flux2Dist}(a) = \\
+ \frac{\mathtt{whiteFlux1} - a\times\mathtt{whiteFlux2}}{ \sqrt{1 + a^2}},
+ \label{eqn:simple_feat}
+\end{multline}
+%
+where \texttt{whiteFlux1} and \texttt{whiteFlux2} are ``white flux''
+measurements introduced in \S\ref{sec:features} (e.g.,
+\texttt{whiteFKronFlux}), $a$ is the slope of the line in the
+texttt{whiteFlux1}--\texttt{whiteFlux2} plane, and
+\texttt{whiteFlux1Flux2Dist} is the orthogonal distance of a source from the
+line. For this study we construct two simple features for inclusion in our
+machine learning model: \texttt{whiteFPSFFKronDist} and
+\texttt{whiteFPSFFApDist}.
+
+We determine the optimal value of $a$ for the simple features via cross
+validation. We find $a = 0.7512$ for the \texttt{whiteFPSFFKronDist} feature
+and $a = 0.7784$ for the \texttt{whiteFPSFFApDist} feature maximizes the FoM.
+Empirically \texttt{whiteFPSFFApDist} is better at separating resolved and
+unresolved sources than \texttt{whiteFPSFFKronDist}, and therefore the
+``simple'' model, discussed below, is based on \texttt{whiteFPSFFApDist}. The
+\texttt{whiteFPSFFKronDist} and \texttt{whiteFPSFFApDist} distribution of
+resolved and unresolved sources is shown in Figures~\ref{fig:psf_kron} and
+\ref{fig:psf_ap}, respectively.
 
 \subsection{Model Construction}
 
