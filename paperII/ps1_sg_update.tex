@@ -277,6 +277,8 @@ The methodology adopted here is extremely similar to the one presented in
 set used in the construction of the machine learning model. We discuss this
 difference below, followed by a brief summary of the model construction.
 
+\todo{Add note about the FoM}
+
 \subsection{Training Set}
 
 As a training set for the model, we use deep observations of the COSMOS field
@@ -287,7 +289,10 @@ sources as faint as $\sim$25\,mag \citep{Leauthaud07}. There are 80,867 bright
 \citep[within a 1\arcsec match radius; see][]{Tachibana18} in the
 \texttt{ForcedMeanObject} table (see \S\ref{sec:features}). Of those, the
 47,825 PS1 sources with $\mathtt{nDetections} \ge 1$ are adopted as the
-training set for our model.
+training set for our model. For this model the training set is $\sim$1.6\%
+larger than that used in \citet{Tachibana18} because more HST/COSMOS sources
+are detected, using our version of a ``detection'', via PS1 forced photometry
+than PS1 stack photometry.
 
 \subsection{PS1 Forced Photometry Features}\label{sec:features}
 
@@ -348,14 +353,47 @@ white polarization parameters: \texttt{whiteE1} and \texttt{whiteE2}, and two
 these features for stars and galaxies in the training set is shown in
 Figure~\ref{fig:features}.
 
+\subsection{The Simple Forced Model}\label{sec:simple_model}
+
+
 
 \subsection{Model Construction}
 
+Using the nine features mentioned in \S\ref{sec:features}, we use the random
+forest (RF) algorithm \citep{Breiman01}, as implemented in
+\texttt{scikit-learn} \citep{Pedregosa11}, to classify PS1 sources as resolved
+or unresolved. Briefly, the RF algorithm constructs an ensemble of decision
+trees \citep{Breiman84}, where each tree is constructed using a bootstrapped
+sample of the training set \citep[a method known as ``bagging'';][]{Breiman96}
+and the split for each branch within the tree is selected from a random subset
+of full feature set. The result is a lower variance estimator than is possible
+from a single decision tree.
 
-\section{Cross-Validation Results}
+To train the RF model, we replicate the procedure in \citet{Tachibana18}. We
+use $k$-fold cross validation (CV) to optimize the model tuning parameters,
+namely the number of trees in the forest $N_\mathrm{tree}$, the random number
+of features for splitting at each node $m_\mathrm{try}$, and the minimum
+number of sources in a terminal leaf of the tree $\mathtt{nodesize}$. Our CV
+procedure utilizes both an inner and outter loop, each with $k = 10$ folds. In
+the inner loop, a $k = 10$ folds CV grid search is performed over the three
+tuning parameters, while predictions from the optimal grid location are
+applied to the 1/10 of the training set that was withheld in the outer loop.
+This process is then repeated for the remaining 9 folds in the outer loop. We
+adopt the average results from the 10 different grid searches to arrive at
+optimal model parameters of: \xander{help me fill in these values}. The RF
+model results are not strongly dependent on the final choice of tuning
+parameters.
 
-\subsection{The Simple Forced Model}\label{sec:simple_model}
+\section{Results}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{./figures/accuracy_mag.pdf}
+    %
+    \caption{}
+    %
+    \label{fig:accuracy_mag}
+\end{figure}    
 
 \acknowledgments
 
