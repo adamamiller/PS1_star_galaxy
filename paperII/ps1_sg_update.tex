@@ -428,6 +428,8 @@ parameters.
 
 \section{Results}
 
+\todo{Add discussion of ROC curve and FoM}
+
 We show the CV accuracy of the RF, simple, and PS1 models\footnote{The PS1
 model is defined by a single hard cut on the PSF--Kron flux ratio measured in
 the $i_\mathrm{PS1}$ band \citep[for further details see][]{Tachibana18}.} in
@@ -451,8 +453,34 @@ model provides more accurate classifications than the alternatives.
 \end{figure}    
 
 As expected, the accuracy of each model shown in Figure~\ref{fig:accuracy_mag}
-decreases with the S/N. Interestingly, the accuracy curve for the RF model is
-nearly flat for \texttt{whiteKronMag} between $\sim$22 and 24\,mag.
+decreases with the S/N. The accuracy curve for the RF model features a slight
+departure from expectation in that is is nearly flat for \texttt{whiteKronMag}
+between $\sim$22 and 24\,mag. \todo{Need to confirm this argument is indeed
+correct} This quasi-plateau in the RF model accuracy can be understood as the
+result of two components of the training set: (i) unresolved sources
+completely dominate the source counts at these magnitudes, and (ii) the
+well-defined locus of unresolved sources in the training set (see
+Figure~\ref{fig:features}) becomes heavily blended with the resolved source
+population at these brightness levels. Taken together the model will be biased
+towards classifying all faint sources as resolved, and with \todo{NNN}\% of
+the $\mathtt{whiteKronMag} > 22.5$\,mag training set sources being unresolved,
+a plateau in accuracy of $\sim$87\% makes sense. This is confirmed in
+Figure~\ref{fig:sg_accuracy}, which shows the true positive rate (TPR) for
+both resolved and unresolved sources as a function of \texttt{whiteKronMag}. A
+near 100\% TPR for faint resolved sources combined with a few correctly
+classified unresolved sources leads to observed quasi-plateau in
+Figure~\ref{fig:accuracy_mag}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{./figures/}
+    %
+    \caption{}
+    %
+    \label{fig:sg_accuracy}
+\end{figure}    
+
+\section{Deployment in the ZTF Real-Time Pipeline}
 
 \acknowledgments
 
