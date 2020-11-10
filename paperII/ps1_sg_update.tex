@@ -14,7 +14,7 @@
 
 \def\ion#1#2{#1$\;${\footnotesize\rm{#2}}\relax}
 
-\newcommand{\xander}[1]{{\color{red} KM: \textbf{#1}}}
+\newcommand{\xander}[1]{{\color{red} XH: \textbf{#1}}}
 \newcommand{\aam}[1]{{\color{DarkOrange} aam: \textbf{#1}}}
 
 \newcommand{\todo}[1]{{\color{magenta} to-do: {#1}}}
@@ -24,6 +24,8 @@
 \usepackage{pifont}% http://ctan.org/pkg/pifont
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
+
+\usepackage{multirow, amsmath}
 
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -426,14 +428,31 @@ parameters.
 
 \section{Results}
 
+We show the CV accuracy of the RF, simple, and PS1 models\footnote{The PS1
+model is defined by a single hard cut on the PSF--Kron flux ratio measured in
+the $i_\mathrm{PS1}$ band \citep[for further details see][]{Tachibana18}.} in
+Figure~\ref{fig:accuracy_mag}. As in \citet{Tachibana18}, we find that the RF
+model provides more accurate classifications than the alternatives.
+
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{./figures/accuracy_mag.pdf}
     %
-    \caption{}
+    \caption{Model accuracy in 0.5\,mag bins for each of the RF, simple, and
+    PS1 models as a function of \texttt{whiteKronMag}. Filled, but
+    transparent, Gaussian KDEs along the bottom axis show the relative
+    distribution of resolved and unresolved sources in the HST training set.
+    Unresolved sources dominate at $\mathtt{whiteKronMag} < 18$\,mag, while
+    resolved sources dominate at $\mathtt{whiteKronMag} > 20$\,mag. The RF
+    model provides the highest accuracy, especially for faint sources
+    ($\mathtt{whiteKronMag} \gtrsim 21.5$\,mag).}
     %
     \label{fig:accuracy_mag}
 \end{figure}    
+
+As expected, the accuracy of each model shown in Figure~\ref{fig:accuracy_mag}
+decreases with the S/N. Interestingly, the accuracy curve for the RF model is
+nearly flat for \texttt{whiteKronMag} between $\sim$22 and 24\,mag.
 
 \acknowledgments
 
