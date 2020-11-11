@@ -1,0 +1,14 @@
+\begin{deluxetable}{cccc}
+    \tablecolumns{4} 
+    \tablewidth{0pt} 
+    \tablecaption{ CV Results for the Training Set \label{tbl:hst_cv}}
+    \tablehead{ 
+    \colhead{model} & \colhead{FoM} & \colhead{Accuracy} & \colhead{ROC AUC}
+    }
+    \startdata
+    RF & \textbf{0.657} $\pm$ 0.016 & \textbf{0.918} $\pm$ 0.003 & \textbf{0.945} $\pm$ 0.003 \\
+    simple & 0.591 $\pm$ 0.017 & 0.887 $\pm$ 0.007 & 0.930 $\pm$ 0.003 \\
+    PS1 & 0.002 $\pm$ 0.001 & 0.809 $\pm$ 0.008 & 0.827 $\pm$ 0.009 \\
+    \enddata
+    \tablecomments{Uncertainties represent the sample standard deviation for the 10 individual folds used in CV.}
+\end{deluxetable}
