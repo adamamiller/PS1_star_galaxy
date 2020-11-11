@@ -472,31 +472,71 @@ parameters.
 
 \section{Results}
 
-Our aim is to maximize the FoM for our model. 
+Our aim is to maximize the FoM of the RF model. We show receiver operating characteristic (ROC) curves of the RF,
+simple, and PS1\footnote{The PS1 model is defined by a single hard cut on the
+PSF--Kron flux ratio measured in the $i_\mathrm{PS1}$ band \citep[for further
+details see][]{Tachibana18}.} models in Figure~\ref{fig:hst_roc}. From
+Figure~\ref{fig:hst_roc}, it is clear that the RF and simple models greatly
+outperform the PS1 model. Furthermore, while the gains are modest, the
+inclusion of all the ``white flux'' features and use of machine learning is
+justified as the RF model produces a higher FoM than the simple model.
 
-We show the CV accuracy of the RF, simple, and PS1 models\footnote{The PS1
-model is defined by a single hard cut on the PSF--Kron flux ratio measured in
-the $i_\mathrm{PS1}$ band \citep[for further details see][]{Tachibana18}.} in
-Figure~\ref{fig:accuracy_mag}. As in \citet{Tachibana18}, we find that the RF
+\begin{figure}[t]
+ \centering
+  \includegraphics[width=\columnwidth]{./Figures/CV_ROC_FHST.pdf}
+  %
+  \caption{ ROC curves comparing the relative performance of the PS1, simple,
+  and RF models for HST sources with $i_\mathrm{PS1}$ detections. The thick,
+  solid slate gray, green, and purple lines show the ROC curves for the PS1,
+  simple, and RF models, respectively. The light, thin lines show the ROC
+  curves for the individual CV folds. The inset on the right shows a zoom in
+  around FPR = 0.005, shown as a dotted vertical line, corresponding to the
+  FoM (the PS1 model is not shown in the inset, because it has very low FoM).
+  \xander{The inset needs to be adjusted to a yrange of $\sim$0.45--0.72}}
+  %
+  \label{fig:hst_roc}
+\end{figure}
+
+The FoM of each of the three models considered here is summarized in
+Table~\ref{tbl:hst_cv}. In addition to providing largest FoM, the RF model is
+also the most accurate of the three and it has the largest area under the ROC
+curve (ROC AUC). We robustly conclude that, of the models considered here, the
+RF model is best. Comparing with Table~1 in \citet{Tachibana18}, we find that
+the forced-photometry features derived in this study do not provide the same
+discriminating power as the PS1 stack-photometry features used in
+\citet{Tachibana18}. The use of the forced-photometry features results in a
+FoM that is $\sim$7\% worse than the stack-photometry features. We discuss the
+implications of this in \S\ref{sec:discussion}. This slight reduction in
+performance is countered by the fact that we can classify $\sim$140 million
+additional sources using the forced-photometry features.
+
+\input{tables/hst_cv.tex}
+
+We show the CV accuracy of the RF, simple, and PS1 models in
+Figure~\ref{fig:hst_acc}. As in \citet{Tachibana18}, we find that the RF
 model provides more accurate classifications than the alternatives.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\columnwidth]{./figures/accuracy_mag.pdf}
-    %
-    \caption{Model accuracy in 0.5\,mag bins for each of the RF, simple, and
-    PS1 models as a function of \texttt{whiteKronMag}. Filled, but
-    transparent, Gaussian KDEs along the bottom axis show the relative
-    distribution of resolved and unresolved sources in the HST training set.
-    Unresolved sources dominate at $\mathtt{whiteKronMag} < 18$\,mag, while
-    resolved sources dominate at $\mathtt{whiteKronMag} > 20$\,mag. The RF
-    model provides the highest accuracy, especially for faint sources
-    ($\mathtt{whiteKronMag} \gtrsim 21.5$\,mag).}
-    %
-    \label{fig:accuracy_mag}
-\end{figure}    
+\begin{figure}[t]
+ \centering
+  \includegraphics[width=\columnwidth]{./Figures/CV_Accuracy_FHST.pdf}
+  %  
+  \caption{Model accuracy as a function of \texttt{whiteFKronMag} for HST
+  sources with $i_\mathrm{PS1}$ detections. Accuracy curves for the PS1,
+  simple and RF models are shown as slate gray pentagons, green triangles, and
+  purple circles, respectively. The bin widths are 0.5\,mag, and the error
+  bars represent the 68\% interval from bootstrap resampling. Additionally, a
+  Gaussian KDE of the PDF for the training set, as well as the unresolved
+  point sources and resolved, extended objects in the same subset is shown in
+  the shaded gray, red, and green regions, respectively. The amplitude of the
+  star and galaxy PDFs have been normalized by their relative ratio compared
+  to the full $i_\mathrm{PS1}$-band subset. \xander{Need to update legend to
+  say resolved and unresolved respectively - should probably udpate the
+  symbols too}}
+  %
+  \label{fig:hst_acc}
+\end{figure}  
 
-As expected, the accuracy of each model shown in Figure~\ref{fig:accuracy_mag}
+As expected, the accuracy of each model shown in Figure~\ref{fig:hst_acc}
 decreases with the S/N. The accuracy curve for the RF model features a slight
 departure from expectation in that is is nearly flat for \texttt{whiteKronMag}
 between $\sim$22 and 24\,mag. \todo{Need to confirm this argument is indeed
@@ -513,18 +553,18 @@ Figure~\ref{fig:sg_accuracy}, which shows the true positive rate (TPR) for
 both resolved and unresolved sources as a function of \texttt{whiteKronMag}. A
 near 100\% TPR for faint resolved sources combined with a few correctly
 classified unresolved sources leads to observed quasi-plateau in
-Figure~\ref{fig:accuracy_mag}.
+Figure~\ref{fig:hst_acc}.
 
 \begin{figure}
     \centering
-    \includegraphics[width=\columnwidth]{./figures/sg_accuracy.pdf}
+    \includegraphics[width=\columnwidth]{./figures/CV_sg_mag_accuracy.pdf}
     %
     \caption{}
     %
     \label{fig:sg_accuracy}
 \end{figure}    
 
-\section{Deployment in the ZTF Real-Time Pipeline}
+\section{Deployment in the ZTF Real-Time Pipeline}\label{sec:discussion}
 
 1,919,106,844 total sources in table
 
