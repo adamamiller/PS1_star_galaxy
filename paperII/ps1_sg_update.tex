@@ -198,6 +198,8 @@
 
 \section{Introduction} \label{sec:intro}
 
+\todo{Make sure the idea of an alert packet is well defined and consistent throughout}
+
 The proliferation of wide-field time-domain surveys over the past $\sim$decade
 has led to the discovery of a bevy of novel extragalactic transients
 \citep[e.g.,][]{quimby11,Gezari12,Gal-Yam14,Abbott17a,Prentice18,
@@ -565,12 +567,44 @@ Figure~\ref{fig:hst_acc}.
     \label{fig:sg_accuracy}
 \end{figure}    
 
+\subsection{The Updated PS1 PSC Catalog}\label{sec:ps1psc_update}
+
 \section{Deployment in the ZTF Real-Time Pipeline}\label{sec:discussion}
+
+The ZTF real-time pipeline \citep{Masci19} provides AVRO alert packets
+\citep[see][]{Patterson19} containing information (e.g., flux, position,
+nearest neighbors) about any newly discovered sources of variability. The
+packets include morphological classifications, based on the PS1 PSC
+\citep{Tachibana18}, for the three closest PS1 sources within 30\arcsec\ of
+the position of the newly observed variable source (see ~\ref{app:cat_counts}
+for a summary of the PS1 sources included). As previously discussed, $\sim$426
+million PS1 sources in the ZTF database are not classified in the original PS1
+PSC.
+
+Moving forward, ZTF alert packets now include the additional classifications
+presented in \S\ref{sec:ps1psc_update}. \todo{Add sentence about Frank about
+how these are designated} We describe below our recommended strategy in
+filtering the ZTF alerts now that $\sim$144 million classifications are being
+added to the PS1 PSC.
+
+The vast majority of users will not experience 
+
+
+
+ 
+
+
+
+details of newly discovered variability 
 
 1,919,106,844 total sources in table
 
 425,589,612 
 426,747,262 total sources with sg = 0.5
+
+\section{Discussion}
+
+
 
 \acknowledgments
 
@@ -584,7 +618,43 @@ Figure~\ref{fig:hst_acc}.
 
 \software{}
 
-\input{ps1_sg_update.bbl}
+\appendix
+
+\section{The ZTF--PS1 Morphological Catalog}\label{app:cat_counts}
+
+The ZTF database contains a table (\texttt{Stars}) with sources selected from
+the PS1 DR1 that are used to provide morphological classifications in the ZTF
+alert packets. The ZTF \texttt{Stars} table was seeded from the PS1
+\texttt{MeanObject} table and includes all PS1 \texttt{MeanObject} sources
+with $\mathtt{nDetections} \ge 3$.\footnote{Immediately after the release of
+PS1 DR1 it was recommended that sources detected on at least three individual
+PS1 images were unlikely to be spurious. Hence, the use of this selection cut
+for the ZTF \texttt{Stars} table.} There are 1,919,106,844 sources in the ZTF
+\texttt{Stars} table. Of these, 1,484,281,394 are classified in the PS1 PSC
+and another 8,520,167 are classified as point sources based on \textit{Gaia}
+parallax and/or proper motion measurements \citep{Tachibana18}. Therefore,
+there are 426,305,283 sources in the ZTF \texttt{Stars} table that did not
+meet the quality cuts necessary to be included in the PS1 PSC.\footnote{Only
+sources with a single row designated as the \texttt{primaryDetection} in the
+PS1 \texttt{StackObjectAttributes} table and a stack ``detection''
+\citep[i.e., the PSF, Kron, and aperture flux are all $>0$ in at least one
+filter, see][]{Tachibana18} are included in the PS1 PSC. }
+
+For the $\sim$426 million ZTF \texttt{Stars} table sources not in the PS1 PSC,
+5,885,633 had multiple rows in the PS1 \texttt{StackObjectAttributes} table
+with $\mathtt{primaryDetection} = 1$, while the rest were not ``detected'' in
+the PS1 stacks. As described in \S\ref{sec:ps1psc_update}, 144,870,754 of the
+previously ``missing'' sources pass our \texttt{ForcedMeanObject}
+``detection'' criteria (see \S\ref{}) and are now included in the PS1 PSC. The
+remaining $\sim$281 million sources do not have reliable photometry in either
+the PS1 forced or stack tables, and as a result remain in the ZTF
+\texttt{Stars} table with an ambiguous score of 0.5.
+
+% 22524277 are at dec < -30
+
+
+\bibliographystyle{aas_arxiv.bst}
+\bibliography{/Users/adamamiller/Documents/tex_stuff/papers}
 
 %% Include this line if you are using the \added, \replaced, \deleted
 %% commands to see a summary list of all changes at the end of the article.
