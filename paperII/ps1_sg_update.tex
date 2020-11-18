@@ -635,7 +635,7 @@ million PS1 sources in the ZTF database are not classified in the original PS1
 PSC.
 
 Moving forward, ZTF alert packets now include the additional classifications
-presented in \S\ref{sec:ps1psc_update}. \todo{Add sentence about Frank about
+presented in \S\ref{sec:ps1psc_update}. \todo{Add sentence from Frank about
 how these are designated} We describe below our recommended strategy in
 filtering the ZTF alerts now that $\sim$144 million classifications are being
 added to the PS1 PSC.
@@ -644,20 +644,9 @@ The vast majority of users will not experience
 
 
 
- 
-
-
-
-details of newly discovered variability 
-
-1,919,106,844 total sources in table
-
-425,589,612 
-426,747,262 total sources with sg = 0.5
-
 \section{Discussion}
 
-
+\section{Conclusions}
 
 \acknowledgments
 
@@ -669,7 +658,12 @@ details of newly discovered variability
 %% the manuscript. Authors should list each code and include either a
 %% citation or url to the code inside ()s when available.
 
-\software{}
+\software{\texttt{astropy} \citep{Astropy-Collaboration13,
+Astropy-Collaboration18}, 
+          \texttt{scipy} \citep{2020SciPy-NMeth},
+          \texttt{matplotlib} \citep{Hunter07}, 
+          \texttt{pandas} \citep{McKinney10},
+          \texttt{scikit-learn} \citep{Pedregosa12}}
 
 \appendix
 
@@ -698,14 +692,20 @@ For the $\sim$426 million ZTF \texttt{Stars} table sources not in the PS1 PSC,
 with $\mathtt{primaryDetection} = 1$, while the rest were not ``detected'' in
 the PS1 stacks. As described in \S\ref{sec:ps1psc_update}, 144,870,754 of the
 previously ``missing'' sources pass our \texttt{ForcedMeanObject}
-``detection'' criteria (see \S\ref{}) and are now included in the PS1 PSC. The
-remaining $\sim$281 million sources do not have reliable photometry in either
-the PS1 forced or stack tables, and as a result remain in the ZTF
+``detection'' criteria (see \S\ref{}) and are now included in the PS1 PSC. 
+
+The remaining $\sim$281 million sources do not have reliable photometry in
+either the PS1 forced or stack tables, and as a result remain in the ZTF
 \texttt{Stars} table with an ambiguous score of 0.5. It is worth noting that
 $\sim$8\% of those $\sim$281 million are sources that were present in PS1 DR1,
 and hence included in the ZTF \texttt{Stars} table, but are not present in PS1
 DR2 (mostly because they have declination $\delta < -30$\,deg).\footnote{See
-\url{https://outerspace.stsci.edu/display/PANSTARRS/PS1+DR2+caveats\#PS1DR2caveats-Missingdata} for more information.}
+\url{https://outerspace.stsci.edu/display/PANSTARRS/PS1+DR2+caveats\#PS1DR2caveats-Missingdata} for more information.} Furthermore, $\sim$34\% of these
+$\sim$281 million sources have $\mathtt{nDetections} = 3$, and $\sim$55\% have
+$\mathtt{nDetections} \le 5$. That these sources have so few detections in PS1
+increases the probability that they may be spurious, and even if they are not
+spurious, they are otherwise very low S/N detections, which do not produce
+highly confident classifications.
 
 % 22524277 are at dec < -30
 

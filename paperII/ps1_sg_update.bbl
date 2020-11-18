@@ -12,6 +12,47 @@
   \href{http://adsabs.harvard.edu/abs/2017ApJ...848L..12A}{\color{blue}848},
   \href{http://adsabs.harvard.edu/abs/2017ApJ...848L..12A}{\color{blue}L12}
 
+\bibitem[{{Astropy Collaboration} {et~al.}(2013){Astropy Collaboration},
+  {Robitaille}, {Tollerud}, {Greenfield}, {Droettboom}, {Bray}, {Aldcroft},
+  {Davis}, {Ginsburg}, {Price-Whelan}, {Kerzendorf}, {Conley}, {Crighton},
+  {Barbary}, {Muna}, {Ferguson}, {Grollier}, {Parikh}, {Nair}, {Unther},
+  {Deil}, {Woillez}, {Conseil}, {Kramer}, {Turner}, {Singer}, {Fox}, {Weaver},
+  {Zabalza}, {Edwards}, {Azalee Bostroem}, {Burke}, {Casey}, {Crawford},
+  {Dencheva}, {Ely}, {Jenness}, {Labrie}, {Lim}, {Pierfederici}, {Pontzen},
+  {Ptak}, {Refsdal}, {Servillat}, \& {Streicher}}]{Astropy-Collaboration13}
+{Astropy Collaboration}, {Robitaille}, T.~P., {Tollerud}, E.~J., {et~al.} 2013,
+  \href{http://dx.doi.org/10.1051/0004-6361/201322068}{\color{magenta}\aap},
+  \href{http://adsabs.harvard.edu/abs/2013A%26A...558A..33A}{\color{blue}558},
+  \href{http://adsabs.harvard.edu/abs/2013A%26A...558A..33A}{\color{blue}A33}
+
+\bibitem[{{Astropy Collaboration} {et~al.}(2018){Astropy Collaboration},
+  {Price-Whelan}, {Sip{\H{o}}cz}, {G{\"u}nther}, {Lim}, {Crawford}, {Conseil},
+  {Shupe}, {Craig}, {Dencheva}, {Ginsburg}, {Vand erPlas}, {Bradley},
+  {P{\'e}rez-Su{\'a}rez}, {de Val-Borro}, {Aldcroft}, {Cruz}, {Robitaille},
+  {Tollerud}, {Ardelean}, {Babej}, {Bach}, {Bachetti}, {Bakanov}, {Bamford},
+  {Barentsen}, {Barmby}, {Baumbach}, {Berry}, {Biscani}, {Boquien}, {Bostroem},
+  {Bouma}, {Brammer}, {Bray}, {Breytenbach}, {Buddelmeijer}, {Burke},
+  {Calderone}, {Cano Rodr{\'\i}guez}, {Cara}, {Cardoso}, {Cheedella}, {Copin},
+  {Corrales}, {Crichton}, {D'Avella}, {Deil}, {Depagne}, {Dietrich}, {Donath},
+  {Droettboom}, {Earl}, {Erben}, {Fabbro}, {Ferreira}, {Finethy}, {Fox},
+  {Garrison}, {Gibbons}, {Goldstein}, {Gommers}, {Greco}, {Greenfield},
+  {Groener}, {Grollier}, {Hagen}, {Hirst}, {Homeier}, {Horton}, {Hosseinzadeh},
+  {Hu}, {Hunkeler}, {Ivezi{\'c}}, {Jain}, {Jenness}, {Kanarek}, {Kendrew},
+  {Kern}, {Kerzendorf}, {Khvalko}, {King}, {Kirkby}, {Kulkarni}, {Kumar},
+  {Lee}, {Lenz}, {Littlefair}, {Ma}, {Macleod}, {Mastropietro}, {McCully},
+  {Montagnac}, {Morris}, {Mueller}, {Mumford}, {Muna}, {Murphy}, {Nelson},
+  {Nguyen}, {Ninan}, {N{\"o}the}, {Ogaz}, {Oh}, {Parejko}, {Parley}, {Pascual},
+  {Patil}, {Patil}, {Plunkett}, {Prochaska}, {Rastogi}, {Reddy Janga},
+  {Sabater}, {Sakurikar}, {Seifert}, {Sherbert}, {Sherwood-Taylor}, {Shih},
+  {Sick}, {Silbiger}, {Singanamalla}, {Singer}, {Sladen}, {Sooley},
+  {Sornarajah}, {Streicher}, {Teuben}, {Thomas}, {Tremblay}, {Turner},
+  {Terr{\'o}n}, {van Kerkwijk}, {de la Vega}, {Watkins}, {Weaver}, {Whitmore},
+  {Woillez}, {Zabalza}, \& {Astropy Contributors}}]{Astropy-Collaboration18}
+{Astropy Collaboration}, {Price-Whelan}, A.~M., {Sip{\H{o}}cz}, B.~M., {et~al.}
+  2018, \href{http://dx.doi.org/10.3847/1538-3881/aabc4f}{\color{magenta}\aj},
+  \href{https://ui.adsabs.harvard.edu/abs/2018AJ....156..123A}{\color{blue}156},
+  \href{https://ui.adsabs.harvard.edu/abs/2018AJ....156..123A}{\color{blue}123}
+
 \bibitem[{{Beck} {et~al.}(2020){Beck}, {Szapudi}, {Flewelling}, {Holmberg},
   {Magnier}, \& {Chambers}}]{Beck20}
 {Beck}, R., {Szapudi}, I., {Flewelling}, H., {et~al.} 2020,
@@ -155,6 +196,11 @@ Breiman, L., Friedman, J., Stone, C.~J., \& Olshen, R.~A. 1984, Classification
   \href{http://dx.doi.org/10.1088/0004-6256/150/3/82}{\color{magenta}\aj},
   \href{http://adsabs.harvard.edu/abs/2015AJ....150...82G}{\color{blue}150},
   \href{http://adsabs.harvard.edu/abs/2015AJ....150...82G}{\color{blue}82}
+
+\bibitem[{Hunter(2007)}]{Hunter07}
+Hunter, J.~D. 2007,
+  \href{http://dx.doi.org/10.1109/MCSE.2007.55}{\color{magenta}Computing In
+  Science \& Engineering}, 9, 90
 
 \bibitem[{{IceCube Collaboration} {et~al.}(2018){IceCube Collaboration},
   {Aartsen}, {Ackermann}, {Adams}, {Aguilar}, {Ahlers}, {Ahrens}, {Al Samarai},
@@ -392,6 +438,9 @@ Breiman, L., Friedman, J., Stone, C.~J., \& Olshen, R.~A. 1984, Classification
   \href{https://ui.adsabs.harvard.edu/abs/2019PASP..131a8003M}{\color{blue}131},
   \href{https://ui.adsabs.harvard.edu/abs/2019PASP..131a8003M}{\color{blue}018003}
 
+\bibitem[{McKinney(2010)}]{McKinney10}
+McKinney, W. 2010, 56
+
 \bibitem[{{Miller} {et~al.}(2017){Miller}, {Kulkarni}, {Cao}, {Laher}, {Masci},
   \& {Surace}}]{Miller17}
 {Miller}, A.~A., {Kulkarni}, M.~K., {Cao}, Y., {et~al.} 2017,
@@ -466,5 +515,17 @@ Pedregosa, F., Varoquaux, G., Gramfort, A., {et~al.} 2011, Journal of Machine
   \href{http://dx.doi.org/10.1088/1538-3873/aae3d9}{\color{magenta}\pasp},
   \href{http://adsabs.harvard.edu/abs/2018PASP..130l8001T}{\color{blue}130},
   \href{http://adsabs.harvard.edu/abs/2018PASP..130l8001T}{\color{blue}128001}
+
+\bibitem[{{Virtanen} {et~al.}(2020){Virtanen}, {Gommers}, {Oliphant},
+  {Haberland}, {Reddy}, {Cournapeau}, {Burovski}, {Peterson}, {Weckesser},
+  {Bright}, {van der Walt}, {Brett}, {Wilson}, {Jarrod Millman}, {Mayorov},
+  {Nelson}, {Jones}, {Kern}, {Larson}, {Carey}, {Polat}, {Feng}, {Moore}, {Vand
+  erPlas}, {Laxalde}, {Perktold}, {Cimrman}, {Henriksen}, {Quintero}, {Harris},
+  {Archibald}, {Ribeiro}, {Pedregosa}, {van Mulbregt}, \&
+  {Contributors}}]{2020SciPy-NMeth}
+{Virtanen}, P., {Gommers}, R., {Oliphant}, T.~E., {et~al.} 2020,
+  \href{http://dx.doi.org/https://doi.org/10.1038/s41592-019-0686-2}{\color{magenta}Nature
+  Methods}, \href{https://rdcu.be/b08Wh}{\color{blue}17},
+  \href{https://rdcu.be/b08Wh}{\color{blue}261}
 
 \end{thebibliography}
