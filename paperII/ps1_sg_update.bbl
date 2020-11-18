@@ -424,6 +424,14 @@ Breiman, L., Friedman, J., Stone, C.~J., \& Olshen, R.~A. 1984, Classification
 Pedregosa, F., Varoquaux, G., Gramfort, A., {et~al.} 2011, Journal of Machine
   Learning Research, 12, 2825
 
+\bibitem[{{Perryman} {et~al.}(2001){Perryman}, {de Boer}, {Gilmore}, {H{\o}g},
+  {Lattanzi}, {Lindegren}, {Luri}, {Mignard}, {Pace}, \& {de
+  Zeeuw}}]{Perryman01}
+{Perryman}, M.~A.~C., {de Boer}, K.~S., {Gilmore}, G., {et~al.} 2001,
+  \href{http://dx.doi.org/10.1051/0004-6361:20010085}{\color{magenta}\aap},
+  \href{http://adsabs.harvard.edu/abs/2001A%26A...369..339P}{\color{blue}369},
+  \href{http://adsabs.harvard.edu/abs/2001A%26A...369..339P}{\color{blue}339}
+
 \bibitem[{{Prentice} {et~al.}(2018){Prentice}, {Maguire}, {Smartt}, {Magee},
   {Schady}, {Sim}, {Chen}, {Clark}, {Colin}, {Fulton}, {McBrien}, {O'Neill},
   {Smith}, {Ashall}, {Chambers}, {Denneau}, {Flewelling}, {Heinze}, {Holoien},

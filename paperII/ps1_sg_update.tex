@@ -569,6 +569,59 @@ Figure~\ref{fig:hst_acc}.
 
 \subsection{The Updated PS1 PSC Catalog}\label{sec:ps1psc_update}
 
+Following the construction of the RF model that utilizes PS1 forced photometry
+features, we can provide morphological classifications for the PS1 sources
+that are currently missing from the PS1 PSC. Of the $\sim$426 million
+``missing'' sources, $\sim$144 million have PS1 DR2 \texttt{ForcedMeanObject}
+photometry that pass our detection criteria (see \ref{app:cat_counts} for more
+details). A histogram showing the distribution of the RF classification score
+for these newly classified sources is shown in Figure~\ref{fig:psc_update}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{./figures/PS1_PSC_update_hist.pdf}
+    %
+    \caption{Histogram showing the RF classification scores for the $\sim$144
+    million newly classified sources from PS1. All of the newly classified
+    sources are shown in blue, while Galactic plane sources ($|b| <
+    5^{\circ}$) are shown in orange, and high galactic latitude sources ($|b|
+    > 30^{\circ}$) are shown in grey. The vertical dotted line shows the
+    conservative classification threshold adopted in \citet{Tachibana18}
+    (sources to the right of the line are considered point sources). The vast
+    majority of the newly classified sources are in the Galactic plane.}
+    %
+    \label{fig:psc_update}
+\end{figure}    
+
+Figure~\ref{fig:psc_update} shows that there are relatively few
+high-confidence classifications (i.e., very likely extended sources with RF
+score $\approx 0$ or very likely point sources with RF score $\approx 1$)
+among the ``missing'' sources. Figure~\ref{fig:psc_update} also reveals the
+likely explanation for this outcome: the vast majority of the newly classified
+sources are in the Galactic plane. Of the $\sim$144 million newly classified
+sources, $\sim$57\% have galactic latitude $\lvert b \rvert < 5$\,deg, while
+$> 95$\% are in the Galactic plane ($\lvert b \rvert < 15$\,deg). The HST
+COSMOS field, from which we derive our training set, has $b \approx 42$\,deg
+and as a result includes very few stellar blends, which are common at low
+galactic latitudes. The PS1 PSC also has significantly lower confidence
+classifications in the Galactic plane \citep[see Figure~8 in][]{Tachibana18}.
+That these sources were not ``detected'' in the PS1 stack images also suggests
+that it is difficult to make reliable photometric measurements using the PS1
+data, which could also contribute to the lower confidence classifications. The
+upcoming third data release from the space-based \textit{Gaia} telescope
+\citep{Perryman01} will improve this situation by classifying many of these
+ambiguous sources as stars via parallax and proper motion measurements.
+
+Ultimately, this update to the PS1 PSC has identified 17,945,494 likely point
+sources using the optimized threshold from \citet[][RF score $\ge
+0.83$]{Tachibana18}. While this number is small compared to the $\sim$734
+million point sources in the original PS1 PSC, these $\sim$18 million newly
+identified point sources would otherwise pass filters looking for
+extragalactic transients in the ZTF alert stream. Their removal will reduce
+the number of false positive transient candidates.
+
+\todo{Get source counts on nDetections for things still not classified?}
+
 \section{Deployment in the ZTF Real-Time Pipeline}\label{sec:discussion}
 
 The ZTF real-time pipeline \citep{Masci19} provides AVRO alert packets
@@ -648,7 +701,11 @@ previously ``missing'' sources pass our \texttt{ForcedMeanObject}
 ``detection'' criteria (see \S\ref{}) and are now included in the PS1 PSC. The
 remaining $\sim$281 million sources do not have reliable photometry in either
 the PS1 forced or stack tables, and as a result remain in the ZTF
-\texttt{Stars} table with an ambiguous score of 0.5.
+\texttt{Stars} table with an ambiguous score of 0.5. It is worth noting that
+$\sim$8\% of those $\sim$281 million are sources that were present in PS1 DR1,
+and hence included in the ZTF \texttt{Stars} table, but are not present in PS1
+DR2 (mostly because they have declination $\delta < -30$\,deg).\footnote{See
+\url{https://outerspace.stsci.edu/display/PANSTARRS/PS1+DR2+caveats\#PS1DR2caveats-Missingdata} for more information.}
 
 % 22524277 are at dec < -30
 
