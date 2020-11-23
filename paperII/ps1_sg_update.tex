@@ -468,20 +468,21 @@ tuning parameters, while predictions from the optimal grid location are
 applied to the 1/10 of the training set that was withheld in the outer loop.
 This process is then repeated for the remaining 9 folds in the outer loop. We
 adopt the average results from the 10 different grid searches to arrive at
-optimal model parameters of: \xander{help me fill in these values}. The RF
-model results are not strongly dependent on the final choice of tuning
-parameters.
+optimal model parameters of: $N_\mathrm{tree} = 900$, $m_\mathrm{try}
+= 3$, and $\mathtt{nodesize} = 2$. The RF model results are not strongly
+dependent on the final choice of tuning parameters.
 
 \section{Results}
 
-Our aim is to maximize the FoM of the RF model. We show receiver operating characteristic (ROC) curves of the RF,
-simple, and PS1\footnote{The PS1 model is defined by a single hard cut on the
-PSF--Kron flux ratio measured in the $i_\mathrm{PS1}$ band \citep[for further
-details see][]{Tachibana18}.} models in Figure~\ref{fig:hst_roc}. From
-Figure~\ref{fig:hst_roc}, it is clear that the RF and simple models greatly
-outperform the PS1 model. Furthermore, while the gains are modest, the
-inclusion of all the ``white flux'' features and use of machine learning is
-justified as the RF model produces a higher FoM than the simple model.
+Our aim is to maximize the FoM of the RF model. We show receiver operating
+characteristic (ROC) curves of the RF, simple, and PS1\footnote{The PS1 model
+is defined by a single hard cut on the PSF--Kron flux ratio measured in the
+$i_\mathrm{PS1}$ band \citep[for further details see][]{Tachibana18}.} models
+in Figure~\ref{fig:hst_roc}. From Figure~\ref{fig:hst_roc}, it is clear that
+the RF and simple models greatly outperform the PS1 model. Furthermore, while
+the gains are modest, the inclusion of all the ``white flux'' features and use
+of machine learning is justified as the RF model produces a higher FoM than
+the simple model.
 
 \begin{figure}[t]
  \centering
@@ -493,9 +494,7 @@ justified as the RF model produces a higher FoM than the simple model.
   simple, and RF models, respectively. The light, thin lines show the ROC
   curves for the individual CV folds. The inset on the right shows a zoom in
   around FPR = 0.005, shown as a dotted vertical line, corresponding to the
-  FoM (the PS1 model is not shown in the inset, because it has very low FoM).
-  \xander{The inset needs to be adjusted to a yrange of $\sim$0.45--0.72 -
-  also whiteFKronMag}}
+  FoM (the PS1 model is not shown in the inset, because it has very low FoM).}
   %
   \label{fig:hst_roc}
 \end{figure}
@@ -523,49 +522,43 @@ model provides more accurate classifications than the alternatives.
  \centering
   \includegraphics[width=\columnwidth]{./figures/CV_Accuracy_FHST.pdf}
   %  
-  \caption{Model accuracy as a function of \texttt{whiteFKronMag} for HST
-  sources with $i_\mathrm{PS1}$ detections. Accuracy curves for the PS1,
-  simple and RF models are shown as slate gray pentagons, green triangles, and
-  purple circles, respectively. The bin widths are 0.5\,mag, and the error
-  bars represent the 68\% interval from bootstrap resampling. Additionally, a
-  Gaussian KDE of the PDF for the training set, as well as the unresolved
-  point sources and resolved, extended objects in the same subset is shown in
-  the shaded gray, red, and green regions, respectively. The amplitude of the
-  star and galaxy PDFs have been normalized by their relative ratio compared
-  to the full $i_\mathrm{PS1}$-band subset. \xander{Need to update legend to
-  say resolved and unresolved respectively - should probably udpate the
-  symbols too - also whiteFKronMag}}
+  \caption{\textit{Top}: Model accuracy as a function of
+  \texttt{whiteFKronMag} for HST sources with $i_\mathrm{PS1}$ detections.
+  Accuracy curves for the PS1, simple and RF models are shown as slate gray
+  pentagons, green triangles, and purple circles, respectively. The bin widths
+  are 0.5\,mag, and the error bars represent the 68\% interval from bootstrap
+  resampling. Additionally, a Gaussian KDE of the PDF for the training set, as
+  well as the unresolved point sources and resolved, extended objects in the
+  same subset is shown in the shaded gray, red, and green regions,
+  respectively. The amplitude of the star and galaxy PDFs have been normalized
+  by their relative ratio compared to the full $i_\mathrm{PS1}$-band subset.
+  \textit{Bottom}: the accuracy of resolved and unresolved classifications as a
+  function of \texttt{whiteFKronMag} from the RF model (i.e., the TPR when
+  treating each class as the positive class). Nearly all the resolved sources
+  are correctly classified, because they dominate by number at low S/N (see
+  text), while only bright unresolved sources are correctly classified.}
   %
   \label{fig:hst_acc}
 \end{figure}  
 
 As expected, the accuracy of each model shown in Figure~\ref{fig:hst_acc}
-decreases with the S/N. The accuracy curve for the RF model features a slight
-departure from expectation in that is is nearly flat for \texttt{whiteKronMag}
-between $\sim$22 and 24\,mag. \todo{Need to confirm this argument is indeed
-correct} This quasi-plateau in the RF model accuracy can be understood as the
-result of two components of the training set: (i) unresolved sources
-completely dominate the source counts at these magnitudes, and (ii) the
-well-defined locus of unresolved sources in the training set (see
-Figure~\ref{fig:features}) becomes heavily blended with the resolved source
-population at these brightness levels. Taken together the model will be biased
-towards classifying all faint sources as resolved, and with \todo{NNN}\% of
-the $\mathtt{whiteKronMag} > 22.5$\,mag training set sources being unresolved,
-a plateau in accuracy of $\sim$87\% makes sense. This is confirmed in
-Figure~\ref{fig:sg_accuracy}, which shows the true positive rate (TPR) for
-both resolved and unresolved sources as a function of \texttt{whiteKronMag}. A
-near 100\% TPR for faint resolved sources combined with a few correctly
-classified unresolved sources leads to observed quasi-plateau in
-Figure~\ref{fig:hst_acc}.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\columnwidth]{./figures/CV_sg_mag_accuracy.pdf}
-    %
-    \caption{}
-    %
-    \label{fig:sg_accuracy}
-\end{figure}    
+decreases for lower S/N sources. The accuracy curve for the RF model features
+a slight departure from expectation in that it does not decrease between
+22--24\,mag in \texttt{whiteFKronMag}. This quasi-plateau in the RF model
+accuracy can be understood as the result of two components of the training
+set: (i) unresolved sources completely dominate the source counts at these
+magnitudes, and (ii) the well-defined locus of unresolved sources in the
+training set (see Figure~\ref{fig:features}) becomes heavily blended with the
+resolved source population at these brightness levels. Taken together the
+model will be biased towards classifying all faint sources as resolved,
+despite the fact that we do not explicitly include flux measurements in the
+feature set. With 88.5\% of the $\mathtt{whiteFKronMag} > 22.5$\,mag training
+set sources being unresolved, a quasi-plateau in accuracy of $\sim$88\% makes
+sense. This is confirmed in the bottom panel of Figure~\ref{fig:hst_acc},
+which shows the true positive rate (TPR) for both resolved and unresolved
+sources as a function of \texttt{whiteFKronMag}. A near 100\% TPR for faint
+resolved sources combined with a few correctly classified unresolved sources
+leads to the observed quasi-plateau in Figure~\ref{fig:hst_acc}.  
 
 \subsection{The Updated PS1 PSC Catalog}\label{sec:ps1psc_update}
 
@@ -619,8 +612,6 @@ million point sources in the original PS1 PSC, these $\sim$18 million newly
 identified point sources would otherwise pass filters looking for
 extragalactic transients in the ZTF alert stream. Their removal will reduce
 the number of false positive transient candidates.
-
-\todo{Get source counts on nDetections for things still not classified?}
 
 \section{Deployment in the ZTF Real-Time Pipeline}\label{sec:discussion}
 
@@ -714,10 +705,28 @@ will be a star.
 
 \section{Conclusions}
 
+We have presented an update to the PS1 PSC \citep{Tachibana18}, by classifying
+$\sim$144 million new sources that were previously ``missing.'' The new
+classifications are made using a new RF model that utilizes photometric and
+shape features from the PS1 DR2 \texttt{ForcedMeanObject} table.
+
+The training set and methodology are nearly identical to those used in
+\citet{Tachibana18}, with the major difference being that that study used
+features from the PS1 DR1 \texttt{StackObjectAttributes} table. The similarity
+in methodology is intentional, as it allows new classifications for the
+previously ``missing'' sources to be incorporated into the PS1 PSC without a
+need for significant revisions to existing filters that are applied to the ZTF
+alert stream. We find that the new model performs $\sim$6--8\% worse than the
+one presented in \citet[][see Table~\ref{tbl:thresh}]{Tachibana18}.
+Nevertheless, the slight degradation in performance is more than offset by the
+addition of $>$144 million newly classified sources. The update to the PS1 PSC
+presented here will improve the extragalactic transient search efficiency for
+ZTF.
+
 \acknowledgments
 
 \vspace{5mm}
-\facilities{}
+\facilities{PS1 \citep{Chambers16}}
 
 %% Similar to \facility{}, there is the optional \software command to allow 
 %% authors a place to specify which programs were used during the creation of 
