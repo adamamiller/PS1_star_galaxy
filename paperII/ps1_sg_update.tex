@@ -634,16 +634,31 @@ for a summary of the PS1 sources included). As previously discussed, $\sim$426
 million PS1 sources in the ZTF \texttt{Stars} table are not classified in the
 original PS1 PSC.
 
-Moving forward, ZTF alert packets now include the additional classifications
-presented in \S\ref{sec:ps1psc_update}. \todo{Add sentence from Frank about
-how these are designated} We describe below our recommended strategy in
-filtering the ZTF alerts now that $\sim$144 million classifications are being
-added to the PS1 PSC.
-
-The vast majority of users will not experience 
+Moving forward, ZTF alert packets now include the $\sim$144 million additional
+classifications presented in \S\ref{sec:ps1psc_update}. \todo{Add sentence
+from Frank about how these are designated} The addition of these new
+classifications to the ZTF AVRO packets should not affect existing
+alert-stream filters, as we describe below.
 
 \input{./tables/thresholds.tex}
 
+While a one-to-one mapping of point-source classification scores cannot be
+made between \citet{Tachibana18} and this study, the similarity between the
+two methodologies leads to classifications that are highly similiar.
+Table~\ref{tbl:thresh} summarizes the TPR and FPR for different classfication
+thresholds using the model from \citet{Tachibana18} and the RF model created
+in this study. Table~\ref{tbl:thresh} shows that the PS1 stack photometry used
+in \citet{Tachibana18} consistently produces a higher TPR, by $\sim$6--8\%,
+than the PS1 forced photometry. The PS1 forced photometry used in this study
+does have a lower FPR than \citet{Tachibana18} for all but the most liberal
+point-source classification cuts. Thus, applying classification cuts developed
+for the original PS1 PSC will ultimately lead to a higher TPR, as previously
+unclassified point sources can now be removed from the stream, without
+experiencing an overall increase in the FPR. As a result, we conclude that the
+vast majority of users will not experience any significant change in the
+results to their filters, aside from a slight reduction in false negatives
+(stars that are classified as galaxies), following the update to the ZTF
+\texttt{Stars} table.
 
 \section{Discussion}
 
@@ -664,7 +679,7 @@ Astropy-Collaboration18},
           \texttt{scipy} \citep{2020SciPy-NMeth},
           \texttt{matplotlib} \citep{Hunter07}, 
           \texttt{pandas} \citep{McKinney10},
-          \texttt{scikit-learn} \citep{Pedregosa12}}
+          \texttt{scikit-learn} \citep{Pedregosa11}}
 
 \appendix
 
