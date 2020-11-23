@@ -662,6 +662,56 @@ results to their filters, aside from a slight reduction in false negatives
 
 \section{Discussion}
 
+During the preparation of this manuscript, \citet{Beck20} published the
+Pan-STARRS1 Source Types and Redshifts with Machine learning (PS1-STRM)
+catalog, which includes the machine learning classification of PS1 sources as
+either stars, galaxies, or quasars. Like this study, \citet{Beck20} use PS1
+forced photometry to provide classifications. There are a couple of
+differences between the catalogs: the PS1-STRM classifies all $\sim$2.9
+billion sources in the PS1 \texttt{ForcedMeanObject} table, while the updated
+PS1 PSC only classifies $\sim$half that many sources.\footnote{We note that
+the majority of the additional classifications in the PS1-STRM are
+$\mathtt{nDetections} \le 1$ sources with low S/N photometry. These
+classifications therefore have a lot more uncertainty than the sources that
+are in common between the PS1 PSC and the PS1-STRM.} Another difference
+between the two catalogs is that the PS1-STRM uses a neural-network
+classifier, whereas the PS1 PSC uses the RF algorithm. Finally, the PS1-STRM
+uses full color information in their classifier whereas the PS1 PSC uses
+``white flux'' features (see \S\ref{sec:features}).
+
+The most important distinction between the two catalogs, in our estimation, is
+their training sets. The PS1-STRM is trained using spectroscopic labels that
+predominantly come from the Sloan Digital Sky Survey
+\citet[SDSS][]{Abolfathi18}, whereas the PS1 PSC is trained via morphological
+classifications from HST. An SDSS-based training set has two distinct
+advantages: it is nearly two orders of magnitude larger than the HST training
+set and it includes redshift information (which can be used to estimate
+photometric redshifts, as is done in the PS1-STRM).
+
+When considering only morphological classification, or similarly star-galaxy
+separation, an SDSS-based training set produces biased classifications
+\citep{Tachibana18}. The SDSS spectroscopic targeting algorithm was biased
+towards specific source classes, such as luminous red galaxies, and as a
+result SDSS spectra are not representative of the average source in PS1
+\citep[see Figure~1 in][]{Tachibana18}. Furthermore, the SDSS training set is
+distinctly biased towards point sources at the faint end ($r \gtrsim
+21$\,mag), which leads to models that overestimate the prevalence of point
+sources at these brightness levels \citep[see e.g., Figure~7
+in][]{Tachibana18}. It is for these reasons that we adopt the HST training set
+for the PS1 PSC, despite its relatively modest size.
+
+Ultimately, we recommend the use of both catalogs. Despite the different
+methodologies and training sets, we expect the classifcations to largely be in
+agreement for bright sources ($r \lesssim 20$\,mag). In cases where the
+catalogs agree, the classifications can be treated as extremely confident.
+Most of the disagreements will occur at the faint end, where the S/N is low,
+and therefore both catalogs will provide noisier estimates. For faint sources
+where the catalogs disagree, users should consider applying an additional
+prior based on the observed source counts in the Universe
+\citep[e.g.][]{Yasuda01}. At high galactic latitudes, nearly all the very
+faint sources are galaxies, while within the Galactic plane nearly everything
+will be a star.
+
 \section{Conclusions}
 
 \acknowledgments
