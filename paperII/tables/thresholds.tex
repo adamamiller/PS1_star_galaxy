@@ -1,0 +1,23 @@
+\begin{deluxetable*}{l|lccccc}
+    \tablecolumns{7}
+    \tablewidth{0pt}
+    \tablecaption{TPR and FPR for TM18 Thresholds\label{tbl:thresh}}
+    \tablehead{
+    \colhead{Catalog} & \colhead{Threshold} & \colhead{0.829} & \colhead{0.724} & \colhead{0.597} & \colhead{0.397} & \colhead{0.224}
+    }
+    \startdata
+    \multirow{2}{*}{TM18} & TPR & 0.734 & 0.792 & 0.843 & 0.0904 & 0.947 \\
+     & FPR & 0.005 & 0.01 & 0.02 & 0.05 & 0.1 \\
+    \hline
+    \multirow{2}{*}{This work} & TPR & 0.688$^{+0.001}_{-0.010}$ & 0.734$^{+0.001}_{-0.010}$ & 0.776$^{+0.001}_{-0.009}$ & 0.835$^{+0.003}_{-0.007}$ & 0.904$^{+0.002}_{-0.005}$\\
+     & FPR & 0.004$^{+0.001}_{-0.000}$ & 0.009$^{+0.001}_{-0.000}$ & 0.016$^{+0.001}_{-0.001}$ & 0.041$^{+0.002}_{-0.002}$ & 0.110$^{+0.004}_{-0.001}$\\
+    \enddata
+    \tablecomments{The table reports the TPR and FPR for different 
+    classification thresholds given in Table~3 in \citet{Tachibana18}. 
+    To estimate the TPR and FPR we perform 10-fold CV on the entire training 
+    set, but only include sources with $\mathtt{nDetections} \ge 3$ in the 
+    final TPR and FPR calculations. The first row (TM18) summarizes the 
+    results from \citet{Tachibana18}, while the second row uses the RF model 
+    from this study. The reported uncertainties represent the central 90\% 
+    interval from 100 bootstrap resamples of the training set.}
+\end{deluxetable*}
