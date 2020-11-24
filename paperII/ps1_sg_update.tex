@@ -198,11 +198,9 @@
 
 \section{Introduction} \label{sec:intro}
 
-\todo{Make sure the idea of an alert packet is well defined and consistent throughout}
-
 The proliferation of wide-field time-domain surveys over the past $\sim$decade
 has led to the discovery of a bevy of novel extragalactic transients
-\citep[e.g.,][]{quimby11,Gezari12,Gal-Yam14,Abbott17a,Prentice18,
+\citep[e.g.,][]{quimby11,Gezari12,Drout14,Gal-Yam14,Abbott17a,Prentice18,
 IceCube-Collaboration18}. While these wide-field surveys have been enabled by
 significant advances in detector technology, software has proven equally
 important \citep[e.g.,][]{Masci17,Masci19,Smith20,Jones20} as many of these
@@ -214,8 +212,8 @@ Reliable catalogs identifying stars and galaxies, or similarly unresolved and
 resolved sources, are an essential cog in the machinery necessary to identify
 extragalactic transients. On a nightly basis, time-domain sureys are inundated
 with transient candidates, the vast majority of which are considered ``bogus''
-\citep{Bloom12}. Despite sophisticated software capable of whittling down the
-number of likely transients by several orders of magnitude
+\citep[e.g.,][]{Bloom12}. Despite sophisticated software capable of whittling
+down the number of likely transients by several orders of magnitude
 \citep[e.g.,][]{Brink13,Goldstein15,Duev19,Smith20}, the number of candidates
 still vastly outpaces the spectroscopic resources necessary to classify
 everything that varies \citep[e.g.,][]{Kulkarni20}. The aforementioned
@@ -224,72 +222,88 @@ extragalactic transients by removing candidates that are associated with
 stellar-like objects that are therefore likely to be Galactic in origin.
 
 To this end we previously created the PanSTARRS-1 Point Source Catalog
-\citep[PS1 PSC; Tachibana \& Miller 2018, hereafter ][]{Tachibana18}, which
-provides probabilistic point-source like classifications for $\sim$1.5 billion
-sources detected by PanSTARRS-1 \citep[PS1;][]{Chambers16}. This catalog has
-been deployed by the Zwicky Transient Facility \citep[ZTF;][]{Bellm19} and
-other surveys \citep{Smith20,Moller20} to identify likely extragalactic
-transients. The PS1 PSC has been demonstrated to be an important ingredient in
-the systematic search for extragalactic transients \citep{Fremling20,De20}.
-
-\todo{??? Add quick explanation of mean, forced, and stack phot from PS1 ???}
+\citep[PS1 PSC][]{Tachibana18}, which provides probabilistic point-source like
+classifications for $\sim$1.5 billion sources detected by PanSTARRS-1
+\citep[PS1;][]{Chambers16}. This catalog has been deployed by the Zwicky
+Transient Facility \citep[ZTF;][]{Bellm19} and other surveys
+\citep{Smith20,Moller20} to identify likely extragalactic transients. The PS1
+PSC has been demonstrated to be an important ingredient in the systematic
+search for extragalactic transients \citep{Fremling20,De20}.
 
 A downside to the PS1 PSC is that it does not provide classifications for
-sources that are not ``detected'' in the PS1 \texttt{StackObjectThin} table
-\citep[the definition of a PS1 stack detection is given in][]{Tachibana18}. Of
-the $\sim$3.5 billion sources in the PS1 \texttt{stackObjectThin} table, the
-vast majority of the $\sim$2 billion missing from the PS1 PSC are either
-spurious or have an extremely low signal-to-noise ratio (S/N), such that the
-methods in \citet{Tachibana18} would not provide a reliable classification.
-There are an additional 144,870,754 high-S/N
-sources missing from the PS1 PSC because they have multiple entries in the PS1
-\texttt{StackObjectThin} table with $\mathtt{primaryDetection} =
-1$.\footnote{The \texttt{primaryDetection} flag identifies which entry within
-the PS1 \texttt{stackObjectThin} table was detected from the stack image that
-provides the best coverage with minimal projection stretching. Roughly 0.5\%
-of the \texttt{stackObjectThin} sources have multiple rows with
-$\mathtt{primaryDetection} = 1$, effectively making it impossible to identify
-which row should be used in conjunction with the model from
-\citet{Tachibana18}.} These sources, many of which are moderately bright
-stars, have an $\mathtt{sg_score} = 0.5$ within the ZTF alert packets, i.e.,
-there classification is ambiguous, and as a result stars can end up in
-extragalactic transient streams.
+sources that are not ``detected'' in the PS1 \texttt{StackObjectAttributes}
+table \citep[the definition of a PS1 stack ``detection'' is given
+in][]{Tachibana18}. Of the $\sim$3 billion unique sources in the PS1
+\texttt{StackObjectAttributes} table, the vast majority of those missing from
+the PS1 PSC are either spurious or have an extremely low signal-to-noise ratio
+(S/N), such that the methods in \citet{Tachibana18} would not provide a
+reliable classification. 
+% There are an additional 144,870,754 high-S/N sources
+% missing from the PS1 PSC because they have multiple entries in the PS1
+% \texttt{StackObjectThin} table with $\mathtt{primaryDetection} =
+% 1$.\footnote{The \texttt{primaryDetection} flag identifies which entry within
+% the PS1 \texttt{stackObjectThin} table was detected from the stack image that
+% provides the best coverage with minimal projection stretching. Roughly 0.5\%
+% of the \texttt{stackObjectThin} sources have multiple rows with
+% $\mathtt{primaryDetection} = 1$, effectively making it impossible to identify
+% which row should be used in conjunction with the model from
+% \citet{Tachibana18}.}
+Additional sources are missing from the PS1 PSC because there are multiple
+rows within the PS1 database that have $\mathtt{primaryDetection} = 1$, which
+by definition should not happen, and therefore these sources were excluded
+from \citet{Tachibana18}. For PS1 sources that are not in the PS1 PSC, ZTF
+reports a probability score $=0.5$, i.e., an ambiguous classification, when
+cross-matching newly observed variables with the PS1 catalog (see
+\ref{app:cat_counts} for additional details about which PS1 sources are used
+by ZTF).
 
-\todo{Add note about ~1.92 B sources in ZTF PS1 table???}
+Here, we present an update to the PS1 PSC by classifying $\sim$144 million
+sources that were previously ``missing'' from the catalog. These
+classifications are made using different photometric measurements from the
+ones adopted in \citet{Tachibana18}. While our new method performs slightly
+worse than the one in \citet{Tachibana18}, we nevertheless achieve similar
+performance with the new model. We apply our new model to the $\sim$426
+million ``missing'' (classifying $\sim$34\% of them), providing a new and
+useful supplement to the PS1 PSC.\footnote{During the preparation of this
+manuscript \citet{Beck20} published a new machine learning catalog (PS1-STRM)
+to separate the $\sim$2.9 billion sources in the PS1 \texttt{ForcedMeanObject}
+table. We highlight differences and similarities between the
+\citeauthor{Beck20} catalog and this work in \S\ref{sec:discussion}.}
 
-Here, we present an update to the PS1 PSC by classifying these
-144,870,754 sources using photometry from the
-\texttt{ForcedObjectMean} table in the PS1 database. While we previously
-showed that the PS1 forced photometry does not separate resolved and
-unresolved sources with the same fidelity as its stack photometry
-\citep{Tachibana18}, we can, using a nearly identical methodology as
-\citet{Tachibana18}, nevertheless achieve similar performance with the PS1
-forced photometry. We apply our new model to the \todo{$\sim$140; need final
-number} million previously unclassified sources, providing a new and useful
-supplement to the PS1 PSC.\footnote{During the preparation of this manuscript
-\citet{Beck20} published a new machine learning catalog (PS1-STRM) to separate
-the $\sim$3.5 billion sources in the PS1 \texttt{ForcedMeanObject} table. The
-main difference between the PS1 PSC and PS1-STRM is the training set used by
-each machine learning model, which we discuss in more detail below.}
+\section{ML Model Data}
 
-\section{Model Data and PS1 Features}
+\subsection{PS1 Data}
 
-\todo{better section title}
+PS1 conducted a five filter (($g_\mathrm{PS1}$, $r_\mathrm{PS1}$,
+$i_\mathrm{PS1}$, $z_\mathrm{PS1}$, $y_\mathrm{PS1}$)) time-domain survey
+covering $\sim$3/4 of the sky \citep{Chambers16}. PS1 provides three different
+types of photometric measurements: there are mean flux measurements from the
+individual PS1 exposures of each field, there are stack flux measurements from
+the deeper stack images that combine the flux in each of the individual
+exposures, and then there are forced-flux measurements that measure the flux
+in individual exposures at the location of all sources detected in the stack
+images whether or not the source was detected in the individual exposure. The
+mean photometry is limited by the depth of the individual exposures, while the
+stack photometry has a difficult to model point spread function (PSF) due to
+the warping of the images. The foced-flux measurements provide an intermediate
+compromise as they are deeper than the mean flux measurements, while in
+principle having a better modelled PSF than the stack images.
 
-The methodology adopted here is extremely similar to the one presented in
-\citep{Tachibana18}. The only major difference between the two is the feature
-set used in the construction of the machine learning model. We discuss this
-difference below, followed by a brief summary of the model construction.
+\citet{Tachibana18} show that the stack photometry works best when
+morphologically classifying resolved, extended sources and unresolved point
+sources. The methodology that we adopt here is extremely similar to that
+presented in \citep{Tachibana18}, but we instead use forced photometry to
+classify sources that do not have suitable stack photometry. The use of lower
+quality forced photometry leads to slightly lower quality classifications (see
+\S\ref{sec:results}).
 
-\todo{Add note about the FoM}
-
-\subsection{Training Set}
+\subsection{ML Training Set}\label{sec:training_set}
 
 As a training set for the model, we use deep observations of the COSMOS field
-from the \textit{Hubble Space Telescope} (\textit{HST}). The superior
-resolution of \textit{HST} enables reliable morphological classifications for
+from the \textit{Hubble Space Telescope} (HST). The superior
+resolution of HST enables reliable morphological classifications for
 sources as faint as $\sim$25\,mag \citep{Leauthaud07}. There are 80,867 bright
-\textit{HST} sources from \citet{Leauthaud07} that have PS1 counterparts
+HST sources from \citet{Leauthaud07} that have PS1 counterparts
 \citep[within a 1\arcsec match radius; see][]{Tachibana18} in the
 \texttt{ForcedMeanObject} table (see \S\ref{sec:features}). Of those, the
 47,825 PS1 sources with $\mathtt{nDetections} \ge 1$ are adopted as the
@@ -297,6 +311,8 @@ training set for our model. For this model the training set is $\sim$1.6\%
 larger than that used in \citet{Tachibana18} because more HST/COSMOS sources
 are detected, using our version of a ``detection'', via PS1 forced photometry
 than PS1 stack photometry.
+
+\section{ML Model Features}
 
 \subsection{PS1 Forced Photometry Features}\label{sec:features}
 
@@ -308,8 +324,7 @@ via a training set, a subset of the data with known labels, afterwhich the
 model can classify any source based on its features.
 
 In \citet{Tachibana18} we introduced the concept of ``white flux'' features,
-whereby measurements in the five individual PS1 filters ($g_\mathrm{PS1}$,
-$r_\mathrm{PS1}$, $i_\mathrm{PS1}$, $z_\mathrm{PS1}$, $y_\mathrm{PS1}$) were
+whereby measurements in the five individual PS1 filters  were
 summed, via a weighted mean, to produce a ``total'' flux or shape measurement
 across all filters.\footnote{Only filters in which the source is detected,
 i.e., the flux is $> 0$, are included in the sum.} Machine learning models are
@@ -403,7 +418,7 @@ calculated as:
 where \texttt{whiteFlux1} and \texttt{whiteFlux2} are ``white flux''
 measurements introduced in \S\ref{sec:features} (e.g.,
 \texttt{whiteFKronFlux}), $a$ is the slope of the line in the
-texttt{whiteFlux1}--\texttt{whiteFlux2} plane, and
+\texttt{whiteFlux1}--\texttt{whiteFlux2} plane, and
 \texttt{whiteFlux1Flux2Dist} is the orthogonal distance of a source from the
 line. For this study we construct two simple features for inclusion in our
 machine learning model: \texttt{whiteFPSFFKronDist} and
@@ -445,7 +460,17 @@ resolved and unresolved sources is shown in Figures~\ref{fig:psf_ap} and
     \label{fig:psf_kron}
 \end{figure}  
 
-\subsection{Model Construction}
+\section{Training the ML Model}
+
+As in \citet{Tachibana18}, we construct a model to maximize the figure of
+merit (FoM) for our morphological classification model. Our aim is to retain
+nearly all the resolved, extended sources while excluding as many unresolved
+point sources as possible. Thus, our FoM is defined as the true positive rate
+(TPR)\footnote{$\mathrm{TPR} = \mathrm{TP}/(\mathrm{TP} + \mathrm{FP})$, where
+TP is the total number of true positive classifications and FP is the number
+of false positives.} at a fixed false positive rate
+(FPR)\footnote{$\mathrm{FPR} = \mathrm{FP}/(\mathrm{FP}+\mathrm{TN})$, where
+TN is the number of true negatives.} = 0.005.
 
 Using the nine features mentioned in \S\ref{sec:features}, we use the random
 forest (RF) algorithm \citep{Breiman01}, as implemented in
@@ -472,7 +497,7 @@ optimal model parameters of: $N_\mathrm{tree} = 900$, $m_\mathrm{try}
 = 3$, and $\mathtt{nodesize} = 2$. The RF model results are not strongly
 dependent on the final choice of tuning parameters.
 
-\section{Results}
+\section{Results}\label{sec:results}
 
 Our aim is to maximize the FoM of the RF model. We show receiver operating
 characteristic (ROC) curves of the RF, simple, and PS1\footnote{The PS1 model
@@ -651,7 +676,7 @@ results to their filters, aside from a slight reduction in false negatives
 (stars that are classified as galaxies), following the update to the ZTF
 \texttt{Stars} table.
 
-\section{Discussion}
+\section{Discussion}\label{sec:discussion}
 
 During the preparation of this manuscript, \citet{Beck20} published the
 Pan-STARRS1 Source Types and Redshifts with Machine learning (PS1-STRM)
@@ -722,6 +747,8 @@ Nevertheless, the slight degradation in performance is more than offset by the
 addition of $>$144 million newly classified sources. The update to the PS1 PSC
 presented here will improve the extragalactic transient search efficiency for
 ZTF.
+
+\todo{Add something about Rubin Observatory? I'm not totally sure this is necessary -- could talk about how SDSS will not serve as a particularly suitable training set for Rubin Observatory \& that new data will be needed for morphological classification}
 
 \acknowledgments
 
