@@ -117,6 +117,13 @@
   \href{https://ui.adsabs.harvard.edu/abs/2018AJ....156..123A}{\color{blue}156},
   \href{https://ui.adsabs.harvard.edu/abs/2018AJ....156..123A}{\color{blue}123}
 
+\bibitem[{{Ball} {et~al.}(2006){Ball}, {Brunner}, {Myers}, \&
+  {Tcheng}}]{Ball06}
+{Ball}, N.~M., {Brunner}, R.~J., {Myers}, A.~D., \& {Tcheng}, D. 2006,
+  \href{http://dx.doi.org/10.1086/507440}{\color{magenta}\apj},
+  \href{http://adsabs.harvard.edu/abs/2006ApJ...650..497B}{\color{blue}650},
+  \href{http://adsabs.harvard.edu/abs/2006ApJ...650..497B}{\color{blue}497}
+
 \bibitem[{{Beck} {et~al.}(2020){Beck}, {Szapudi}, {Flewelling}, {Holmberg},
   {Magnier}, \& {Chambers}}]{Beck20}
 {Beck}, R., {Szapudi}, I., {Flewelling}, H., {et~al.} 2020,
@@ -271,6 +278,13 @@ Breiman, L., Friedman, J., Stone, C.~J., \& Olshen, R.~A. 1984, Classification
   \href{http://dx.doi.org/10.1088/0004-6256/150/3/82}{\color{magenta}\aj},
   \href{http://adsabs.harvard.edu/abs/2015AJ....150...82G}{\color{blue}150},
   \href{http://adsabs.harvard.edu/abs/2015AJ....150...82G}{\color{blue}82}
+
+\bibitem[{{Henrion} {et~al.}(2011){Henrion}, {Mortlock}, {Hand}, \&
+  {Gandy}}]{Henrion11}
+{Henrion}, M., {Mortlock}, D.~J., {Hand}, D.~J., \& {Gandy}, A. 2011,
+  \href{http://dx.doi.org/10.1111/j.1365-2966.2010.18055.x}{\color{magenta}\mnras},
+  \href{https://ui.adsabs.harvard.edu/abs/2011MNRAS.412.2286H}{\color{blue}412},
+  \href{https://ui.adsabs.harvard.edu/abs/2011MNRAS.412.2286H}{\color{blue}2286}
 
 \bibitem[{Hunter(2007)}]{Hunter07}
 Hunter, J.~D. 2007,
@@ -447,6 +461,61 @@ Hunter, J.~D. 2007,
   \href{https://ui.adsabs.harvard.edu/abs/2018Sci...361.1378I}{\color{blue}361},
   \href{https://ui.adsabs.harvard.edu/abs/2018Sci...361.1378I}{\color{blue}eaat1378}
 
+\bibitem[{{Ivezi{\'c}} {et~al.}(2019){Ivezi{\'c}}, {Kahn}, {Tyson}, {Abel},
+  {Acosta}, {Allsman}, {Alonso}, {AlSayyad}, {Anderson}, {Andrew}, {Angel},
+  {Angeli}, {Ansari}, {Antilogus}, {Araujo}, {Armstrong}, {Arndt}, {Astier},
+  {Aubourg}, {Auza}, {Axelrod}, {Bard}, {Barr}, {Barrau}, {Bartlett}, {Bauer},
+  {Bauman}, {Baumont}, {Bechtol}, {Bechtol}, {Becker}, {Becla}, {Beldica},
+  {Bellavia}, {Bianco}, {Biswas}, {Blanc}, {Blazek}, {Bland ford}, {Bloom},
+  {Bogart}, {Bond}, {Booth}, {Borgland}, {Borne}, {Bosch}, {Boutigny},
+  {Brackett}, {Bradshaw}, {Brand t}, {Brown}, {Bullock}, {Burchat}, {Burke},
+  {Cagnoli}, {Calabrese}, {Callahan}, {Callen}, {Carlin}, {Carlson}, {Chand
+  rasekharan}, {Charles-Emerson}, {Chesley}, {Cheu}, {Chiang}, {Chiang},
+  {Chirino}, {Chow}, {Ciardi}, {Claver}, {Cohen-Tanugi}, {Cockrum}, {Coles},
+  {Connolly}, {Cook}, {Cooray}, {Covey}, {Cribbs}, {Cui}, {Cutri}, {Daly},
+  {Daniel}, {Daruich}, {Daubard}, {Daues}, {Dawson}, {Delgado}, {Dellapenna},
+  {de Peyster}, {de Val-Borro}, {Digel}, {Doherty}, {Dubois},
+  {Dubois-Felsmann}, {Durech}, {Economou}, {Eifler}, {Eracleous}, {Emmons},
+  {Fausti Neto}, {Ferguson}, {Figueroa}, {Fisher-Levine}, {Focke}, {Foss},
+  {Frank}, {Freemon}, {Gangler}, {Gawiser}, {Geary}, {Gee}, {Geha}, {Gessner},
+  {Gibson}, {Gilmore}, {Glanzman}, {Glick}, {Goldina}, {Goldstein}, {Goodenow},
+  {Graham}, {Gressler}, {Gris}, {Guy}, {Guyonnet}, {Haller}, {Harris},
+  {Hascall}, {Haupt}, {Hernand ez}, {Herrmann}, {Hileman}, {Hoblitt},
+  {Hodgson}, {Hogan}, {Howard}, {Huang}, {Huffer}, {Ingraham}, {Innes},
+  {Jacoby}, {Jain}, {Jammes}, {Jee}, {Jenness}, {Jernigan}, {Jevremovi{\'c}},
+  {Johns}, {Johnson}, {Johnson}, {Jones}, {Juramy-Gilles}, {Juri{\'c}},
+  {Kalirai}, {Kallivayalil}, {Kalmbach}, {Kantor}, {Karst}, {Kasliwal},
+  {Kelly}, {Kessler}, {Kinnison}, {Kirkby}, {Knox}, {Kotov}, {Krabbendam},
+  {Krughoff}, {Kub{\'a}nek}, {Kuczewski}, {Kulkarni}, {Ku}, {Kurita}, {Lage},
+  {Lambert}, {Lange}, {Langton}, {Le Guillou}, {Levine}, {Liang}, {Lim},
+  {Lintott}, {Long}, {Lopez}, {Lotz}, {Lupton}, {Lust}, {MacArthur}, {Mahabal},
+  {Mand elbaum}, {Markiewicz}, {Marsh}, {Marshall}, {Marshall}, {May},
+  {McKercher}, {McQueen}, {Meyers}, {Migliore}, {Miller}, {Mills}, {Miraval},
+  {Moeyens}, {Moolekamp}, {Monet}, {Moniez}, {Monkewitz}, {Montgomery},
+  {Morrison}, {Mueller}, {Muller}, {Mu{\~n}oz Arancibia}, {Neill}, {Newbry},
+  {Nief}, {Nomerotski}, {Nordby}, {O'Connor}, {Oliver}, {Olivier}, {Olsen},
+  {O'Mullane}, {Ortiz}, {Osier}, {Owen}, {Pain}, {Palecek}, {Parejko},
+  {Parsons}, {Pease}, {Peterson}, {Peterson}, {Petravick}, {Libby Petrick},
+  {Petry}, {Pierfederici}, {Pietrowicz}, {Pike}, {Pinto}, {Plante}, {Plate},
+  {Plutchak}, {Price}, {Prouza}, {Radeka}, {Rajagopal}, {Rasmussen},
+  {Regnault}, {Reil}, {Reiss}, {Reuter}, {Ridgway}, {Riot}, {Ritz}, {Robinson},
+  {Roby}, {Roodman}, {Rosing}, {Roucelle}, {Rumore}, {Russo}, {Saha},
+  {Sassolas}, {Schalk}, {Schellart}, {Schindler}, {Schmidt}, {Schneider},
+  {Schneider}, {Schoening}, {Schumacher}, {Schwamb}, {Sebag}, {Selvy},
+  {Sembroski}, {Seppala}, {Serio}, {Serrano}, {Shaw}, {Shipsey}, {Sick},
+  {Silvestri}, {Slater}, {Smith}, {Smith}, {Sobhani}, {Soldahl},
+  {Storrie-Lombardi}, {Stover}, {Strauss}, {Street}, {Stubbs}, {Sullivan},
+  {Sweeney}, {Swinbank}, {Szalay}, {Takacs}, {Tether}, {Thaler}, {Thayer},
+  {Thomas}, {Thornton}, {Thukral}, {Tice}, {Trilling}, {Turri}, {Van Berg},
+  {Vanden Berk}, {Vetter}, {Virieux}, {Vucina}, {Wahl}, {Walkowicz}, {Walsh},
+  {Walter}, {Wang}, {Wang}, {Warner}, {Wiecha}, {Willman}, {Winters},
+  {Wittman}, {Wolff}, {Wood-Vasey}, {Wu}, {Xin}, {Yoachim}, \&
+  {Zhan}}]{Ivezic19}
+{Ivezi{\'c}}, {\v{Z}}., {Kahn}, S.~M., {Tyson}, J.~A., {et~al.} 2019,
+  \href{http://dx.doi.org/10.3847/1538-4357/ab042c}{\color{magenta}\apj},
+  \href{https://ui.adsabs.harvard.edu/abs/2019ApJ...873..111I}{\color{blue}873},
+  \href{https://ui.adsabs.harvard.edu/abs/2019ApJ...873..111I}{\color{blue}111}
+
 \bibitem[{{Jones} {et~al.}(2020){Jones}, {Foley}, {Narayan}, {Hjorth}, {Huber},
   {Aleo}, {Alexander}, {Angus}, {Auchettl}, {Baldassare}, {Bruun}, {Chambers},
   {Chatterjee}, {Coppejans}, {Coulter}, {DeMarchi}, {Dimitriadis}, {Drout},
@@ -576,6 +645,13 @@ Pedregosa, F., Varoquaux, G., Gramfort, A., {et~al.} 2011, Journal of Machine
   \href{http://adsabs.harvard.edu/abs/2011Natur.474..487Q}{\color{blue}474},
   \href{http://adsabs.harvard.edu/abs/2011Natur.474..487Q}{\color{blue}487}
 
+\bibitem[{{Slater} {et~al.}(2020){Slater}, {Ivezi{\'c}}, \&
+  {Lupton}}]{Slater20}
+{Slater}, C.~T., {Ivezi{\'c}}, {\v{Z}}., \& {Lupton}, R.~H. 2020,
+  \href{http://dx.doi.org/10.3847/1538-3881/ab6166}{\color{magenta}\aj},
+  \href{https://ui.adsabs.harvard.edu/abs/2020AJ....159...65S}{\color{blue}159},
+  \href{https://ui.adsabs.harvard.edu/abs/2020AJ....159...65S}{\color{blue}65}
+
 \bibitem[{{Smith} {et~al.}(2020){Smith}, {Smartt}, {Young}, {Tonry}, {Denneau},
   {Flewelling}, {Heinze}, {Weiland}, {Stalder}, {Rest}, {Stubbs}, {Anderson},
   {Chen}, {Clark}, {Do}, {F{\"o}rster}, {Fulton}, {Gillanders}, {McBrien},
@@ -602,16 +678,5 @@ Pedregosa, F., Varoquaux, G., Gramfort, A., {et~al.} 2011, Journal of Machine
   \href{http://dx.doi.org/https://doi.org/10.1038/s41592-019-0686-2}{\color{magenta}Nature
   Methods}, \href{https://rdcu.be/b08Wh}{\color{blue}17},
   \href{https://rdcu.be/b08Wh}{\color{blue}261}
-
-\bibitem[{{Yasuda} {et~al.}(2001){Yasuda}, {Fukugita}, {Narayanan}, {Lupton},
-  {Strateva}, {Strauss}, {Ivezi{\'c}}, {Kim}, {Hogg}, {Weinberg}, {Shimasaku},
-  {Loveday}, {Annis}, {Bahcall}, {Blanton}, {Brinkmann}, {Brunner}, {Connolly},
-  {Csabai}, {Doi}, {Hamabe}, {Ichikawa}, {Ichikawa}, {Johnston}, {Knapp},
-  {Kunszt}, {Lamb}, {McKay}, {Munn}, {Nichol}, {Okamura}, {Schneider},
-  {Szokoly}, {Vogeley}, {Watanabe}, \& {York}}]{Yasuda01}
-{Yasuda}, N., {Fukugita}, M., {Narayanan}, V.~K., {et~al.} 2001,
-  \href{http://dx.doi.org/10.1086/322093}{\color{magenta}\aj},
-  \href{http://adsabs.harvard.edu/abs/2001AJ....122.1104Y}{\color{blue}122},
-  \href{http://adsabs.harvard.edu/abs/2001AJ....122.1104Y}{\color{blue}1104}
 
 \end{thebibliography}

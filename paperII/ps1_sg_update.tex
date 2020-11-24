@@ -85,8 +85,8 @@
 %%
 %% If you wish, you may supply running head information, although
 %% this information may be modified by the editorial offices.
-\shorttitle{}
-\shortauthors{}
+\shorttitle{PS1 Point Source Catalog II}
+\shortauthors{Miller \& Hall}
 %%
 %% You can add a light gray and diagonal water-mark to the first page 
 %% with this command:
@@ -154,8 +154,18 @@
 %% automatically put the author and affiliation information from the manuscript
 %% and save the corresponding author the trouble of entering it by hand.
 
-\correspondingauthor{A.~A.~Miller}
+\author[0000-0001-9515-478X]{A.~A.~Miller}
+\affiliation{Center for Interdisciplinary Exploration and Research in 
+             Astrophysics (CIERA) and Department of Physics and Astronomy, 
+             Northwestern University, 
+             1800 Sherman Road, Evanston, IL 60201, USA}
+\affiliation{The Adler Planetarium, Chicago, IL 60605, USA}
 \email{amiller@northwestern.edu}
+
+\author{X.~Hall}
+\affiliation{Cahill Center for Astrophysics,
+             California Institute of Technology,
+             1200 E.~California Boulevard, Pasadena, CA 91125, USA}
 
 
 %% Note that the \and command from previous versions of AASTeX is now
@@ -173,13 +183,28 @@
 %% Mark off the abstract in the ``abstract'' environment. 
 \begin{abstract}
 
+We present an update to the PanSTARRS-1 Point Source Catalog (PS1 PSC), which
+provides morphological classifications of PS1 sources. The original PS1 PSC
+adopted stringent detection criteria that excluded hundreds of millions of PS1
+sources from the PSC. Here, we adapt the supervised machine learning methods
+used to create the PS1 PSC and apply them to different photometric
+measurements that are more widely available, allowing us to add $\sim$144
+million new classifications while expanding the the total number of sources in
+PS1 PSC by $\sim$10\%. We find that the new methodology, which utilizes PS1
+forced photometry, performs $\sim$6--8\% worse than the original method. This
+slight degradation in performance is offset by the overall increase in the
+size of the catalog. The PS1 PSC is used by time-domain surveys to filter
+transient alert streams by removing candidates that are coincident with likely
+point sources that are likely to be Galactic in origin. The addition of
+$\sim$144 million new classifications to the PS1 PSC will improve the
+efficiency with which transients are discovered.
 
 \end{abstract}
 
 %% Keywords should appear after the \end{abstract} command. 
 %% See the online documentation for the full list of available subject
 %% keywords and the rules for their use.
-\keywords{}
+\keywords{Catalogs -- Surveys -- Astronomy data analysis -- Astrostatistics}
 
 %% From the front matter, we move on to the body of the paper.
 %% Sections are demarcated by \section and \subsection, respectively.
@@ -218,51 +243,40 @@ down the number of likely transients by several orders of magnitude
 still vastly outpaces the spectroscopic resources necessary to classify
 everything that varies \citep[e.g.,][]{Kulkarni20}. The aforementioned
 star--galaxy catalogs therefore play an essential role in the search for
-extragalactic transients by removing candidates that are associated with
-stellar-like objects that are therefore likely to be Galactic in origin.
+transients by removing stellar-like objects that are likely to be Galactic in
+origin.
 
 To this end we previously created the PanSTARRS-1 Point Source Catalog
-\citep[PS1 PSC][]{Tachibana18}, which provides probabilistic point-source like
+\citep[PS1 PSC;][]{Tachibana18}, which provides probabilistic point-source like
 classifications for $\sim$1.5 billion sources detected by PanSTARRS-1
 \citep[PS1;][]{Chambers16}. This catalog has been deployed by the Zwicky
 Transient Facility \citep[ZTF;][]{Bellm19} and other surveys
 \citep{Smith20,Moller20} to identify likely extragalactic transients. The PS1
 PSC has been demonstrated to be an important ingredient in the systematic
-search for extragalactic transients \citep{Fremling20,De20}.
+search for extragalactic transients \citep[e.g.,][]{Fremling20,De20}.
 
 A downside to the PS1 PSC is that it does not provide classifications for
 sources that are not ``detected'' in the PS1 \texttt{StackObjectAttributes}
-table \citep[the definition of a PS1 stack ``detection'' is given
-in][]{Tachibana18}. Of the $\sim$3 billion unique sources in the PS1
-\texttt{StackObjectAttributes} table, the vast majority of those missing from
-the PS1 PSC are either spurious or have an extremely low signal-to-noise ratio
-(S/N), such that the methods in \citet{Tachibana18} would not provide a
-reliable classification. 
-% There are an additional 144,870,754 high-S/N sources
-% missing from the PS1 PSC because they have multiple entries in the PS1
-% \texttt{StackObjectThin} table with $\mathtt{primaryDetection} =
-% 1$.\footnote{The \texttt{primaryDetection} flag identifies which entry within
-% the PS1 \texttt{stackObjectThin} table was detected from the stack image that
-% provides the best coverage with minimal projection stretching. Roughly 0.5\%
-% of the \texttt{stackObjectThin} sources have multiple rows with
-% $\mathtt{primaryDetection} = 1$, effectively making it impossible to identify
-% which row should be used in conjunction with the model from
-% \citet{Tachibana18}.}
-Additional sources are missing from the PS1 PSC because there are multiple
-rows within the PS1 database that have $\mathtt{primaryDetection} = 1$, which
-by definition should not happen, and therefore these sources were excluded
-from \citet{Tachibana18}. For PS1 sources that are not in the PS1 PSC, ZTF
-reports a probability score $=0.5$, i.e., an ambiguous classification, when
-cross-matching newly observed variables with the PS1 catalog (see
-\ref{app:cat_counts} for additional details about which PS1 sources are used
-by ZTF).
+table \citep[see \S3 in][]{Tachibana18}. Of the $\sim$3 billion unique sources
+in the PS1 \texttt{StackObjectAttributes} table, the vast majority of those
+missing from the PS1 PSC are either spurious or have an extremely low
+signal-to-noise ratio (S/N), such that the methods in \citet{Tachibana18}
+would not provide a reliable classification. Additional sources are missing
+from the PS1 PSC because there are multiple rows within the PS1
+\texttt{StackObjectAttributes} table that have the same \texttt{ObjID} and
+$\mathtt{primaryDetection} = 1$. By definition this should not happen, and
+therefore these sources were excluded from the PS1 PSC. For PS1 sources that
+are not in the PS1 PSC, ZTF reports a probability score $=0.5$, i.e., an
+ambiguous classification, when cross-matching newly observed variables with
+the PS1 catalog (see \ref{app:cat_counts} for additional details about which
+PS1 sources are used by ZTF).
 
 Here, we present an update to the PS1 PSC by classifying $\sim$144 million
 sources that were previously ``missing'' from the catalog. These
 classifications are made using different photometric measurements from the
 ones adopted in \citet{Tachibana18}. While our new method performs slightly
-worse than the one in \citet{Tachibana18}, we nevertheless achieve similar
-performance with the new model. We apply our new model to the $\sim$426
+worse than the one in \citet{Tachibana18}, we nevertheless achieve a similar
+level of accuracy with the new model. We apply our new model to the $\sim$426
 million ``missing'' (classifying $\sim$34\% of them), providing a new and
 useful supplement to the PS1 PSC.\footnote{During the preparation of this
 manuscript \citet{Beck20} published a new machine learning catalog (PS1-STRM)
@@ -274,28 +288,27 @@ table. We highlight differences and similarities between the
 
 \subsection{PS1 Data}
 
-PS1 conducted a five filter (($g_\mathrm{PS1}$, $r_\mathrm{PS1}$,
-$i_\mathrm{PS1}$, $z_\mathrm{PS1}$, $y_\mathrm{PS1}$)) time-domain survey
+PS1 conducted a five filter ($g_\mathrm{PS1}$, $r_\mathrm{PS1}$,
+$i_\mathrm{PS1}$, $z_\mathrm{PS1}$, $y_\mathrm{PS1}$) time-domain survey
 covering $\sim$3/4 of the sky \citep{Chambers16}. PS1 provides three different
 types of photometric measurements: there are mean flux measurements from the
 individual PS1 exposures of each field, there are stack flux measurements from
-the deeper stack images that combine the flux in each of the individual
-exposures, and then there are forced-flux measurements that measure the flux
-in individual exposures at the location of all sources detected in the stack
-images whether or not the source was detected in the individual exposure. The
-mean photometry is limited by the depth of the individual exposures, while the
-stack photometry has a difficult to model point spread function (PSF) due to
-the warping of the images. The foced-flux measurements provide an intermediate
-compromise as they are deeper than the mean flux measurements, while in
-principle having a better modelled PSF than the stack images.
+the deeper stack images that co-add individual exposures, and then there are
+forced-flux measurements that measure the flux in individual exposures at the
+location of all sources detected in the stack images. The mean photometry is
+limited by the depth of the individual exposures, while the stack photometry
+has a difficult to model point spread function (PSF) because images must be
+warped before they can be co-added. The foced-flux measurements provide an
+intermediate compromise as they are deeper than the mean flux measurements,
+while in principle having a more stable PSF than the stack images.
 
 \citet{Tachibana18} show that the stack photometry works best when
 morphologically classifying resolved, extended sources and unresolved point
-sources. The methodology that we adopt here is extremely similar to that
-presented in \citep{Tachibana18}, but we instead use forced photometry to
-classify sources that do not have suitable stack photometry. The use of lower
-quality forced photometry leads to slightly lower quality classifications (see
-\S\ref{sec:results}).
+sources. The methodology that we adopt here is extremely similar to
+\citet{Tachibana18}, but we instead use PS1 forced photometry to classify
+sources that do not have suitable stack photometry. The
+forced-photometry-based model leads to slightly lower quality classifications
+(see \S\ref{sec:results}).
 
 \subsection{ML Training Set}\label{sec:training_set}
 
@@ -304,15 +317,14 @@ from the \textit{Hubble Space Telescope} (HST). The superior
 resolution of HST enables reliable morphological classifications for
 sources as faint as $\sim$25\,mag \citep{Leauthaud07}. There are 80,867 bright
 HST sources from \citet{Leauthaud07} that have PS1 counterparts
-\citep[within a 1\arcsec match radius; see][]{Tachibana18} in the
+\citep[within a 1\arcsec match radius; see][]{Tachibana18} in the PS1
 \texttt{ForcedMeanObject} table (see \S\ref{sec:features}). Of those, the
 47,825 PS1 sources with $\mathtt{nDetections} \ge 1$ are adopted as the
-training set for our model. For this model the training set is $\sim$1.6\%
-larger than that used in \citet{Tachibana18} because more HST/COSMOS sources
-are detected, using our version of a ``detection'', via PS1 forced photometry
-than PS1 stack photometry.
+training set for our model. This training set is $\sim$1.6\%
+larger than the one used in \citet{Tachibana18} because more HST/COSMOS sources
+are ``detected'' in PS1 forced photometry.\footnote{For this work a source is considered ``detected'' only if the \texttt{FPSFFlux}, \texttt{FPSFFluxErr}, \texttt{FKronFlux}, \texttt{FKronFluxErr}, \texttt{FApFlux}, \texttt{FApFluxErr} are all $> 0$ in at least one filter.}
 
-\section{ML Model Features}
+\section{ML Model Features}\label{sec:ML_features}
 
 \subsection{PS1 Forced Photometry Features}\label{sec:features}
 
@@ -323,42 +335,42 @@ target output, often a classification, of the model. This mapping is learned
 via a training set, a subset of the data with known labels, afterwhich the
 model can classify any source based on its features.
 
-In \citet{Tachibana18} we introduced the concept of ``white flux'' features,
-whereby measurements in the five individual PS1 filters  were
-summed, via a weighted mean, to produce a ``total'' flux or shape measurement
-across all filters.\footnote{Only filters in which the source is detected,
-i.e., the flux is $> 0$, are included in the sum.} Machine learning models are
-limited by their training sets: there is no guarantee that their empirical
-mapping will correctly extend beyond the boundaries enclosed by the training
-set. Given the significant systematic uncertainties associated with Galactic
-reddening, and the tendancy for spectroscopic samples, which are typically
-used to define training sets, to be biased in their target selection
+\citet{Tachibana18} introduced the concept of ``white flux'' features, whereby
+measurements in the five individual PS1 filters were summed, via a weighted
+mean, to produce a ``total'' flux or shape measurement across all
+filters.\footnote{Only filters in which the source is detected are included in
+the sum, see Equations~1 and 2 in \citet{Tachibana18}.} Machine learning
+models are limited by their training sets: there is no guarantee that their
+empirical mapping will correctly extend beyond the boundaries enclosed by the
+training set. Given the significant systematic uncertainties associated with
+Galactic reddening, and the tendancy for spectroscopic samples, which are
+typically used to define training sets, to be biased in their target selection
 \citep[see e.g.,][]{Miller17}, the motivation for ``white flux'' features
 becomes clear: they reduce potential biases in the final classifications due
-to select effects in how the training set sources were targeted. Therefore, as
-in \citet{Tachibana18}, we use ``white flux'' features in this study.
+to selection effects in how the training set sources were targeted. Therefore,
+as in \citet{Tachibana18}, we use ``white flux'' features in this study.
 
 The PS1 \texttt{StackObjectAttributes} table provides both flux and shape
 (e.g., second moment of the radiation intensity) measurements in each of the
-five PS1 filters, whereas the \texttt{ForcedMeanObject} table only provides
-flux measurements.\footnote{The \texttt{ForcedMeanObject} table provides
-average measurements across all epochs on which a PS1 source is observed, and
-the average second moment of the radiation intensity is somewhat meaningless
-as the orientation of the detector and observing conditions vary image to
-image.} Morphological classification models, such as the one presented here,
-are somewhat hindered by the lack of shape information in the
-\texttt{ForcedMeanObject} table \citep[see for example the different shape
-features in Figure~2 of][]{Tachibana18}. 
+five PS1 filters, whereas the PS1 \texttt{ForcedMeanObject} table only
+provides flux measurements.\footnote{The PS1 \texttt{ForcedMeanObject} table
+provides average measurements across all epochs on which a PS1 source is
+observed, and the average second moment of the radiation intensity is somewhat
+meaningless as the orientation of the detector and observing conditions vary
+image to image.}
 
 To create the feature set for our machine learning model, we create ``white
 flux'' features for the six different flux measurements available in the
-\texttt{ForcedMeanObject} table (\texttt{FPSFFlux}, \texttt{FKronFlux},
-\texttt{FApFlux}, \texttt{FmeanflxR5}, \texttt{FmeanflxR6},
-\texttt{FmeanflxR7}), as well as the \texttt{E1} and \texttt{E2} measurements,
-which represent the mean polarization parameters from \citet{Kaiser95}. As in
-\citet{Tachibana18}, we use flux ratios, rather than the raw flux
-measurements, which provide morphological classifications that are independent
-of S/N \citep{Lupton01}.
+\texttt{ForcedMeanObject} table\footnote{The original PS1 PSC and the PS1-STRM
+catalogs are both constructed using the first PS1 data release. This study
+uses measurements from the second PS1 data release, which corrects a
+percent-level flat-field correction that was applied with the wrong sign in
+DR1 \citep{Beck20}.} (\texttt{FPSFFlux}, \texttt{FKronFlux}, \texttt{FApFlux},
+\texttt{FmeanflxR5}, \texttt{FmeanflxR6}, \texttt{FmeanflxR7}), as well as the
+\texttt{E1} and \texttt{E2} measurements, which represent the mean
+polarization parameters from \citet{Kaiser95}. We use flux ratios, rather than
+the raw flux measurements, which provide morphological classifications that
+are independent of S/N \citep{Lupton01}.
 
 \begin{figure*}
     \centering
@@ -381,8 +393,8 @@ of S/N \citep{Lupton01}.
 Our final model includes nine features, five flux ratios:\\
 $\mathtt{whiteFPSFApRatio} = \mathtt{whiteFPSFlux/whiteFApFlux}$,
 $\mathtt{whiteFPSFKronRatio} = \mathtt{whiteFPSFlux/whiteFKronFlux}$,
-$\mathtt{whiteFPSFFflxR7Ratio} = \mathtt{whiteFPSFlux/whiteFFflxR7Flux}$,
-$\mathtt{whiteFPSFFflxR7Ratio} = \mathtt{whiteFPSFlux/whiteFFflxR7Flux}$,
+$\mathtt{whiteFPSFFflxR5Ratio} = \mathtt{whiteFPSFlux/whiteFFflxR5Flux}$,
+$\mathtt{whiteFPSFFflxR6Ratio} = \mathtt{whiteFPSFlux/whiteFFflxR6Flux}$,
 $\mathtt{whiteFPSFFflxR7Ratio} = \mathtt{whiteFPSFlux/whiteFFflxR7Flux}$, the
 white polarization parameters: \texttt{whiteE1} and \texttt{whiteE2}, and two
 ``simple'' distance measures: \texttt{whiteFPSFKronDist} and
@@ -390,21 +402,29 @@ white polarization parameters: \texttt{whiteE1} and \texttt{whiteE2}, and two
 these features for stars and galaxies in the training set is shown in
 Figure~\ref{fig:features}.
 
-\subsection{The ``Distance'' Features}\label{sec:simple_model}
+Figure~\ref{fig:features} shows that \texttt{whiteFPSFApRatio} is the most
+useful feature, aside from the ``simple'' features, to separate resolved and
+unresolved sources. This intuitively makes sense as PS1 \texttt{ApFlux}
+measurements are matched to the seeing, whereas the \texttt{R5flx},
+\texttt{R6flx}, \texttt{R7flx} measurements use fixed aperture sizes. With
+multiple images taken under different observing conditions contibuting to the
+final forced flux measurements, it makes sense that the fixed aperture
+measurements would prove to be more noisy.
 
-In \citet{Tachibana18} we introduced a ``simple'' model to classify sources
-based solely on their measured \texttt{whitePSFFlux} and
-\texttt{whiteKronFlux}. The model was inspired by the use of flux ratios,
-which have been shown to provide a good discriminant between resolved and
-unresolved sources \citep[e.g., the SDSS morphological \texttt{CLASS}
-parameter][]{Lupton01}. At moderate to low S/N, however, flux ratios no longer
-provide accurate classifications (see e.g., Figure~\ref{fig:features}). The
-simple model from \citet{Tachibana18} leverages this fact by measuring the
-distance of each source from a line drawn in the
-\texttt{whitePSFFlux}--\texttt{whiteKronFlux} plane. Unlike a flux ratio, the
-simple model preserves information about the S/N, meaning sources with large
-absolute distances from the dividing line can be classified with greater
-confidence.
+\subsection{The ``Simple'' Distance Features}\label{sec:simple_model}
+
+\citet{Tachibana18} introduced a ``simple'' model to classify sources based
+solely on their measured \texttt{whitePSFFlux} and \texttt{whiteKronFlux}. The
+model was inspired by the use of flux ratios, which have been shown to provide
+a good discriminant between resolved and unresolved sources \citep[e.g., the
+SDSS morphological \texttt{CLASS} parameter][]{Lupton01}. At moderate to low
+S/N, however, flux ratios no longer provide accurate classifications (see
+e.g., Figure~\ref{fig:features}). The simple model from \citet{Tachibana18}
+leverages this fact by measuring the distance of each source from a line drawn
+in the \texttt{whitePSFFlux}--\texttt{whiteKronFlux} plane. Unlike a flux
+ratio, the simple model preserves information about the S/N, meaning sources
+with large absolute distances from the dividing line can be classified with
+greater confidence.
 
 Following from Equation~3 in \citet{Tachibana18}, ``simple'' features can be
 calculated as:
@@ -415,35 +435,35 @@ calculated as:
  \label{eqn:simple_feat}
 \end{multline}
 %
-where \texttt{whiteFlux1} and \texttt{whiteFlux2} are ``white flux''
+where \texttt{whiteFlux1} and \texttt{whiteFlux2} are the ``white flux''
 measurements introduced in \S\ref{sec:features} (e.g.,
 \texttt{whiteFKronFlux}), $a$ is the slope of the line in the
 \texttt{whiteFlux1}--\texttt{whiteFlux2} plane, and
 \texttt{whiteFlux1Flux2Dist} is the orthogonal distance of a source from the
-line. For this study we construct two simple features for inclusion in our
-machine learning model: \texttt{whiteFPSFFKronDist} and
-\texttt{whiteFPSFFApDist}.
+line (sources above the line have positive values). For this study we
+construct two simple features for inclusion in our machine learning model:
+\texttt{whiteFPSFFKronDist} and \texttt{whiteFPSFFApDist}.
 
 We determine the optimal value of $a$ for the simple features via cross
 validation. We find $a = 0.7512$ for the \texttt{whiteFPSFFKronDist} feature
-and $a = 0.7784$ for the \texttt{whiteFPSFFApDist} feature maximizes the FoM.
-Empirically \texttt{whiteFPSFFApDist} is better at separating resolved and
-unresolved sources than \texttt{whiteFPSFFKronDist}, and therefore the
-``simple'' model, discussed below, is based on \texttt{whiteFPSFFApDist}. The
-\texttt{whiteFPSFFApDist} and \texttt{whiteFPSFFKronDist} distribution of
-resolved and unresolved sources is shown in Figures~\ref{fig:psf_ap} and
-\ref{fig:psf_kron}, respectively.
+and $a = 0.7784$ for the \texttt{whiteFPSFFApDist} feature maximizes the FoM
+(see \S\ref{sec:ML_model}). Empirically \texttt{whiteFPSFFApDist} is better at
+separating resolved and unresolved sources than \texttt{whiteFPSFFKronDist},
+and therefore the ``simple'' model, discussed below, is based on
+\texttt{whiteFPSFFApDist}. The \texttt{whiteFPSFFApDist} and
+\texttt{whiteFPSFFKronDist} distribution of resolved and unresolved sources is
+shown in Figures~\ref{fig:psf_ap} and \ref{fig:psf_kron}, respectively.
 
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{./figures/whiteFPSFApDist.pdf}
     %
-    \caption{The distribution of $\mathtt{whitePSFKronDist}$ values for HST
-    training set point sources (labeled stars) and extended objects (labeled
-    galaxies) as a function of \texttt{whiteKronMag}. The colors and contours
-    are the same as Figure~\ref{fig:features}. The horizontal dashed line
-    shows the optimal threshold ($\mathtt{whitePSFKronDist} \ge 9.2 \times
-    10^{-7}$) for resolved--unresolved classification. The upper-right inset
+    \caption{The distribution of $\mathtt{whiteFPSFKronDist}$ values for
+    resolved, extended sources and unresolved point sources from the training
+    set as a function of \texttt{whiteKronMag}. The colors and contours are
+    the same as Figure~\ref{fig:features}. The horizontal dashed line shows
+    the optimal threshold ($\mathtt{whitePSFKronDist} \ge 1.48 \times
+    10^{-6}$) for resolved--unresolved classification. The upper-right inset
     shows a zoom-out highlighting the stark difference between stars and
     galaxies at the bright end.}
     %
@@ -455,32 +475,32 @@ resolved and unresolved sources is shown in Figures~\ref{fig:psf_ap} and
     \includegraphics[width=\columnwidth]{./figures/whiteFPSFKronDist.pdf}
     %
     \caption{Same as Figure~\ref{fig:psf_ap}, but showing the distribution for
-    \texttt{whiteFPSFKronDist}.}
+    \texttt{whiteFFPSFKronDist}.}
     %
     \label{fig:psf_kron}
 \end{figure}  
 
-\section{Training the ML Model}
+\section{Training the ML Model}\label{sec:ML_model}
 
-As in \citet{Tachibana18}, we construct a model to maximize the figure of
-merit (FoM) for our morphological classification model. Our aim is to retain
-nearly all the resolved, extended sources while excluding as many unresolved
-point sources as possible. Thus, our FoM is defined as the true positive rate
+We construct a model to maximize the figure of merit (FoM) for our
+morphological classification model. Our aim is to retain nearly all the
+resolved, extended sources while excluding as many unresolved point sources as
+possible. Thus, our FoM is defined as the true positive rate
 (TPR)\footnote{$\mathrm{TPR} = \mathrm{TP}/(\mathrm{TP} + \mathrm{FP})$, where
 TP is the total number of true positive classifications and FP is the number
 of false positives.} at a fixed false positive rate
 (FPR)\footnote{$\mathrm{FPR} = \mathrm{FP}/(\mathrm{FP}+\mathrm{TN})$, where
 TN is the number of true negatives.} = 0.005.
 
-Using the nine features mentioned in \S\ref{sec:features}, we use the random
-forest (RF) algorithm \citep{Breiman01}, as implemented in
-\texttt{scikit-learn} \citep{Pedregosa11}, to classify PS1 sources as resolved
-or unresolved. Briefly, the RF algorithm constructs an ensemble of decision
-trees \citep{Breiman84}, where each tree is constructed using a bootstrapped
-sample of the training set \citep[a method known as ``bagging'';][]{Breiman96}
-and the split for each branch within the tree is selected from a random subset
-of full feature set. The result is a lower variance estimator than is possible
-from a single decision tree.
+Using the nine features from \S\ref{sec:ML_features}, we use the random forest
+(RF) algorithm \citep{Breiman01}, as implemented in \texttt{scikit-learn}
+\citep{Pedregosa11}, to classify PS1 sources as resolved or unresolved.
+Briefly, the RF algorithm constructs an ensemble of decision trees
+\citep{Breiman84}, where each tree is constructed using a bootstrapped sample
+of the training set \citep[a method known as ``bagging'';][]{Breiman96} and
+the split for each branch within the tree is selected from a random subset of
+the full feature set. The result is a lower variance estimator than is
+possible from a single decision tree.
 
 To train the RF model, we replicate the procedure in \citet{Tachibana18}. We
 use $k$-fold cross validation (CV) to optimize the model tuning parameters,
@@ -499,6 +519,8 @@ dependent on the final choice of tuning parameters.
 
 \section{Results}\label{sec:results}
 
+\subsection{Model Performance}
+
 Our aim is to maximize the FoM of the RF model. We show receiver operating
 characteristic (ROC) curves of the RF, simple, and PS1\footnote{The PS1 model
 is defined by a single hard cut on the PSF--Kron flux ratio measured in the
@@ -514,34 +536,34 @@ the simple model.
   \includegraphics[width=\columnwidth]{./figures/CV_ROC_FHST.pdf}
   %
   \caption{ ROC curves comparing the relative performance of the PS1, simple,
-  and RF models for HST sources with $i_\mathrm{PS1}$ detections. The thick,
-  solid slate gray, green, and purple lines show the ROC curves for the PS1,
-  simple, and RF models, respectively. The light, thin lines show the ROC
-  curves for the individual CV folds. The inset on the right shows a zoom in
-  around FPR = 0.005, shown as a dotted vertical line, corresponding to the
-  FoM (the PS1 model is not shown in the inset, because it has very low FoM).}
+  and RF models for HST sources with $i_\mathrm{PS1}$ detections. The thick
+  slate gray, green, and purple lines show the ROC curves for the PS1, simple,
+  and RF models, respectively. The light, thin lines show the ROC curves for
+  the individual CV folds. The inset on the right shows a zoom in around FPR =
+  0.005, shown as a dotted vertical line, corresponding to the FoM (the PS1
+  model is not shown in the inset, because it has very low FoM).}
   %
   \label{fig:hst_roc}
 \end{figure}
 
-The FoM of each of the three models considered here is summarized in
-Table~\ref{tbl:hst_cv}. In addition to providing largest FoM, the RF model is
-also the most accurate of the three and it has the largest area under the ROC
-curve (ROC AUC). We robustly conclude that, of the models considered here, the
-RF model is best. Comparing with Table~1 in \citet{Tachibana18}, we find that
-the forced-photometry features derived in this study do not provide the same
-discriminating power as the PS1 stack-photometry features used in
-\citet{Tachibana18}. The use of the forced-photometry features results in a
-FoM that is $\sim$7\% worse than the stack-photometry features. We discuss the
-implications of this in \S\ref{sec:discussion}. This slight reduction in
-performance is countered by the fact that we can classify $\sim$140 million
-additional sources using the forced-photometry features.
+The FoM of each of the three models is summarized in Table~\ref{tbl:hst_cv}.
+In addition to providing largest FoM, the RF model is also the most accurate
+and it has the largest area under the ROC curve (ROC AUC). We robustly
+conclude that, of the models considered here, the RF model is best. Comparing
+with Table~1 in \citet{Tachibana18}, we find that the forced-photometry
+features derived in this study do not provide the same discriminating power as
+the PS1 stack-photometry features used in \citet{Tachibana18}. Our new model
+performs $\sim$7\% worse than the one in \citet{Tachibana18}. In
+\S\ref{sec:discussion}, we argue that this slight reduction in performance is
+more than offset by the $\sim$144 million additional sources that are now
+classified using the forced-photometry features.
 
 \input{tables/hst_cv.tex}
 
-We show the CV accuracy of the RF, simple, and PS1 models in
-Figure~\ref{fig:hst_acc}. As in \citet{Tachibana18}, we find that the RF
-model provides more accurate classifications than the alternatives.
+We show the CV accuracy of the RF, simple, and PS1 models as a function of
+\texttt{whiteFKronMag} in Figure~\ref{fig:hst_acc}. As in \citet{Tachibana18},
+we find that the RF model provides more accurate classifications than the
+alternatives.
 
 \begin{figure}[t]
  \centering
@@ -557,7 +579,7 @@ model provides more accurate classifications than the alternatives.
   same subset is shown in the shaded gray, red, and green regions,
   respectively. The amplitude of the star and galaxy PDFs have been normalized
   by their relative ratio compared to the full $i_\mathrm{PS1}$-band subset.
-  \textit{Bottom}: the accuracy of resolved and unresolved classifications as a
+  \textit{Bottom}: accuracy of resolved and unresolved classifications as a
   function of \texttt{whiteFKronMag} from the RF model (i.e., the TPR when
   treating each class as the positive class). Nearly all the resolved sources
   are correctly classified, because they dominate by number at low S/N (see
@@ -566,34 +588,34 @@ model provides more accurate classifications than the alternatives.
   \label{fig:hst_acc}
 \end{figure}  
 
-As expected, the accuracy of each model shown in Figure~\ref{fig:hst_acc}
-decreases for lower S/N sources. The accuracy curve for the RF model features
-a slight departure from expectation in that it does not decrease between
-22--24\,mag in \texttt{whiteFKronMag}. This quasi-plateau in the RF model
-accuracy can be understood as the result of two components of the training
-set: (i) unresolved sources completely dominate the source counts at these
-magnitudes, and (ii) the well-defined locus of unresolved sources in the
-training set (see Figure~\ref{fig:features}) becomes heavily blended with the
-resolved source population at these brightness levels. Taken together the
-model will be biased towards classifying all faint sources as resolved,
-despite the fact that we do not explicitly include flux measurements in the
-feature set. With 88.5\% of the $\mathtt{whiteFKronMag} > 22.5$\,mag training
-set sources being unresolved, a quasi-plateau in accuracy of $\sim$88\% makes
-sense. This is confirmed in the bottom panel of Figure~\ref{fig:hst_acc},
-which shows the true positive rate (TPR) for both resolved and unresolved
-sources as a function of \texttt{whiteFKronMag}. A near 100\% TPR for faint
-resolved sources combined with a few correctly classified unresolved sources
-leads to the observed quasi-plateau in Figure~\ref{fig:hst_acc}.  
+The accuracy of each model shown in Figure~\ref{fig:hst_acc} decreases for
+lower S/N sources. The accuracy curve for the RF and simple models feature a
+slight departure from expectation in that they do not decrease much from 22 to
+24\,mag. This quasi-plateau in the model accuracy can be understood as the
+result of two components of the training set: (i) unresolved sources
+completely dominate the source counts at these magnitudes, and (ii) the
+well-defined locus of unresolved sources in the training set (see
+Figure~\ref{fig:features}) becomes heavily blended with the resolved source
+population at these brightness levels. Taken together the model will be biased
+towards classifying all faint sources as resolved, despite the fact that we do
+not explicitly include flux measurements in the feature set. With 88.5\% of
+the $\mathtt{whiteFKronMag} > 22.5$\,mag training set sources being
+unresolved, a quasi-plateau in accuracy of $\sim$88\% makes sense. This is
+confirmed in the bottom panel of Figure~\ref{fig:hst_acc}, which shows the RF
+model true positive rate (TPR) for both resolved and unresolved sources as a
+function of \texttt{whiteFKronMag}. A near 100\% TPR for faint resolved
+sources combined with a few correctly classified unresolved sources leads to
+the observed quasi-plateau in Figure~\ref{fig:hst_acc}.
 
 \subsection{The Updated PS1 PSC Catalog}\label{sec:ps1psc_update}
 
-Following the construction of the RF model that utilizes PS1 forced photometry
-features, we can provide morphological classifications for the PS1 sources
-that are currently missing from the PS1 PSC. Of the $\sim$426 million
-``missing'' sources, $\sim$144 million have PS1 DR2 \texttt{ForcedMeanObject}
-photometry that pass our detection criteria (see \ref{app:cat_counts} for more
-details). A histogram showing the distribution of the RF classification score
-for these newly classified sources is shown in Figure~\ref{fig:psc_update}.
+With a new RF model in hand, we can now provide morphological classifications
+for the PS1 sources that are currently missing from the PS1 PSC. Of the
+$\sim$426 million ``missing'' sources, $\sim$144 million have PS1 DR2
+\texttt{ForcedMeanObject} photometry that pass our detection criteria (see
+\ref{app:cat_counts} for more details). A histogram showing the distribution
+of the RF classification score for these newly classified sources is shown in
+Figure~\ref{fig:psc_update}.
 
 \begin{figure}
     \centering
@@ -651,8 +673,9 @@ million PS1 sources in the ZTF \texttt{Stars} table are not classified in the
 original PS1 PSC.
 
 Moving forward, ZTF alert packets now include the $\sim$144 million additional
-classifications presented in \S\ref{sec:ps1psc_update}. \todo{Add sentence
-from Frank about how these are designated} The addition of these new
+classifications presented in \S\ref{sec:ps1psc_update}.\footnote{This change
+will occur upon the journal acceptance of this paper.} \todo{Add sentence from
+Frank about how these are designated} The addition of these new
 classifications to the ZTF AVRO packets should not affect existing
 alert-stream filters, as we describe below.
 
@@ -663,12 +686,12 @@ made between \citet{Tachibana18} and this study, the similarity between the
 two methodologies leads to classifications that are highly similiar.
 Table~\ref{tbl:thresh} summarizes the TPR and FPR for different classfication
 thresholds using the model from \citet{Tachibana18} and the RF model created
-in this study. Table~\ref{tbl:thresh} shows that the PS1 stack photometry used
-in \citet{Tachibana18} consistently produces a higher TPR, by $\sim$6--8\%,
-than the PS1 forced photometry. The PS1 forced photometry used in this study
-does have a lower FPR than \citet{Tachibana18} for all but the most liberal
-point-source classification cuts. Thus, applying classification cuts developed
-for the original PS1 PSC will ultimately lead to a higher TPR, as previously
+in this study. Tthe PS1 stack photometry used in \citet{Tachibana18}
+consistently produces a higher TPR, by $\sim$6--8\%, than the PS1 forced
+photometry. The PS1 forced photometry used in this study does have a lower FPR
+than \citet{Tachibana18} for all but the most liberal point-source
+classification cuts. Thus, applying classification cuts developed for the
+original PS1 PSC will ultimately lead to a higher TPR, as previously
 unclassified point sources can now be removed from the stream, without
 experiencing an overall increase in the FPR. As a result, we conclude that the
 vast majority of users will not experience any significant change in the
@@ -687,7 +710,7 @@ differences between the catalogs: the PS1-STRM classifies all $\sim$2.9
 billion sources in the PS1 \texttt{ForcedMeanObject} table, while the updated
 PS1 PSC only classifies $\sim$half that many sources.\footnote{We note that
 the majority of the additional classifications in the PS1-STRM are
-$\mathtt{nDetections} \le 1$ sources with low S/N photometry. These
+$\mathtt{nDetections} \le 2$ sources with low S/N photometry. These
 classifications therefore have a lot more uncertainty than the sources that
 are in common between the PS1 PSC and the PS1-STRM.} Another difference
 between the two catalogs is that the PS1-STRM uses a neural-network
@@ -698,7 +721,7 @@ uses full color information in their classifier whereas the PS1 PSC uses
 The most important distinction between the two catalogs, in our estimation, is
 their training sets. The PS1-STRM is trained using spectroscopic labels that
 predominantly come from the Sloan Digital Sky Survey
-\citet[SDSS][]{Abolfathi18}, whereas the PS1 PSC is trained via morphological
+\citep[SDSS;][]{Abolfathi18}, whereas the PS1 PSC is trained via morphological
 classifications from HST. An SDSS-based training set has two distinct
 advantages: it is nearly two orders of magnitude larger than the HST training
 set and it includes redshift information (which can be used to estimate
@@ -720,18 +743,17 @@ Ultimately, we recommend the use of both catalogs. Despite the different
 methodologies and training sets, we expect the classifcations to largely be in
 agreement for bright sources ($r \lesssim 20$\,mag). In cases where the
 catalogs agree, the classifications can be treated as extremely confident.
-Most of the disagreements will occur at the faint end, where the S/N is low,
-and therefore both catalogs will provide noisier estimates. For faint sources
-where the catalogs disagree, users should consider applying an additional
-prior based on the observed source counts in the Universe
-\citep[e.g.][]{Yasuda01}. At high galactic latitudes, nearly all the very
-faint sources are galaxies, while within the Galactic plane nearly everything
-will be a star.
+Most of the disagreements will occur at the faint end, where both catalogs
+will provide noisier estimates. For faint sources where the catalogs disagree,
+users should consider applying an additional prior based on the observed
+source counts in the Universe \citep[e.g.,][]{Henrion11}. At high galactic
+latitudes, nearly all the very faint sources are galaxies, while within the
+Galactic plane nearly everything will be a star.
 
 \section{Conclusions}
 
 We have presented an update to the PS1 PSC \citep{Tachibana18}, by classifying
-$\sim$144 million new sources that were previously ``missing.'' The new
+$\sim$144 million sources that were previously ``missing.'' The new
 classifications are made using a new RF model that utilizes photometric and
 shape features from the PS1 DR2 \texttt{ForcedMeanObject} table.
 
@@ -748,11 +770,35 @@ addition of $>$144 million newly classified sources. The update to the PS1 PSC
 presented here will improve the extragalactic transient search efficiency for
 ZTF.
 
-\todo{Add something about Rubin Observatory? I'm not totally sure this is necessary -- could talk about how SDSS will not serve as a particularly suitable training set for Rubin Observatory \& that new data will be needed for morphological classification}
+Spectroscopic observations from SDSS have now fueled the training sets for
+machine learning models to separate stars and galaxies for more than a decade
+\citep[e.g.,][]{Ball06,Beck20}. These labels have proven extremely valuable as
+they have been applied to several surveys beyond SDSS
+\citep[e.g.,][]{Miller17,Beck20}. Our ability to use methods built on
+empirical training sets is going to be severely limited by the Vera C.\ Rubin
+Observatory, whose images will be predominantly populated by extremely faint
+sources \citep[$r \approx 24$\,mag;][]{Ivezic19}. With few spectroscopic
+classifications of any kind at these depths, the separation of stars and
+galaxies in Rubin Observatory data is going to largely rely on data from the
+Rubin Observatory itself. In this regime machine learning is unlikely to play
+a leading role, and purely photometric methods will be required to separate
+stars and galaxies \citep[e.g.,][]{Slater20} and triage the Rubin Observatory
+alert stream to remove stellar variables prior to the search for extragalactic
+transients.
 
 \acknowledgments
 
-\vspace{5mm}
+This work would not have been possible without the public release of the
+PS1 data.
+
+A.A.M.~is funded by the Large Synoptic Survey Telescope Corporation, the
+Brinson Foundation, and the Moore Foundation in support of the LSSTC Data
+Science Fellowship Program; he also receives support as a CIERA Fellow by the
+CIERA Postdoctoral Fellowship Program (Center for Interdisciplinary
+Exploration and Research in Astrophysics, Northwestern University). X.H.~is
+funded by the \todo{figure out his funding}.
+
+% \vspace{5mm}
 \facilities{PS1 \citep{Chambers16}}
 
 %% Similar to \facility{}, there is the optional \software command to allow 
@@ -794,14 +840,14 @@ For the $\sim$426 million ZTF \texttt{Stars} table sources not in the PS1 PSC,
 with $\mathtt{primaryDetection} = 1$, while the rest were not ``detected'' in
 the PS1 stacks. As described in \S\ref{sec:ps1psc_update}, 144,870,754 of the
 previously ``missing'' sources pass our \texttt{ForcedMeanObject}
-``detection'' criteria (see \S\ref{}) and are now included in the PS1 PSC. 
+``detection'' criteria (see \S\ref{sec:training_set}) and are now included in
+the PS1 PSC.
 
-The remaining $\sim$281 million sources do not have reliable photometry in
-either the PS1 forced or stack tables, and as a result remain in the ZTF
-\texttt{Stars} table with an ambiguous score of 0.5. It is worth noting that
-$\sim$8\% of those $\sim$281 million are sources that were present in PS1 DR1,
-and hence included in the ZTF \texttt{Stars} table, but are not present in PS1
-DR2 (mostly because they have declination $\delta < -30$\,deg).\footnote{See
+The remaining $\sim$281 million sources do not have reliable PS1 stack or
+forced photometry, and as a result remain in the ZTF \texttt{Stars} table with
+an ambiguous score of 0.5. About 8\% of the still unclassified ZTF
+\texttt{Stars} table sources are not present in PS1 DR2 (mostly because they
+have declination $\delta < -30$\,deg).\footnote{See
 \url{https://outerspace.stsci.edu/display/PANSTARRS/PS1+DR2+caveats\#PS1DR2caveats-Missingdata} for more information.} Furthermore, $\sim$34\% of these
 $\sim$281 million sources have $\mathtt{nDetections} = 3$, and $\sim$55\% have
 $\mathtt{nDetections} \le 5$. That these sources have so few detections in PS1
