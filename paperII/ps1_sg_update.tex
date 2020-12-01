@@ -233,13 +233,13 @@ has led to the discovery of a bevy of novel extragalactic transients
 IceCube-Collaboration18}. While these wide-field surveys have been enabled by
 significant advances in detector technology, software has proven equally
 important \citep[e.g.,][]{Masci17,Masci19,Smith20,Jones20} as many of these
-critical discoveries have been facilitiated by the rapid identification and
+critical discoveries have been facilitated by the rapid identification and
 dissemination of new transient candidates in near real time
 \citep[e.g.,][]{Patterson19}.
 
 Reliable catalogs identifying stars and galaxies, or similarly unresolved and
 resolved sources, are an essential cog in the machinery necessary to identify
-extragalactic transients. On a nightly basis, time-domain sureys are inundated
+extragalactic transients. On a nightly basis, time-domain surveys are inundated
 with transient candidates, the vast majority of which are considered ``bogus''
 \citep[e.g.,][]{Bloom12}. Despite sophisticated software capable of whittling
 down the number of likely transients by several orders of magnitude
@@ -287,6 +287,10 @@ manuscript \citet{Beck20} published a new machine learning catalog (PS1-STRM)
 to separate the $\sim$2.9 billion sources in the PS1 \texttt{ForcedMeanObject}
 table. We highlight differences and similarities between the
 \citeauthor{Beck20} catalog and this work in \S\ref{sec:discussion}.}
+
+Alongside this paper, we have released our open-source analysis, and queries
+to recreate the data utilized in this study. These are available online at
+\url{https://github.com/adamamiller/PS1_star_galaxy}.
 
 \section{ML Model Data}
 
@@ -336,7 +340,7 @@ Regardless of the choice of algorithm, the basic goal of a machine learning
 model is to build a map between source features, numerical and/or categorical
 properties that can be measured for an individual source, and labels, the
 target output, often a classification, of the model. This mapping is learned
-via a training set, a subset of the data with known labels, afterwhich the
+via a training set, a subset of the data with known labels, after which the
 model can classify any source based on its features.
 
 \citet{Tachibana18} introduced the concept of ``white flux'' features, whereby
@@ -347,7 +351,7 @@ the sum, see Equations~1 and 2 in \citet{Tachibana18}.} Machine learning
 models are limited by their training sets: there is no guarantee that their
 empirical mapping will correctly extend beyond the boundaries enclosed by the
 training set. Given the significant systematic uncertainties associated with
-Galactic reddening, and the tendancy for spectroscopic samples, which are
+Galactic reddening, and the tendency for spectroscopic samples, which are
 typically used to define training sets, to be biased in their target selection
 \citep[see e.g.,][]{Miller17}, the motivation for ``white flux'' features
 becomes clear: they reduce potential biases in the final classifications due
@@ -394,14 +398,18 @@ are independent of S/N \citep{Lupton01}.
     \label{fig:features}
 \end{figure*} 
 
-Our final model includes nine features, five flux ratios:\\
-$\mathtt{whiteFPSFApRatio} = \mathtt{whiteFPSFlux/whiteFApFlux}$,
-$\mathtt{whiteFPSFKronRatio} = \mathtt{whiteFPSFlux/whiteFKronFlux}$,
-$\mathtt{whiteFPSFFflxR5Ratio} = \mathtt{whiteFPSFlux/whiteFFflxR5Flux}$,
-$\mathtt{whiteFPSFFflxR6Ratio} = \mathtt{whiteFPSFlux/whiteFFflxR6Flux}$,
-$\mathtt{whiteFPSFFflxR7Ratio} = \mathtt{whiteFPSFlux/whiteFFflxR7Flux}$, the
-white polarization parameters: \texttt{whiteE1} and \texttt{whiteE2}, and two
-``simple'' distance measures: \texttt{whiteFPSFKronDist} and
+Our final model includes nine features, five flux ratios:
+%
+\begin{align*}
+    \mathtt{whiteFPSFApRatio} &= \frac{\mathtt{whiteFPSFlux}}{\mathtt{whiteFApFlux}},\\
+    \mathtt{whiteFPSFKronRatio} &= \frac{\mathtt{whiteFPSFlux}}{\mathtt{whiteFKronFlux}},\\
+    \mathtt{whiteFPSFFmeanflxR5Ratio} &= \frac{\mathtt{whiteFPSFlux}}{\mathtt{whiteFmeanflxR5Flux}},\\
+    \mathtt{whiteFPSFFmeanflxR6Ratio} &= \frac{\mathtt{whiteFPSFlux}}{\mathtt{whiteFmeanflxR6Flux}},\\
+    \mathtt{whiteFPSFFmeanflxR7Ratio} &= \frac{\mathtt{whiteFPSFlux}}{\mathtt{whiteFmeanflxR7Flux}},
+\end{align*}
+%
+the white polarization parameters: \texttt{whiteE1} and \texttt{whiteE2}, and
+two ``simple'' distance measures: \texttt{whiteFPSFKronDist} and
 \texttt{whiteFPSFKronDist} (see \S\ref{sec:simple_model}). The distribution of
 these features for stars and galaxies in the training set is shown in
 Figure~\ref{fig:features}.
@@ -411,7 +419,7 @@ useful feature, aside from the ``simple'' features, to separate resolved and
 unresolved sources. This intuitively makes sense as PS1 \texttt{ApFlux}
 measurements are matched to the seeing, whereas the \texttt{R5flx},
 \texttt{R6flx}, \texttt{R7flx} measurements use fixed aperture sizes. With
-multiple images taken under different observing conditions contibuting to the
+multiple images taken under different observing conditions contributing to the
 final forced flux measurements, it makes sense that the fixed aperture
 measurements would prove to be more noisy.
 
@@ -433,20 +441,19 @@ greater confidence.
 Following from Equation~3 in \citet{Tachibana18}, ``simple'' features can be
 calculated as:
 %
-\begin{multline}
- \mathtt{whiteFlux1Flux2Dist}(a) = \\
- \frac{\mathtt{whiteFlux1} - a\times\mathtt{whiteFlux2}}{ \sqrt{1 + a^2}},
- \label{eqn:simple_feat}
-\end{multline}
+\begin{equation}
+ \mathtt{whiteF1F2Dist}(a) = 
+ \frac{\mathtt{whiteF1} - a\times\mathtt{whiteF2}}{ \sqrt{1 + a^2}},
+\end{equation}
 %
-where \texttt{whiteFlux1} and \texttt{whiteFlux2} are the ``white flux''
+where \texttt{whiteF1} and \texttt{whiteF2} are the ``white flux''
 measurements introduced in \S\ref{sec:features} (e.g.,
 \texttt{whiteFKronFlux}), $a$ is the slope of the line in the
-\texttt{whiteFlux1}--\texttt{whiteFlux2} plane, and
-\texttt{whiteFlux1Flux2Dist} is the orthogonal distance of a source from the
-line (sources above the line have positive values). For this study we
-construct two simple features for inclusion in our machine learning model:
-\texttt{whiteFPSFFKronDist} and \texttt{whiteFPSFFApDist}.
+\texttt{whiteF1}--\texttt{whiteF2} plane, and \texttt{whiteF1F2Dist} is the
+orthogonal distance of a source from the line (sources above the line have
+positive values). For this study we construct two simple features for
+inclusion in our machine learning model: \texttt{whiteFPSFFKronDist} and
+\texttt{whiteFPSFFApDist}.
 
 We determine the optimal value of $a$ for the simple features via cross
 validation. We find $a = 0.7512$ for the \texttt{whiteFPSFFKronDist} feature
@@ -466,7 +473,7 @@ shown in Figures~\ref{fig:psf_ap} and \ref{fig:psf_kron}, respectively.
     resolved, extended sources and unresolved point sources from the training
     set as a function of \texttt{whiteKronMag}. The colors and contours are
     the same as Figure~\ref{fig:features}. The horizontal dashed line shows
-    the optimal threshold ($\mathtt{whitePSFKronDist} \ge 1.48 \times
+    the optimal threshold ($\mathtt{whiteFPSFKronDist} \ge 1.48 \times
     10^{-6}$) for resolved--unresolved classification. The upper-right inset
     shows a zoom-out highlighting the stark difference between stars and
     galaxies at the bright end.}
@@ -479,7 +486,9 @@ shown in Figures~\ref{fig:psf_ap} and \ref{fig:psf_kron}, respectively.
     \includegraphics[width=\columnwidth]{./figures/whiteFPSFKronDist.pdf}
     %
     \caption{Same as Figure~\ref{fig:psf_ap}, but showing the distribution for
-    \texttt{whiteFFPSFKronDist}.}
+    \texttt{whiteFPSFKronDist}. A horizontal line is not shown as we do not
+    recommend the use of only \texttt{whiteFPSFKronDist} for
+    resolved-unresolved classification.}
     %
     \label{fig:psf_kron}
 \end{figure}  
@@ -511,7 +520,7 @@ use $k$-fold cross validation (CV) to optimize the model tuning parameters,
 namely the number of trees in the forest $N_\mathrm{tree}$, the random number
 of features for splitting at each node $m_\mathrm{try}$, and the minimum
 number of sources in a terminal leaf of the tree $\mathtt{nodesize}$. Our CV
-procedure utilizes both an inner and outter loop, each with $k = 10$ folds. In
+procedure utilizes both an inner and outer loop, each with $k = 10$ folds. In
 the inner loop, a $k = 10$ folds CV grid search is performed over the three
 tuning parameters, while predictions from the optimal grid location are
 applied to the 1/10 of the training set that was withheld in the outer loop.
@@ -678,19 +687,18 @@ original PS1 PSC.
 
 Moving forward, ZTF alert packets now include the $\sim$144 million additional
 classifications presented in \S\ref{sec:ps1psc_update}.\footnote{This change
-will occur upon the journal acceptance of this paper.} \todo{Add sentence from
-Frank about how these are designated} The addition of these new
-classifications to the ZTF AVRO packets should not affect existing
+will occur upon the journal acceptance of this paper.} The addition of these
+new classifications to the ZTF AVRO packets should not affect existing
 alert-stream filters, as we describe below.
 
 \input{./tables/thresholds.tex}
 
 While a one-to-one mapping of point-source classification scores cannot be
 made between \citet{Tachibana18} and this study, the similarity between the
-two methodologies leads to classifications that are highly similiar.
-Table~\ref{tbl:thresh} summarizes the TPR and FPR for different classfication
+two methodologies leads to classifications that are highly similar.
+Table~\ref{tbl:thresh} summarizes the TPR and FPR for different classification
 thresholds using the model from \citet{Tachibana18} and the RF model created
-in this study. Tthe PS1 stack photometry used in \citet{Tachibana18}
+in this study. The PS1 stack photometry used in \citet{Tachibana18}
 consistently produces a higher TPR, by $\sim$6--8\%, than the PS1 forced
 photometry. The PS1 forced photometry used in this study does have a lower FPR
 than \citet{Tachibana18} for all but the most liberal point-source
@@ -744,7 +752,7 @@ in][]{Tachibana18}. It is for these reasons that we adopt the HST training set
 for the PS1 PSC, despite its relatively modest size.
 
 Ultimately, we recommend the use of both catalogs. Despite the different
-methodologies and training sets, we expect the classifcations to largely be in
+methodologies and training sets, we expect the classifications to largely be in
 agreement for bright sources ($r \lesssim 20$\,mag). In cases where the
 catalogs agree, the classifications can be treated as extremely confident.
 Most of the disagreements will occur at the faint end, where both catalogs
@@ -792,8 +800,9 @@ transients.
 
 \acknowledgments
 
-This work would not have been possible without the public release of the
-PS1 data. We thank F.~Masci and R.~Laher for helping us 
+This work would not have been possible without the public release of the PS1
+data. We thank F.~Masci and R.~Laher for helping us identify sources that were
+not classified in the ZTF \texttt{Stars} table.
 
 A.A.M.~is funded by the Large Synoptic Survey Telescope Corporation (LSSTC),
 the Brinson Foundation, and the Moore Foundation in support of the LSSTC Data
