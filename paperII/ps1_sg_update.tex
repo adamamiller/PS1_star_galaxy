@@ -681,17 +681,58 @@ The ZTF real-time pipeline \citep{Masci19} provides AVRO alert packets
 nearest neighbors) about any newly discovered sources of variability. The
 packets include morphological classifications, based on the PS1 PSC
 \citep{Tachibana18}, for the three closest closed sources in the ZTF
-\texttt{Stars} table that within 30\arcsec\ of the newly observed variable
+\texttt{Stars} table that are within 30\arcsec\ of the newly observed variable
 source (see ~\ref{app:cat_counts} for a summary of the PS1 sources included in
-the ZTF \texttt{Stars} table). As previously discussed, $\sim$426 million PS1
-sources in the ZTF \texttt{Stars} table are not classified in the original PS1
-PSC.
+the ZTF \texttt{Stars} table). There are $\sim$426 million PS1 sources in the
+ZTF \texttt{Stars} table are not classified in the original PS1 PSC (see
+\S\ref{sec:ps1psc_update}).
 
-Moving forward, ZTF alert packets now include the $\sim$144 million additional
-classifications presented in \S\ref{sec:ps1psc_update}.\footnote{This change
-will occur upon the journal acceptance of this paper.} The addition of these
-new classifications to the ZTF AVRO packets should not affect existing
-alert-stream filters, as we describe below.
+\subsection{Updating RF Classifications with Gaia Stars}\label{sec:gaia}
+
+The \textit{Gaia} Early Data Release 3 includes high-precision astrometric
+measurements collected over a 34 month timespan for $\sim$1.8 billion sources
+\citep{Gaia-Collaboration20}. Within ZTF, the PS1 PSC is primarily used to
+identify likely stars (i.e., point sources) and remove them from filters
+searching for extragalactic transients. To that end, we can supplement the RF
+classifications described in \S\ref{sec:ps1psc_update} with \textit{Gaia}
+stars, which are identified via high-significance parallax and proper motion
+detections.
+
+A common threshold for determining ``high-significance'' is $\mathrm{S/N} \ge
+5$, which in the case of gaussian uncertainties corresponds to a
+$\sim$3$\times 10^{-7}$ probability that the observed signal is the result of
+noise. We can therefore select stars from \textit{Gaia} sources with high S/N
+parallax or proper motion measurements.\footnote{The total proper motion is
+estimated by adding the proper motion in Right Ascension and Declination in
+quadrature, see \citet{Tachibana18} for the corresponding uncertainty on this
+quantity.} We adopt conservative significance thresholds because the formal
+uncertainties from \textit{Gaia} are slightly underestimated
+\citep{Fabricius20} and because most of the ``missing'' sources in the ZTF
+\texttt{Stars} table are in the Galactic Plane (e.g.,
+Figure~\ref{fig:psc_update}). \citet{Fabricius20} estimate that \textit{Gaia}
+parallax measurements underestimate the uncertainties by a much as $\sim$60\%
+in crowded regions. Similarly, proper motions are found to be underestimated
+by as much $\sim$80\% in crowded regions \citep{Fabricius20}. We therefore
+only consider \textit{Gaia} sources with a parallax $\mathrm{S/N} \ge 8$ or a
+total proper motion $\mathrm{S/N} \ge 9$ to be stars.
+
+Using the ESA \textit{Gaia}
+archive\footnote{\url{https://gea.esac.esa.int/archive/}} we find there are
+18,662,985 sources with either a high-significance parallax or proper motion
+detection in the ZTF \texttt{Stars} table that lack a classification in the
+original PS1 PSC. For these sources (11,479,512 of which have RF scores from
+\S\ref{sec:ps1psc_update}) we update their scores to 1 in the ZTF
+\texttt{Stars} table. This effectively excludes each of these sources from
+filters designed to find extragalactic transients in the ZTF alert stream.
+
+\subsection{Practical Implementation of the Updated Catalog}
+
+Moving forward, ZTF alert packets now include $\sim$152 million additional
+classifications ($\sim$133.6 million RF classifications from
+\S\ref{sec:ps1psc_update}, and $\sim$18.6 million from
+\S\ref{sec:gaia}.\footnote{This change will occur upon the journal acceptance
+of this paper.} The addition of these new classifications to the ZTF AVRO
+packets should not affect existing alert-stream filters, as we describe below.
 
 \input{./tables/thresholds.tex}
 
