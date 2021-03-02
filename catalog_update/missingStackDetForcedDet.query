@@ -1,0 +1,36 @@
+/* This query selects all the sources in the ZTF stars table
+that were not classified in the original PS1-PSC. The results 
+can be used to determine the reason why the source was not 
+classified in the original catalog. This query also determines 
+whether the source is "detected" in the ForcedMeanObject 
+table and then could be included in the updated catalog. */
+
+Select strid, ot.objid, ot.nDetections, sot.primaryDetection, 
+(case when ((sot.gPSFMag > 0 AND sot.gKronMag > 0 AND sot.gApMag > 0) OR
+            (sot.rPSFMag > 0 AND sot.rKronMag > 0 AND sot.rApMag > 0) OR
+            (sot.iPSFMag > 0 AND sot.iKronMag > 0 AND sot.iApMag > 0) OR
+            (sot.zPSFMag > 0 AND sot.zKronMag > 0 AND sot.zApMag > 0) OR
+            (sot.yPSFMag > 0 AND sot.yKronMag > 0 AND sot.yApMag > 0)
+           )
+    then 1 else 0 end) as stackDet,
+(case when ((fmov.gFPSFFlux > 0 AND fmov.gFPSFFluxErr > 0 AND 
+             fmov.gFKronFlux > 0 AND fmov.gFKronFluxErr > 0 AND 
+             fmov.gFApFlux > 0 AND fmov.gFApFluxErr > 0) OR
+            (fmov.rFPSFFlux > 0 AND fmov.rFPSFFluxErr > 0 AND 
+             fmov.rFKronFlux > 0 AND fmov.rFKronFluxErr > 0 AND 
+             fmov.rFApFlux > 0 AND fmov.rFApFluxErr > 0) OR
+            (fmov.iFPSFFlux > 0 AND fmov.iFPSFFluxErr > 0 AND 
+             fmov.iFKronFlux > 0 AND fmov.iFKronFluxErr > 0 AND 
+             fmov.iFApFlux > 0 AND fmov.iFApFluxErr > 0) OR
+            (fmov.zFPSFFlux > 0 AND fmov.zFPSFFluxErr > 0 AND 
+             fmov.zFKronFlux > 0 AND fmov.zFKronFluxErr > 0 AND 
+             fmov.zFApFlux > 0 AND fmov.zFApFluxErr > 0) OR
+            (fmov.yFPSFFlux > 0 AND fmov.yFPSFFluxErr > 0 AND 
+             fmov.yFKronFlux > 0 AND fmov.yFKronFluxErr > 0 AND 
+             fmov.yFApFlux > 0 AND fmov.yFApFluxErr > 0)
+         )
+    then 1 else 0 end) as forceDet
+into mydb.missing_1 from (PS1_star_galaxy.xhall.stars_20180814_1 x
+join objectThin ot on x.strid = ot.objid)
+left join stackObjectThin sot on x.strid = sot.objid
+left join forcedMeanObject fmov on x.strid = fmov.objid
