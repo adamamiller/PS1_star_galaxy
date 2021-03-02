@@ -290,7 +290,10 @@ table. We highlight differences and similarities between the
 
 Alongside this paper, we have released our open-source software needed to
 recreate the analysis in this study. These are available online at
-\url{https://github.com/adamamiller/PS1_star_galaxy}.
+\url{https://github.com/adamamiller/PS1_star_galaxy}. The update to the
+ZTF–PS1 catalog created during this study is available as a High Level
+Science Product via the Mikulski Archive for Space Telescopes (MAST) at
+doi:\textbf{\textit{link still to be determined}}.
 
 \section{ML Model Data}
 
@@ -409,7 +412,7 @@ Our final model includes nine features, five flux ratios:
 \end{align*}
 %
 the white polarization parameters: \texttt{whiteE1} and \texttt{whiteE2}, and
-two ``simple'' distance measures: \texttt{whiteFPSFKronDist} and
+two ``simple'' distance measures: \texttt{whiteFPSFApDist} and
 \texttt{whiteFPSFKronDist} (see \S\ref{sec:simple_model}). The distribution of
 these features for stars and galaxies in the training set is shown in
 Figures~\ref{fig:features}, \ref{fig:psf_ap}, and \ref{fig:psf_kron}.
@@ -661,10 +664,11 @@ galactic latitudes. The PS1 PSC also has significantly lower confidence
 classifications in the Galactic plane \citep[see Figure~8 in][]{Tachibana18}.
 That these sources were not ``detected'' in the PS1 stack images also suggests
 that it is difficult to make reliable photometric measurements using the PS1
-data, which could also contribute to the lower confidence classifications. The
-upcoming third data release from the space-based \textit{Gaia} telescope
-\citep{Perryman01} will improve this situation by classifying many of these
-ambiguous sources as stars via parallax and proper motion measurements.
+data, which could also contribute to the lower confidence classifications. We
+use the third data release from the space-based \textit{Gaia} telescope
+\citep{Perryman01} to improve this situation by classifying many of these
+ambiguous sources as stars via parallax and proper motion measurements
+(\S\ref{sec:gaia}).
 
 Ultimately, this update to the PS1 PSC has identified 17,945,494 likely point
 sources using the optimized threshold from \citet[][RF score $\ge
@@ -718,9 +722,9 @@ total proper motion $\mathrm{S/N} \ge 9$ to be stars.
 
 Using the ESA \textit{Gaia}
 archive\footnote{\url{https://gea.esac.esa.int/archive/}} we find there are
-18,662,985 sources with either a high-significance parallax or proper motion
+18,658,572 sources with either a high-significance parallax or proper motion
 detection in the ZTF \texttt{Stars} table that lack a classification in the
-original PS1 PSC. For these sources (11,479,512 of which have RF scores from
+original PS1 PSC. For these sources (11,427,503 of which have RF scores from
 \S\ref{sec:ps1psc_update}) we update their scores to 1 in the ZTF
 \texttt{Stars} table. This effectively excludes each of these sources from
 filters designed to find extragalactic transients in the ZTF alert stream.
@@ -730,8 +734,7 @@ filters designed to find extragalactic transients in the ZTF alert stream.
 Moving forward, ZTF alert packets now include $\sim$152 million additional
 classifications ($\sim$133.6 million RF classifications from
 \S\ref{sec:ps1psc_update}, and $\sim$18.6 million from
-\S\ref{sec:gaia}.\footnote{This change will occur upon the journal acceptance
-of this paper.} The addition of these new classifications to the ZTF AVRO
+\S\ref{sec:gaia}. The addition of these new classifications to the ZTF AVRO
 packets should not affect existing alert-stream filters, as we describe below.
 
 \input{./tables/thresholds.tex}
@@ -845,7 +848,7 @@ transients.
 
 This work would not have been possible without the public release of the PS1
 data. We thank F.~Masci and R.~Laher for helping us identify sources that were
-not classified in the ZTF \texttt{Stars} table.
+not classified in the ZTF \texttt{Stars} table. We thank the anonymous referee for comments that improved this manuscript. 
 
 A.A.M.~is funded by the Large Synoptic Survey Telescope Corporation (LSSTC),
 the Brinson Foundation, and the Moore Foundation in support of the LSSTC Data

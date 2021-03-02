@@ -201,16 +201,17 @@ Breiman, L., Friedman, J., Stone, C.~J., \& Olshen, R.~A. 1984, Classification
   e-prints
 
 \bibitem[{{De} {et~al.}(2020){De}, {Kasliwal}, {Tzanidakis}, {Fremling},
-  {Adams}, {Andreoni}, {Bagdasaryan}, {Bellm}, {Bildsten}, {Cannella}, {Cook},
-  {Delacroix}, {Drake}, {Duev}, {Dugas}, {Frederick}, {Gal-Yam}, {Goldstein},
-  {Golkhou}, {Graham}, {Hale}, {Hankins}, {Helou}, {Ho}, {Irani}, {Jencson},
-  {Kaye}, {Kulkarni}, {Kupfer}, {Laher}, {Leadbeater}, {Lunnan}, {Masci},
-  {Miller}, {Neill}, {Ofek}, {Perley}, {Polin}, {Prince}, {Quataert}, {Reiley},
-  {Riddle}, {Rusholme}, {Sharma}, {Shupe}, {Sollerman}, {Tartaglia}, {Walters},
-  {Yan}, \& {Yao}}]{De20}
+  {Adams}, {Aloisi}, {Andreoni}, {Bagdasaryan}, {Bellm}, {Bildsten},
+  {Cannella}, {Cook}, {Delacroix}, {Drake}, {Duev}, {Dugas}, {Frederick},
+  {Gal-Yam}, {Goldstein}, {Golkhou}, {Graham}, {Hale}, {Hankins}, {Helou},
+  {Ho}, {Irani}, {Jencson}, {Kaplan}, {Kaye}, {Kulkarni}, {Kupfer}, {Laher},
+  {Leadbeater}, {Lunnan}, {Masci}, {Miller}, {Neill}, {Ofek}, {Perley},
+  {Polin}, {Prince}, {Quataert}, {Reiley}, {Riddle}, {Rusholme}, {Sharma},
+  {Shupe}, {Sollerman}, {Tartaglia}, {Walters}, {Yan}, \& {Yao}}]{De20}
 {De}, K., {Kasliwal}, M.~M., {Tzanidakis}, A., {et~al.} 2020,
-  \href{https://arxiv.org/abs/2004.09029}{\color{magenta}arXiv},
-  \href{https://ui.adsabs.harvard.edu/abs/2020arXiv200409029D}{\color{blue}arXiv:2004.09029}
+  \href{http://dx.doi.org/10.3847/1538-4357/abb45c}{\color{magenta}\apj},
+  \href{https://ui.adsabs.harvard.edu/abs/2020ApJ...905...58D}{\color{blue}905},
+  \href{https://ui.adsabs.harvard.edu/abs/2020ApJ...905...58D}{\color{blue}58}
 
 \bibitem[{{Drout} {et~al.}(2014){Drout}, {Chornock}, {Soderberg}, {Sand ers},
   {McKinnon}, {Rest}, {Foley}, {Milisavljevic}, {Margutti}, {Berger},
